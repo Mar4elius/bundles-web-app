@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+// Support
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -9,6 +10,8 @@ use Illuminate\Notifications\Notifiable;
 use Laravel\Fortify\TwoFactorAuthenticatable;
 use Laravel\Jetstream\HasProfilePhoto;
 use Laravel\Sanctum\HasApiTokens;
+// Models
+use App\Models\Order;
 
 class User extends Authenticatable
 {
@@ -58,4 +61,12 @@ class User extends Authenticatable
     protected $appends = [
         'profile_photo_url',
     ];
+
+    /**
+     * Get user's orders.
+     */
+    public function orders()
+    {
+        return $this->hasMany(Order::class);
+    }
 }
