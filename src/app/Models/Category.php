@@ -18,7 +18,9 @@ class Category extends Model
      */
     protected $fillable = [
         'name',
-        'description'
+        'slug',
+        'description',
+        'image_path' // TODO:remove later
     ];
 
     /**

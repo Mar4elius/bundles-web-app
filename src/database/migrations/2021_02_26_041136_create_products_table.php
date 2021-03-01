@@ -19,10 +19,13 @@ class CreateProductsTable extends Migration
                 ->references('id')
                 ->on('categories');
             $table->string('name');
+            $table->string('slug')
+                ->unique();
             $table->text('description');
             $table->text('image_path')
                 ->nullable();
-            $table->decimal('price', 4, 2);
+            $table->integer('price')
+                ->default(0);
             $table->integer('qnt_left');
             $table->timestamps();
         });
