@@ -3,5 +3,7 @@
     "singleQuote": true,
     "useTabs": true,
     "trailingComma": "none",
-    "tabWidth": 4
+    "tabWidth": 4,
+    "vueIndentScriptAndStyle": true,
+    "printWidth": 120
 }
