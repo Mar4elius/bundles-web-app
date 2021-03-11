@@ -136,7 +136,7 @@
               To: "transform opacity-0 scale-95"
           -->
 						<div
-							class="origin-top-right absolute right-0 mt-2 w-48 rounded-md shadow-lg py-1 bg-white ring-1 ring-black ring-opacity-5 focus:outline-none"
+							class="origin-top-right absolute right-0 z-20 mt-2 w-48 rounded-md shadow-lg py-1 bg-white ring-1 ring-black ring-opacity-5 focus:outline-none"
 							role="menu"
 							v-if="isProfileMenuOpen"
 						>
@@ -198,25 +198,25 @@
 		},
 
 		setup() {
+			let isMobileMenuOpen = ref(false);
+			let isProfileMenuOpen = ref(false);
+
+			function displayMobileMenu() {
+				isMobileMenuOpen.value = !isMobileMenuOpen.value;
+			}
+
+			function displayProfileMenu() {
+				isProfileMenuOpen.value = !isProfileMenuOpen.value;
+			}
+
 			return {
+				isMobileMenuOpen,
+				isProfileMenuOpen,
+				displayMobileMenu,
+				displayProfileMenu,
 				topNavigationLinks,
 				userProfileLinks
 			};
-		},
-
-		data: () => ({
-			isMobileMenuOpen: false,
-			isProfileMenuOpen: false
-		}),
-
-		methods: {
-			displayMobileMenu() {
-				this.isMobileMenuOpen = !this.isMobileMenuOpen;
-			},
-
-			displayProfileMenu() {
-				this.isProfileMenuOpen = !this.isProfileMenuOpen;
-			}
 		}
 	};
 </script>
