@@ -22,6 +22,9 @@
 					/>
 				</div>
 			</div>
+			<div class="w-full margin-auto text-center pb-8 sm:pb-4 text-white">
+				<p>2021 Zop Bundles, Inc. All rights reserved.</p>
+			</div>
 		</div>
 	</div>
 </template>
