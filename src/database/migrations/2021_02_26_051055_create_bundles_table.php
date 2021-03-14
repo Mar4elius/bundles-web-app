@@ -17,6 +17,7 @@ class CreateBundlesTable extends Migration
             $table->id();
             $table->string('name');
             $table->string('slug');
+            $table->text('image_path')->nullable();
             $table->text('description');
             $table->integer('popularity');
             $table->timestamps();

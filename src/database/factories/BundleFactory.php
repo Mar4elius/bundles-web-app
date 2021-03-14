@@ -31,6 +31,7 @@ class BundleFactory extends Factory
             'name'          => $name,
             'slug'          => Str::slug($name),
             'description'   => $this->faker->realText(120),
+            'image_path'    => $this->faker->imageUrl(640, 480, 'dogs', true, 'Faker'),
             'popularity'    => $this->faker->randomDigit
         ];
     }
