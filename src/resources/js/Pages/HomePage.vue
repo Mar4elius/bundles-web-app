@@ -5,12 +5,11 @@
 		</template>
 
 		<template v-slot:main>
-			<div class="py-12">
-				<div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-					<div class="bg-white overflow-hidden shadow-xl sm:rounded-lg">
-						<h1>Main content</h1>
-					</div>
+			<div class="max-w-7xl mx-auto sm:px-6 lg:px-8 my-8">
+				<div class="w-full flex justify-center">
+					<h1 class="my-4">Our most popular bundles:</h1>
 				</div>
+				<bundle-tile v-for="bundle in bundles" :key="bundle.id" :bundle="bundle" />
 			</div>
 		</template>
 	</app-layout>
@@ -19,11 +18,20 @@
 <script>
 	import HeroBanner from '@/Pages/HeroBanner';
 	import AppLayout from '@/Layouts/AppLayout';
+	import BundleTile from '@/Components/App/BundleTile';
 
 	export default {
 		components: {
 			AppLayout,
+			BundleTile,
 			HeroBanner
+		},
+
+		props: {
+			bundles: {
+				type: Array,
+				required: true
+			}
 		},
 
 		created() {}

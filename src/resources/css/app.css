@@ -1,3 +1,17 @@
 @import 'tailwindcss/base';
 @import 'tailwindcss/components';
 @import 'tailwindcss/utilities';
+
+@layer base {
+	h1 {
+		@apply text-4xl m-4 tracking-tight font-extrabold text-gray-900 sm:text-5xl sm:m-5 md:text-6xl;
+	}
+	,
+	h2 {
+		@apply text-3xl m-3 tracking-tight font-extrabold text-gray-900 sm:text-4xl sm:m-4 md:text-5xl;
+	}
+	,
+	h3 {
+		@apply text-2xl m-2 tracking-tight font-extrabold text-gray-900 sm:text-3xl sm:m-3 md:text-4xl;
+	}
+}
