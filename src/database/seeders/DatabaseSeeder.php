@@ -27,5 +27,13 @@ class DatabaseSeeder extends Seeder
         Category::factory()->count(5)->create();
         Product::factory()->count(20)->create();
         Bundle::factory()->count(20)->create();
+
+        // populate bundle-product table (many-to-many)
+        $bundles = Bundle::all();
+        Product::all()->each(function ($product) use ($bundles) {
+            $product->bundles()->attach(
+                $bundles->random(2)->pluck('id')->toArray()
+            );
+        });
     }
 }
