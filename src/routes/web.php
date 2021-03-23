@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Web\BundleController;
+use App\Http\Controllers\Web\ShopController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -30,3 +31,4 @@ use Inertia\Inertia;
 // })->name('dashboard');
 
 Route::get('/', [BundleController::class, 'index'])->name('home');
+Route::get('/shop', [ShopController::class, 'index'])->name('shop');

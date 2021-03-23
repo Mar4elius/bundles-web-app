@@ -7,9 +7,9 @@ export const topNavigationLinks = [
 	},
 	{
 		name: 'Shop',
-		route: 'home',
+		route: 'shop',
 		icon: '',
-		url: '/'
+		url: '/shop'
 	}
 	// {
 	// 	name: 'Sign In',

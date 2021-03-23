@@ -17,11 +17,14 @@
 				<h3>{{ bundle.name }}</h3>
 				<p class="mb-4 mt">{{ bundle.description }}</p>
 			</div>
-			<div class="flex justify-between">
+			<div class="flex justify-between items-center">
 				<v-button :onClick="goToBundleDetails">Read more</v-button>
 				<v-button :onClick="addItemToCart" @mouseleave="showButtonPrice">
 					<div v-show="showPrice" class="flex" @mouseenter="showButtonText">
-						<span class="mr-1">${{ bundlePrice }}</span> |
+						<span class="mr-1"
+							><strong>${{ bundlePrice }}</strong></span
+						>
+						|
 						<div class="w-8 ml-1">
 							<svg
 								xmlns="http://www.w3.org/2000/svg"
