@@ -17,6 +17,7 @@ class BundleController extends Controller
     public function index()
     {
         $most_popular_bundles = Bundle::orderBy('popularity', 'desc')
+            ->with('products')
             ->take(10)
             ->get();
 
