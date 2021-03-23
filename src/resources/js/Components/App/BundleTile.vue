@@ -6,8 +6,8 @@
 			<div v-show="showBundleDetails" class="bg-black bg-opacity-60 absolute h-full w-full top-0 left-0">
 				<h2 class="text-white text-center">Includes:</h2>
 				<ul class="mx-10 text-white list-disc">
-					<li v-for="product in bundle.products" :key="product.id">
-						<strong>{{ product.name }}</strong>
+					<li v-for="product in bundle.products" :key="product.id" class="flex justify-between">
+						<strong>{{ product.name }}</strong> Quantity: {{ product.pivot.default_quantity }}
 					</li>
 				</ul>
 			</div>
