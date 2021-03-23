@@ -32,7 +32,8 @@ class DatabaseSeeder extends Seeder
         $bundles = Bundle::all();
         Product::all()->each(function ($product) use ($bundles) {
             $product->bundles()->attach(
-                $bundles->random(2)->pluck('id')->toArray()
+                $bundles->random(2)->pluck('id')->toArray(),
+                ['default_quantity' => rand(1, 10)]
             );
         });
     }

@@ -20,6 +20,8 @@ class CreateBundleProductTable extends Migration
             $table->foreignId('product_id')
                 ->references('id')
                 ->on('products');
+            $table->integer('default_quantity')
+                ->default(1);
             $table->timestamps();
         });
     }
