@@ -6,10 +6,10 @@ export const topNavigationLinks = [
 		url: '/'
 	},
 	{
-		name: 'Shop',
-		route: 'shop',
+		name: 'Bundles',
+		route: 'bundles',
 		icon: '',
-		url: '/shop'
+		url: '/bundles'
 	}
 	// {
 	// 	name: 'Sign In',
