@@ -10,12 +10,21 @@
 				</p>
 				<div class="flex justify-start w-full mt-6">
 					<v-button
+						id="all"
+						:is-rounded="true"
+						size="small"
+						:classes="`mr-4`"
+						@btnOnClickEvent="filterBundles"
+						>All</v-button
+					>
+					<v-button
 						:is-rounded="true"
 						size="small"
 						:classes="`mr-4`"
 						v-for="category in categories"
-						:key="category.id"
+						:key="category.slug"
 						@btnOnClickEvent="filterBundles"
+						:id="category.slug"
 					>
 						{{ category.name }}
 					</v-button>
@@ -42,9 +51,7 @@
 		},
 
 		setup() {
-			function filterBundles() {
-				console.log('filterBundles function');
-			}
+			function filterBundles(btnId) {}
 
 			return {
 				filterBundles

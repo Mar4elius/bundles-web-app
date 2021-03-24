@@ -1,5 +1,5 @@
 <template>
-	<button :type="type" :class="combinedClasses" :disabled="isDisabled" @click="handelOnClickEvent">
+	<button :id="id" :type="type" :class="combinedClasses" :disabled="isDisabled" @click="handelOnClickEvent($event)">
 		<slot></slot>
 	</button>
 </template>
@@ -8,17 +8,14 @@
 	import { computed, emit } from '@vue/runtime-core';
 	export default {
 		props: {
-			type: {
-				type: String,
-				default: 'primary',
-				validator: function (value) {
-					return ['success', 'warning', 'danger', 'disabled', 'primary'].includes(value.toLowerCase());
-				}
-			},
-
 			classes: {
 				type: String,
 				default: ' '
+			},
+
+			id: {
+				type: String,
+				required: true
 			},
 
 			isDisabled: {
@@ -29,6 +26,14 @@
 			isRounded: {
 				type: Boolean,
 				default: false
+			},
+
+			type: {
+				type: String,
+				default: 'primary',
+				validator: function (value) {
+					return ['success', 'warning', 'danger', 'disabled', 'primary'].includes(value.toLowerCase());
+				}
 			},
 
 			size: {
@@ -61,7 +66,7 @@
 					defaultClasses += ' bg-amber-600 hover:bg-amber-700 focus:border-amber-600';
 					break;
 			}
-
+			// set button size
 			switch (props.size) {
 				case 'small':
 					defaultClasses += ' px-4 py-2';
@@ -77,13 +82,13 @@
 					defaultClasses += ' px-4 py-2 md:px-6 md:py-3 lg:px-8';
 					break;
 			}
-
+			// set button shape
 			props.isRounded ? (defaultClasses += ' rounded-full') : (defaultClasses += ' rounded');
 
 			const combinedClasses = computed(() => defaultClasses.concat(' ' + props.classes));
 
-			function handelOnClickEvent() {
-				emit('btnOnClickEvent');
+			function handelOnClickEvent(e) {
+				emit('btnOnClickEvent', e.target.id);
 			}
 
 			return {
