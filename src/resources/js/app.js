@@ -5,6 +5,8 @@ import { createApp, h } from 'vue';
 import { App as InertiaApp, plugin as InertiaPlugin } from '@inertiajs/inertia-vue3';
 import { InertiaProgress } from '@inertiajs/progress';
 import { FontAwesomeIcon } from '@/Plugins/font-awesome';
+// Store
+import store from './store/index';
 
 const el = document.getElementById('app');
 
@@ -17,6 +19,7 @@ createApp({
 })
 	.mixin({ methods: { route } })
 	.use(InertiaPlugin)
+	.use(store)
 	.component('font-awesome-icon', FontAwesomeIcon)
 	.mount(el);
 

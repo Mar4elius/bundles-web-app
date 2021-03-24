@@ -35,6 +35,9 @@
 </template>
 
 <script>
+	// vue
+	import { useStore } from 'vuex';
+	// Components
 	import AppLayout from '@/Layouts/AppLayout';
 	import vButton from '@/Components/Forms/VButton';
 	export default {
@@ -51,6 +54,8 @@
 		},
 
 		setup() {
+			const store = useStore();
+			console.log(store.state.cart.checkoutStatus);
 			function filterBundles(btnId) {}
 
 			return {
