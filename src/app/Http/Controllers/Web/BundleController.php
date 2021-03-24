@@ -4,17 +4,18 @@ namespace App\Http\Controllers\Web;
 
 use App\Http\Controllers\Controller;
 use App\Models\Bundle;
+use App\Models\Category;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
 class BundleController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * Get most popular bundles based on popularity
      *
-     * @return \Illuminate\Http\Response
+     * @return Inertia
      */
-    public function index()
+    public function getMostPopularBundles()
     {
         $most_popular_bundles = Bundle::orderBy('popularity', 'desc')
             ->with('products', function ($q) {
@@ -25,6 +26,19 @@ class BundleController extends Controller
 
         return Inertia::render('HomePage', [
             'bundles' => $most_popular_bundles
+        ]);
+    }
+
+    /**
+     * Get all available bundles with categories
+     *
+     * @return Inertia
+     */
+    public function getBundles()
+    {
+        $categories = Category::all();
+        return Inertia::render('Bundle/BundlesPage', [
+            'categories' => $categories
         ]);
     }
 }

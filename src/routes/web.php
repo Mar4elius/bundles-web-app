@@ -30,5 +30,5 @@ use Inertia\Inertia;
 //     return Inertia::render('Dashboard');
 // })->name('dashboard');
 
-Route::get('/', [BundleController::class, 'index'])->name('home');
-Route::get('/shop', [ShopController::class, 'index'])->name('shop');
+Route::get('/', [BundleController::class, 'getMostPopularBundles'])->name('home');
+Route::get('/bundles', [BundleController::class, 'getBundles'])->name('bundles');

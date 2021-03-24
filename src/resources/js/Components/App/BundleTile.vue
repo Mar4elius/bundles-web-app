@@ -18,8 +18,8 @@
 				<p class="mb-4 mt">{{ bundle.description }}</p>
 			</div>
 			<div class="flex justify-between items-center">
-				<v-button :onClick="goToBundleDetails">Read more</v-button>
-				<v-button :onClick="addItemToCart" @mouseleave="showButtonPrice">
+				<v-button>Read more</v-button>
+				<v-button @mouseleave="showButtonPrice">
 					<div v-show="showPrice" class="flex" @mouseenter="showButtonText">
 						<span class="mr-1"
 							><strong>${{ bundlePrice }}</strong></span
