@@ -13,7 +13,7 @@ class BundleController extends Controller
     /**
      * Get most popular bundles based on popularity
      *
-     * @return Inertia
+     * @return Inertia\Inertia
      */
     public function getMostPopularBundles()
     {
@@ -32,7 +32,7 @@ class BundleController extends Controller
     /**
      * Get all available bundles with categories
      *
-     * @return Inertia
+     * @return Inertia\Inertia
      */
     public function getBundles()
     {

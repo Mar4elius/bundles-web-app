@@ -56,7 +56,9 @@
 		setup() {
 			const store = useStore();
 			console.log(store.state.cart.checkoutStatus);
-			function filterBundles(btnId) {}
+			function filterBundles(btnId) {
+				store.dispatch('bundles/filterBundles', btnId);
+			}
 
 			return {
 				filterBundles
