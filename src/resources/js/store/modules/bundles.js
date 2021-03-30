@@ -13,7 +13,7 @@ const actions = {
 	filterBundles({ commit }, bundleName) {
 		//TODO: add loading thing
 		console.log(bundleName);
-		bundlesApi.filterBundles(bundleName);
+		return bundlesApi.filterBundles(bundleName);
 	}
 };
 

@@ -21,12 +21,12 @@
 						:is-rounded="true"
 						size="small"
 						:classes="`mr-4`"
-						v-for="category in categories"
-						:key="category.slug"
+						v-for="section in sections"
+						:key="section.slug"
 						@btnOnClickEvent="filterBundles"
-						:id="category.slug"
+						:id="section.slug"
 					>
-						{{ category.name }}
+						{{ section.name }}
 					</v-button>
 				</div>
 			</div>
@@ -37,6 +37,7 @@
 <script>
 	// vue
 	import { useStore } from 'vuex';
+	import { ref, onMounted } from '@vue/runtime-core';
 	// Components
 	import AppLayout from '@/Layouts/AppLayout';
 	import vButton from '@/Components/Forms/VButton';
@@ -47,7 +48,7 @@
 		},
 
 		props: {
-			categories: {
+			sections: {
 				type: Array,
 				require: true
 			}
@@ -55,12 +56,17 @@
 
 		setup() {
 			const store = useStore();
-			console.log(store.state.cart.checkoutStatus);
-			function filterBundles(btnId) {
-				store.dispatch('bundles/filterBundles', btnId);
+			let bundles = ref([]);
+
+			async function filterBundles(btnId) {
+				const { data } = await store.dispatch('bundles/filterBundles', btnId);
+				bundles.value = [...data.bundles];
 			}
 
+			onMounted(filterBundles('all'));
+
 			return {
+				bundles,
 				filterBundles
 			};
 		}

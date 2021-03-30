@@ -3,6 +3,10 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+// Models
+use App\Models\Bundle;
+use App\Models\Category;
+use App\Models\Section;
 // Requests
 use App\Http\Requests\Api\FilterBundlesRequest;
 
@@ -17,10 +21,20 @@ class BundleController extends Controller
      */
     public function filterBundles(FilterBundlesRequest $request)
     {
-        dd($request->all());
+        $term = $request->term;
+        $bundles = null;
+
+        if ($term === 'all') {
+            $bundles = Section::with('bundles')
+                ->get();
+        } else {
+            $bundles = Section::with('bundles')
+                ->whereSlug($term)
+                ->get();
+        }
 
         return response()->json([
-            //
+            'bundles' => $bundles
         ]);
     }
 }

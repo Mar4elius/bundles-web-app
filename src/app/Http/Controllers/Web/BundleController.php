@@ -1,12 +1,12 @@
 <?php
 
 namespace App\Http\Controllers\Web;
-
+// Support
 use App\Http\Controllers\Controller;
-use App\Models\Bundle;
-use App\Models\Category;
-use Illuminate\Http\Request;
 use Inertia\Inertia;
+// Models
+use App\Models\Bundle;
+use App\Models\Section;
 
 class BundleController extends Controller
 {
@@ -36,9 +36,9 @@ class BundleController extends Controller
      */
     public function getBundles()
     {
-        $categories = Category::all();
+        $sections = Section::all();
         return Inertia::render('Bundle/BundlesPage', [
-            'categories' => $categories
+            'sections' => $sections
         ]);
     }
 }
