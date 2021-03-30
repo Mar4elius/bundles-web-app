@@ -1,33 +1,41 @@
 <template>
 	<app-layout>
 		<template v-slot:main>
-			<div class="max-w-7xl mx-auto sm:px-6 lg:px-8 my-8">
-				<h1 class="ml-0">Bundles</h1>
-				<p>
-					Our Bundles are limited-time collections of games, books, software, and more. Simply pay what you
-					want and choose where your money goes, including to charity. Most Bundles come in tiers starting at
-					only $1 - the more you give, the more you get!
-				</p>
-				<div class="flex justify-start w-full mt-6">
-					<v-button
-						id="all"
-						:is-rounded="true"
-						size="small"
-						:classes="`mr-4`"
-						@btnOnClickEvent="filterBundles"
-						>All</v-button
-					>
-					<v-button
-						:is-rounded="true"
-						size="small"
-						:classes="`mr-4`"
-						v-for="section in sections"
-						:key="section.slug"
-						@btnOnClickEvent="filterBundles"
-						:id="section.slug"
-					>
-						{{ section.name }}
-					</v-button>
+			<h1>Bundles</h1>
+			<p>
+				Our Bundles are limited-time collections of games, books, software, and more. Simply pay what you want
+				and choose where your money goes, including to charity. Most Bundles come in tiers starting at only $1 -
+				the more you give, the more you get!
+			</p>
+
+			<div class="flex justify-start items-center flex-wrap w-full">
+				<v-button
+					id="all"
+					:is-rounded="true"
+					size="small"
+					:classes="`mr-4 mt-6`"
+					@btnOnClickEvent="filterBundles"
+					>All</v-button
+				>
+				<v-button
+					:is-rounded="true"
+					size="small"
+					:classes="`mr-4 mt-6`"
+					v-for="section in sections"
+					:key="section.slug"
+					@btnOnClickEvent="filterBundles"
+					:id="section.slug"
+				>
+					{{ section.name }}
+				</v-button>
+			</div>
+
+			<div class="bg-white rounded-md">
+				<div v-for="section in sectionBundles" :key="section.id" class="mt-6">
+					<h3 class="p-4">{{ section.name }}</h3>
+					<div class="grid grod-cols-1 md:grid-cols-3 md:gap-4">
+						<bundle-tile-short v-for="bundle in section.bundles" :bundle="bundle" :key="bundle.slug" />
+					</div>
 				</div>
 			</div>
 		</template>
@@ -41,9 +49,11 @@
 	// Components
 	import AppLayout from '@/Layouts/AppLayout';
 	import vButton from '@/Components/Forms/VButton';
+	import BundleTileShort from '@/Components/App/BundleTileShort';
 	export default {
 		components: {
 			AppLayout,
+			BundleTileShort,
 			vButton
 		},
 
@@ -54,19 +64,19 @@
 			}
 		},
 
-		setup() {
+		setup(props) {
 			const store = useStore();
-			let bundles = ref([]);
+			let sectionBundles = ref([]);
 
 			async function filterBundles(btnId) {
 				const { data } = await store.dispatch('bundles/filterBundles', btnId);
-				bundles.value = [...data.bundles];
+				sectionBundles.value = [...data.bundles];
 			}
 
 			onMounted(filterBundles('all'));
 
 			return {
-				bundles,
+				sectionBundles,
 				filterBundles
 			};
 		}

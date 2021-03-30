@@ -15,7 +15,7 @@
 		<div class="m-4 flex flex-col content-between">
 			<div class="h-full">
 				<h3>{{ bundle.name }}</h3>
-				<p class="mb-4 mt">{{ bundle.description }}</p>
+				<p class="mb-4">{{ bundle.description }}</p>
 			</div>
 			<div class="flex justify-between items-center">
 				<v-button>Read more</v-button>
