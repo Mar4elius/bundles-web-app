@@ -40,7 +40,8 @@ class BundleFactory extends Factory
             'slug'          => Str::slug($name),
             'price'         => $this->faker->numberBetween(1000, 10000), //$10.00 - $100.00
             'description'   => $this->faker->realText(120),
-            'image_path'    => $this->faker->imageUrl(640, 480, 'dogs', true, 'Faker'),
+            // 'image_path'    => $this->faker->imageUrl(640, 480, 'cats', true, 'Faker'),
+            'image_path'    => 'https://picsum.photos/640/480',
             'popularity'    => $this->faker->randomDigit
         ];
     }
