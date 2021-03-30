@@ -46,7 +46,6 @@
 		},
 
 		setup(props, { emit }) {
-			// let defaultClasses = `px-8 py-3 border border-transparent text-base font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 md:py-4 md:text-lg md:px-10 `;
 			let defaultClasses = `text-white font-bold uppercase shadow hover:shadow-md transition-all duration-150 focus:outline-none focus:ring-2`;
 			// set button color
 			switch (props.type) {
@@ -74,7 +73,6 @@
 				case 'regular':
 					defaultClasses += ' px-6 py-3';
 					break;
-
 				case 'large':
 					defaultClasses += ' px-8 py-3';
 					break;

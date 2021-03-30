@@ -24,12 +24,13 @@ class BundleController extends Controller
         $term = $request->term;
         $bundles = null;
 
+        $bundles = Section::with(['bundles.products' => function ($q) {
+            return $q->withPivot('default_quantity');
+        }]);
         if ($term === 'all') {
-            $bundles = Section::with('bundles')
-                ->get();
+            $bundles = $bundles->get();
         } else {
-            $bundles = Section::with('bundles')
-                ->whereSlug($term)
+            $bundles = $bundles->whereSlug($term)
                 ->get();
         }
 

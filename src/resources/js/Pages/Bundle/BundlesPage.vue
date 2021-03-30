@@ -13,14 +13,14 @@
 					id="all"
 					:is-rounded="true"
 					size="small"
-					:classes="`mr-4 mt-6`"
+					:classes="`mr-4 mt-8`"
 					@btnOnClickEvent="filterBundles"
 					>All</v-button
 				>
 				<v-button
 					:is-rounded="true"
 					size="small"
-					:classes="`mr-4 mt-6`"
+					:classes="`mr-4 mt-8`"
 					v-for="section in sections"
 					:key="section.slug"
 					@btnOnClickEvent="filterBundles"
@@ -31,9 +31,9 @@
 			</div>
 
 			<div class="bg-white rounded-md">
-				<div v-for="section in sectionBundles" :key="section.id" class="mt-6">
-					<h3 class="p-4">{{ section.name }}</h3>
-					<div class="grid grod-cols-1 md:grid-cols-3 md:gap-4">
+				<div v-for="section in sectionBundles" :key="section.id" class="my-8">
+					<h3 class="p-4 md:p-6">{{ section.name }}</h3>
+					<div class="grid grid-cols-1 md:grid-cols-3 md:gap-4">
 						<bundle-tile-short v-for="bundle in section.bundles" :bundle="bundle" :key="bundle.slug" />
 					</div>
 				</div>
