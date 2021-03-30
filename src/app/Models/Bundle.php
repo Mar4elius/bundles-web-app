@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Model;
 use App\Models\Order;
 use App\Models\Product;
 use App\Models\Section;
+use App\Models\Usecase;
 
 class Bundle extends Model
 {
@@ -33,12 +34,27 @@ class Bundle extends Model
         return $this->belongsToMany(Order::class);
     }
 
+    // /**
+    //  * Get products that belong to bundle
+    //  */
+    // public function products()
+    // {
+    //     return $this->belongsToMany(Product::class);
+    // }
     /**
      * Get products that belong to bundle
      */
     public function products()
     {
-        return $this->belongsToMany(Product::class);
+        return $this->morphedByMany(Product::class, 'bundleable');
+    }
+
+    /**
+     * Get usecases that belong to bundle
+     */
+    public function usecases()
+    {
+        return $this->morphedByMany(Usecase::class, 'bundleable');
     }
 
     /**

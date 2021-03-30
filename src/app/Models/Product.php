@@ -28,12 +28,19 @@ class Product extends Model
         'qnt_left'
     ];
 
+    // /**
+    //  * Get bundles to which product belongs
+    //  */
+    // public function bundles()
+    // {
+    //     return $this->belongsToMany(Bundle::class);
+    // }
     /**
      * Get bundles to which product belongs
      */
     public function bundles()
     {
-        return $this->belongsToMany(Bundle::class);
+        return $this->morphToMany(Bundle::class, 'bundleable');
     }
 
     /**
