@@ -22,7 +22,7 @@ class CreateProductsTable extends Migration
             $table->string('slug')
                 ->unique();
             $table->text('description');
-            $table->text('image_path')
+            $table->string('image_path')
                 ->nullable();
             $table->integer('price')
                 ->default(0);

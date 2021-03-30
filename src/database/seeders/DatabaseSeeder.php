@@ -4,10 +4,11 @@ namespace Database\Seeders;
 // Support
 use Illuminate\Database\Seeder;
 // Models
+use App\Models\Bundle;
 use App\Models\Category;
+use App\Models\Section;
 use App\Models\Product;
 use App\Models\User;
-use App\Models\Bundle;
 
 class DatabaseSeeder extends Seeder
 {
@@ -26,6 +27,7 @@ class DatabaseSeeder extends Seeder
         User::factory()->count(10)->create();
         Category::factory()->count(5)->create();
         Product::factory()->count(20)->create();
+        Section::factory()->count(5)->create();
         Bundle::factory()->count(20)->create();
 
         // populate bundle-product table (many-to-many)

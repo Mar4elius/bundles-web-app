@@ -7,6 +7,8 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 // Models
 use Illuminate\Database\Eloquent\Model;
 use App\Models\Order;
+use App\Models\Product;
+use App\Models\Section;
 
 class Bundle extends Model
 {
@@ -37,5 +39,13 @@ class Bundle extends Model
     public function products()
     {
         return $this->belongsToMany(Product::class);
+    }
+
+    /**
+     * Get bundle section
+     */
+    public function section()
+    {
+        return $this->belongsTo(Section::class);
     }
 }
