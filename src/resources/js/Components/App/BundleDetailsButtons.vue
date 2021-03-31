@@ -1,7 +1,7 @@
 <template>
 	<div class="flex justify-between items-end w-full">
-		<v-button>Read more</v-button>
-		<v-button @mouseleave="showButtonPrice" classes="w-44">
+		<v-button-filled>Read more</v-button-filled>
+		<v-button-filled @mouseleave="showButtonPrice" classes="w-44">
 			<div v-show="showPrice" class="flex justify-center" @mouseenter="showButtonText">
 				<span class="mr-1"
 					><strong>${{ bundlePrice }}</strong></span
@@ -19,7 +19,7 @@
 				</div>
 			</div>
 			<div v-show="!showPrice">Add To Cart</div>
-		</v-button>
+		</v-button-filled>
 	</div>
 </template>
 
@@ -27,10 +27,10 @@
 	// Vue
 	import { ref, computed } from 'vue';
 	// Components
-	import VButton from '@/Components/Forms/VButton';
+	import VButtonFilled from '@/Components/Forms/VButtonFilled';
 	export default {
 		components: {
-			VButton
+			VButtonFilled
 		},
 
 		props: {

@@ -5,7 +5,7 @@
 </template>
 
 <script>
-	import { computed, emit } from '@vue/runtime-core';
+	import { computed } from '@vue/runtime-core';
 	export default {
 		props: {
 			classes: {
@@ -46,23 +46,25 @@
 		},
 
 		setup(props, { emit }) {
-			let defaultClasses = `text-white font-bold uppercase shadow hover:shadow-md transition-all duration-150 focus:outline-none focus:ring-2`;
+			let defaultClasses = `border border-solid border-2 bg-transparent font-bold uppercase shadow hover:shadow-md hover:text-white transition-all duration-150 focus:outline-none focus:ring-2`;
 			// set button color
 			switch (props.type) {
 				case 'disabled':
-					defaultClasses += ' bg-blueGray-600 hover:bg-blueGray-700 focus:border-blueGray-600 ';
+					defaultClasses +=
+						' text-blueGray border-blueGray-600 hover:bg-blueGray-700 focus:border-blueGray-600 ';
 					break;
 				case 'primary':
-					defaultClasses += ' bg-indigo-600 hover:bg-indigo-700 focus:border-indigo-600';
+					defaultClasses += ' text-ingido border-indigo-600 hover:bg-indigo-700 focus:border-indigo-600';
 					break;
 				case 'success':
-					defaultClasses += ' bg-emerarld-600 hover:bg-emerarld-700 focus:border-emerald-600';
+					defaultClasses +=
+						' text-emerald border-emerarld-600 hover:bg-emerarld-700 focus:border-emerald-600';
 					break;
 				case 'danger':
-					defaultClasses += ' bg-red-600 hover:bg-red-700 focus:border-red-600';
+					defaultClasses += ' text-red border-red-600 hover:bg-red-700 focus:border-red-600';
 					break;
 				case 'warning':
-					defaultClasses += ' bg-amber-600 hover:bg-amber-700 focus:border-amber-600';
+					defaultClasses += ' text-amber border-amber-600 hover:bg-amber-700 focus:border-amber-600';
 					break;
 			}
 			// set button size

@@ -20,7 +20,7 @@
 				</table>
 			</div>
 			<div>
-				<h4>Great for:</h4>
+				<p v-for="tag in bundle.tags" :key="tag.slug">{{ tag.name }}</p>
 			</div>
 			<bundle-details-buttons :bundle="bundle" />
 		</div>

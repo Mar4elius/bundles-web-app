@@ -28,14 +28,12 @@
 	// Vue
 	import { ref, computed } from '@vue/reactivity';
 	// Components
-	import VButton from '@/Components/Forms/VButton';
 	import BundleDetailsButtons from '@/Components/App/BundleDetailsButtons';
 	import FontAwesomeIcon from '@/Components/Support/FontAwesomeIcon.vue';
 
 	export default {
 		components: {
 			BundleDetailsButtons,
-			VButton,
 			FontAwesomeIcon
 		},
 
