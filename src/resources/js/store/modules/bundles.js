@@ -12,7 +12,6 @@ const getters = {};
 const actions = {
 	filterBundles({ commit }, bundleName) {
 		//TODO: add loading thing
-		console.log(bundleName);
 		return bundlesApi.filterBundles(bundleName);
 	}
 };

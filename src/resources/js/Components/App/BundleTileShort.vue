@@ -4,7 +4,7 @@
 			<div>
 				<img :src="bundle.image_path" :alt="bundle.name" />
 				<h4>{{ bundle.name }}</h4>
-				<table class="w-full mb-5">
+				<table class="mb-5">
 					<thead>
 						<tr>
 							<th class="text-left">Items</th>
@@ -19,10 +19,11 @@
 					</tbody>
 				</table>
 			</div>
+			<div class="w-full">
+				<bundle-tags :tags="bundle.tags" :id="bundle.slug" />
 
-			<bundle-tags :tags="bundle.tags" :id="bundle.slug" />
-
-			<bundle-details-buttons :bundle="bundle" />
+				<bundle-details-buttons :bundle="bundle" />
+			</div>
 		</div>
 	</div>
 </template>
