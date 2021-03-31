@@ -18,9 +18,12 @@ class BundleController extends Controller
     public function getMostPopularBundles()
     {
         $most_popular_bundles = Bundle::orderBy('popularity', 'desc')
-            ->with('products', function ($q) {
-                return $q->withPivot('default_quantity');
-            })
+            ->with([
+                'products' => function ($q) {
+                    return $q->withPivot('default_quantity');
+                },
+                'tags'
+            ])
             ->take(10)
             ->get();
 

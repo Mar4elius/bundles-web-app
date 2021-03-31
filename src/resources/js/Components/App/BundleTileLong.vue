@@ -18,6 +18,7 @@
 				<p class="mb-4">{{ bundle.description }}</p>
 			</div>
 
+			<bundle-tags :tags="bundle.tags" :id="bundle.slug" />
 			<bundle-details-buttons :bundle="bundle" />
 		</div>
 	</div>
@@ -29,11 +30,13 @@
 	import { ref, computed } from '@vue/reactivity';
 	// Components
 	import BundleDetailsButtons from '@/Components/App/BundleDetailsButtons';
+	import BundleTags from '@/Components/App/BundleTags';
 	import FontAwesomeIcon from '@/Components/Support/FontAwesomeIcon.vue';
 
 	export default {
 		components: {
 			BundleDetailsButtons,
+			BundleTags,
 			FontAwesomeIcon
 		},
 
