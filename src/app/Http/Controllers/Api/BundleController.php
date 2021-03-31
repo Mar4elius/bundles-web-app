@@ -3,12 +3,13 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Api\Bundles\SortBundlesRequest as BundlesSortBundlesRequest;
 // Models
 use App\Models\Bundle;
-use App\Models\Category;
 use App\Models\Section;
 // Requests
-use App\Http\Requests\Api\FilterBundlesRequest;
+use App\Http\Requests\Api\Bundles\FilterBundlesRequest;
+use App\Http\Requests\Api\Bundles\SortBundlesRequest;
 
 class BundleController extends Controller
 {
@@ -21,6 +22,7 @@ class BundleController extends Controller
      */
     public function filterBundles(FilterBundlesRequest $request)
     {
+        // TODO: Add try catch block
         $term = $request->term;
         $bundles = null;
 
@@ -39,6 +41,32 @@ class BundleController extends Controller
 
         return response()->json([
             'bundles' => $bundles
+        ]);
+    }
+
+    /**
+     * Sort available bundles based on path param
+     *
+     * @param App\Http\Requests\Api\SortBundlesRequest $request
+     *
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    public function sortBundles(BundlesSortBundlesRequest $request)
+    {
+        // TODO: Add try catch block
+        $sort_by = $request->sort_by;
+        $most_popular_bundles = Bundle::orderBy($sort_by, 'desc')
+            ->with([
+                'products' => function ($q) {
+                    return $q->withPivot('default_quantity');
+                },
+                'tags'
+            ])
+            ->take(10)
+            ->get();
+
+        return response()->json([
+            'bundles' => $most_popular_bundles
         ]);
     }
 }

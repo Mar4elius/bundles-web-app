@@ -21,5 +21,8 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 
 Route::prefix('v1')->group(function () {
-    Route::get('/bundles', [BundleController::class, 'filterBundles']);
+    Route::prefix('bundles')->group(function () {
+        Route::get('/filter', [BundleController::class, 'filterBundles']);
+        Route::get('/sort', [BundleController::class, 'sortBundles']);
+    });
 });

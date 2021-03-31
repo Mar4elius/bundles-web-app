@@ -30,5 +30,8 @@ use Inertia\Inertia;
 //     return Inertia::render('Dashboard');
 // })->name('dashboard');
 
-Route::get('/', [BundleController::class, 'getMostPopularBundles'])->name('home');
-Route::get('/bundles', [BundleController::class, 'getBundles'])->name('bundles');
+// Order is important here. Custom routes MUST go before resource.
+Route::prefix('bundles')->group(function () {
+    Route::get('/search', [BundleController::class, 'search'])->name('bundles.search');
+});
+Route::resource('bundles', BundleController::class);

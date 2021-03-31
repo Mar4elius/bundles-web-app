@@ -1,15 +1,15 @@
 export const topNavigationLinks = [
 	{
 		name: 'Home',
-		route: 'home',
+		route: 'bundles.index',
 		icon: '',
-		url: '/'
+		url: '/bundles'
 	},
 	{
 		name: 'Bundles',
-		route: 'bundles',
+		route: 'bundles.search',
 		icon: '',
-		url: '/bundles'
+		url: '/bundles/search'
 	}
 	// {
 	// 	name: 'Sign In',
