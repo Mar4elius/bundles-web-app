@@ -23,6 +23,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 Route::prefix('v1')->group(function () {
     Route::prefix('bundles')->group(function () {
         Route::get('/search', [BundleController::class, 'search']);
-        Route::get('/get-top-ten', [BundleController::class, 'getTopTenBundles']);
+        Route::get('/top-ten', [BundleController::class, 'getTopTenBundles']);
+        Route::get('/filter-options', [BundleController::class, 'getFilterOptions']);
     });
 });

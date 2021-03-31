@@ -78,7 +78,7 @@
 					defaultClasses += ' px-2 py-1 text-xs';
 					break;
 				case 'small':
-					defaultClasses += ' px-4 py-2';
+					defaultClasses += ' px-4 py-2 text-sm';
 					break;
 				case 'regular':
 					defaultClasses += ' px-6 py-3';

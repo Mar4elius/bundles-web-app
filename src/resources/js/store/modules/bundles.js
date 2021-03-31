@@ -22,13 +22,27 @@ const actions = {
 		//TODO: add loading thing
 		return bundlesApi.searchBundles(params);
 	},
+
 	/**
+	 * Get top 10 bundles based on sort_by params
 	 *
 	 * @param {*} context
 	 * @param {String} sortBy
+	 *
+	 * @returns FIXME: what does it return?
 	 */
 	getTopTenBundles({ commit }, sortBy) {
 		return bundlesApi.getTopTenBundles(sortBy);
+	},
+	/**
+	 * Get bundle filter options
+	 *
+	 * @param {*} param0
+	 *
+	 * @returns FIXME: what does it return?
+	 */
+	getFilterOptions({ commit }) {
+		return bundlesApi.getFilterOptions();
 	}
 };
 

@@ -9,11 +9,13 @@ const bundlesApi = {
 		}),
 
 	getTopTenBundles: (sortBy) =>
-		axios.get('/api/v1/bundles/get-top-ten', {
+		axios.get('/api/v1/bundles/top-ten', {
 			params: {
 				sort_by: sortBy
 			}
-		})
+		}),
+
+	getFilterOptions: () => axios.get('/api/v1/bundles/filter-options')
 };
 
 export default bundlesApi;

@@ -2,7 +2,7 @@
 	<app-layout>
 		<template v-slot:main>
 			<h1>Bundles</h1>
-			<p>
+			<p class="mb-4 md:mb-6">
 				Our Bundles are limited-time collections of games, books, software, and more. Simply pay what you want
 				and choose where your money goes, including to charity. Most Bundles come in tiers starting at only $1 -
 				the more you give, the more you get!
@@ -51,7 +51,6 @@
 			let sectionBundles = ref([]);
 
 			async function searchBundles(params) {
-				console.log(params);
 				const { data } = await store.dispatch('bundles/searchBundles', params);
 				sectionBundles.value = [...data.bundles];
 			}

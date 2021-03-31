@@ -88,4 +88,21 @@ class BundleController extends Controller
             'bundles' => $most_popular_bundles
         ]);
     }
+
+    /**
+     * Get bundles filter options
+     *
+     * * @return \Symfony\Component\HttpFoundation\Response
+     */
+
+    public function getFilterOptions()
+    {
+        $sections = Section::all();
+        $tags = Tag::all();
+
+        return response()->json([
+            'sections'  => $sections,
+            'tags'      => $tags
+        ]);
+    }
 }
