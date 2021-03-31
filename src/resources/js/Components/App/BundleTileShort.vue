@@ -19,9 +19,9 @@
 					</tbody>
 				</table>
 			</div>
-			<div>
-				<p v-for="tag in bundle.tags" :key="tag.slug">{{ tag.name }}</p>
-			</div>
+
+			<bundle-tags :tags="bundle.tags" :id="bundle.slug" />
+
 			<bundle-details-buttons :bundle="bundle" />
 		</div>
 	</div>
@@ -29,9 +29,11 @@
 
 <script>
 	import BundleDetailsButtons from '@/Components/App/BundleDetailsButtons';
+	import BundleTags from '@/Components/App/BundleTags';
 	export default {
 		components: {
-			BundleDetailsButtons
+			BundleDetailsButtons,
+			BundleTags
 		},
 
 		props: {

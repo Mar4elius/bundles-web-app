@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\Model;
 use App\Models\Order;
 use App\Models\Product;
 use App\Models\Section;
-use App\Models\Usecase;
+use App\Models\Tag;
 
 class Bundle extends Model
 {
@@ -50,11 +50,11 @@ class Bundle extends Model
     }
 
     /**
-     * Get usecases that belong to bundle
+     * Get tags that belong to bundle
      */
-    public function usecases()
+    public function tags()
     {
-        return $this->morphedByMany(Usecase::class, 'bundleable');
+        return $this->morphedByMany(Tag::class, 'bundleable');
     }
 
     /**

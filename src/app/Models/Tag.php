@@ -23,7 +23,7 @@ class Tag extends Model
     ];
 
     /**
-     * Get bundles to which usecase belongs
+     * Get bundles to which tag belongs
      */
     public function bundles()
     {

@@ -40,7 +40,7 @@
 				type: String,
 				default: 'all',
 				validator: function (value) {
-					return ['small', 'regular', 'large', 'all'].includes(value.toLowerCase());
+					return ['x-small', 'small', 'regular', 'large', 'all'].includes(value.toLowerCase());
 				}
 			}
 		},
@@ -67,6 +67,9 @@
 			}
 			// set button size
 			switch (props.size) {
+				case 'x-small':
+					defaultClasses += ' px-2 py-1 text-xs';
+					break;
 				case 'small':
 					defaultClasses += ' px-4 py-2';
 					break;

@@ -64,10 +64,10 @@
 	</div>
 </template>
 <script>
-	import VButton from '@/Components/Forms/VButton';
+	import VButtonFilled from '@/Components/Forms/VButtonFilled';
 	export default {
 		components: {
-			VButton
+			VButtonFilled
 		},
 
 		setup() {
