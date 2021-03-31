@@ -29,8 +29,8 @@
 </template>
 
 <script>
-	import BundleDetailsButtons from '@/Components/App/BundleDetailsButtons';
-	import BundleTags from '@/Components/App/BundleTags';
+	import BundleDetailsButtons from '@/Components/App/Bundle/BundleDetailsButtons';
+	import BundleTags from '@/Components/App/Bundle/BundleTags';
 	export default {
 		components: {
 			BundleDetailsButtons,

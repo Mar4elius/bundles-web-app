@@ -20,7 +20,7 @@
 	// Components
 	import HeroBanner from '@/Pages/HeroBanner';
 	import AppLayout from '@/Layouts/AppLayout';
-	import BundleTileLong from '@/Components/App/BundleTileLong';
+	import BundleTileLong from '@/Components/App/Bundle/BundleTileLong';
 
 	export default {
 		components: {

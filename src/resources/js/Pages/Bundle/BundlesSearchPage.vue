@@ -51,7 +51,7 @@
 	// Components
 	import AppLayout from '@/Layouts/AppLayout';
 	import VButtonOutlined from '@/Components/Forms/VButtonOutlined';
-	import BundleTileShort from '@/Components/App/BundleTileShort';
+	import BundleTileShort from '@/Components/App/Bundle/BundleTileShort';
 	export default {
 		components: {
 			AppLayout,
