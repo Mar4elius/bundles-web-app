@@ -33,15 +33,14 @@
 			const store = useStore();
 			let bundlesByPopularity = ref([]);
 
-			async function sortBundles(sortBy) {
-				const { data } = await store.dispatch('bundles/sortBundles', sortBy);
+			async function getTopTenBundles(sortBy) {
+				const { data } = await store.dispatch('bundles/getTopTenBundles', sortBy);
 				bundlesByPopularity.value = [...data.bundles];
 			}
 
-			onMounted(sortBundles('popularity'));
+			onMounted(getTopTenBundles('popularity'));
 
 			return {
-				sortBundles,
 				bundlesByPopularity
 			};
 		}

@@ -1,13 +1,13 @@
 export const userProfileLinks = [
 	{
 		name: 'My Account',
-		route: 'home',
+		route: 'bundles.index',
 		icon: '',
 		url: '/my-account'
 	},
 	{
 		name: 'Sign Out',
-		route: 'home',
+		route: 'bundles.index',
 		icon: '',
 		url: '/logout'
 	}

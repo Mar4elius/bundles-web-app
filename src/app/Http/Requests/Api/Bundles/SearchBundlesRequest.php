@@ -4,7 +4,7 @@ namespace App\Http\Requests\Api\Bundles;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class FilterBundlesRequest extends FormRequest
+class SearchBundlesRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,7 +24,7 @@ class FilterBundlesRequest extends FormRequest
     public function rules()
     {
         return [
-            'term' => 'required|string'
+            'params' => 'required|array'
         ];
     }
 }

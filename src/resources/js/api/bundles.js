@@ -1,15 +1,15 @@
 import axios from 'axios';
 
 const bundlesApi = {
-	filterBundles: (name) =>
-		axios.get('/api/v1/bundles/filter', {
+	searchBundles: (params) =>
+		axios.get('/api/v1/bundles/search', {
 			params: {
-				term: name
+				params: params
 			}
 		}),
 
-	sortBundles: (sortBy) =>
-		axios.get('/api/v1/bundles/sort', {
+	getTopTenBundles: (sortBy) =>
+		axios.get('/api/v1/bundles/get-top-ten', {
 			params: {
 				sort_by: sortBy
 			}

@@ -8,30 +8,9 @@
 				the more you give, the more you get!
 			</p>
 
-			<div class="flex justify-start items-center flex-wrap w-full">
-				<v-button-outlined
-					id="all"
-					:is-rounded="true"
-					:is-active="activeSection === 'all'"
-					size="small"
-					:classes="`mr-4 mt-8`"
-					@btnOnClickEvent="filterBundles"
-					>All</v-button-outlined
-				>
-				<v-button-outlined
-					:is-rounded="true"
-					:is-active="activeSection === section.slug"
-					size="small"
-					:classes="`mr-4 mt-8`"
-					v-for="section in sections"
-					:key="section.slug"
-					@btnOnClickEvent="filterBundles"
-					:id="section.slug"
-				>
-					{{ section.name }}
-				</v-button-outlined>
+			<div class="bg-white rounded-md">
+				<bundle-filter-search @btnOnClickEvent="searchBundles" />
 			</div>
-
 			<div class="bg-white rounded-md">
 				<div v-for="section in sectionBundles" :key="section.id" class="my-8">
 					<h3 class="p-4 md:p-6">{{ section.name }}</h3>
@@ -50,13 +29,14 @@
 	import { ref, onMounted } from '@vue/runtime-core';
 	// Components
 	import AppLayout from '@/Layouts/AppLayout';
-	import VButtonOutlined from '@/Components/Forms/VButtonOutlined';
 	import BundleTileShort from '@/Components/App/Bundle/BundleTileShort';
+	import BundleFilterSearch from '@/Components/App/Bundle/BundleFilterSearch';
+
 	export default {
 		components: {
 			AppLayout,
-			BundleTileShort,
-			VButtonOutlined
+			BundleFilterSearch,
+			BundleTileShort
 		},
 
 		props: {
@@ -69,20 +49,18 @@
 		setup() {
 			const store = useStore();
 			let sectionBundles = ref([]);
-			let activeSection = ref(null);
 
-			async function filterBundles(btnId) {
-				const { data } = await store.dispatch('bundles/filterBundles', btnId);
+			async function searchBundles(params) {
+				console.log(params);
+				const { data } = await store.dispatch('bundles/searchBundles', params);
 				sectionBundles.value = [...data.bundles];
-				activeSection.value = btnId;
 			}
 
-			onMounted(filterBundles('all'));
+			onMounted(searchBundles(['all']));
 
 			return {
-				activeSection,
-				sectionBundles,
-				filterBundles
+				searchBundles,
+				sectionBundles
 			};
 		}
 	};

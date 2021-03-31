@@ -14,26 +14,21 @@ const actions = {
 	 * Filter bundles by passed parameter
 	 *
 	 * @param {*} context
-	 * @param {*} bundleName
+	 * @param {Array} params
 	 *
 	 * @returns FIXME: what does it return?
 	 */
-	filterBundles({ commit }, bundleName) {
+	searchBundles({ commit }, params) {
 		//TODO: add loading thing
-		return bundlesApi.filterBundles(bundleName);
+		return bundlesApi.searchBundles(params);
 	},
-
 	/**
-	 *Sort bundles by passed parameter
 	 *
 	 * @param {*} context
-	 * @param {*} sortBy
-	 *
-	 * @returns FIXME: what does it return?
+	 * @param {String} sortBy
 	 */
-	sortBundles({ commit }, sortBy) {
-		//TODO: add loading thing
-		return bundlesApi.sortBundles(sortBy);
+	getTopTenBundles({ commit }, sortBy) {
+		return bundlesApi.getTopTenBundles(sortBy);
 	}
 };
 
