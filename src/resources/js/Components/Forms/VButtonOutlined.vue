@@ -93,7 +93,15 @@
 			// set button shape
 			props.isRounded ? (defaultClasses += ' rounded-full') : (defaultClasses += ' rounded');
 
-			const combinedClasses = computed(() => defaultClasses.concat(' ' + props.classes));
+			let originalClass = defaultClasses;
+			const combinedClasses = computed(() => {
+				if (props.isActive) {
+					originalClass += ' bg-indigo-700 text-white';
+				} else {
+					originalClass = defaultClasses;
+				}
+				return originalClass.concat(' ' + props.classes);
+			});
 
 			function handelOnClickEvent(e) {
 				emit('btnOnClickEvent', e.target.id);
