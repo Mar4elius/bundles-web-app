@@ -23,14 +23,11 @@ class BundleController extends Controller
     public function search(SearchBundlesRequest $request)
     {
         // TODO: Add try catch block
-        $filter_params = $request->params;
         $bundles = null;
 
-        $sections = Section::all()->pluck('slug');
-        $tags = Tag::all()->pluck('slug');
-        // get only values that have been selected on the front end
-        $section_slugs = $sections->intersect($filter_params)->count() ? $sections->intersect($filter_params) : ['all'];
-        $tag_slugs = $tags->intersect($filter_params)->count() ? $tags->intersect($filter_params) : ['all'];
+        $sections = $request->sections;
+        $tags = $request->tags;
+        // dd($tags);
 
         $bundles = Section::with([
             'bundles.products' => function ($q) {
@@ -39,18 +36,17 @@ class BundleController extends Controller
         ]);
 
         // filter by section
-        if (!in_array('all', $section_slugs)) {
-            $bundles = $bundles->whereIn('slug', $section_slugs);
+        if (!in_array('all', $sections)) {
+            $bundles = $bundles->whereIn('slug', $sections);
         }
 
         // filter by tags
-        // none OR All is selected
-        if (in_array('all', $tag_slugs)) {
+        if (in_array('all', $tags)) {
             $bundles->with('bundles.tags');
         } else {
             $bundles->with([
-                'bundles.tags' => function ($q) use ($tag_slugs) {
-                    return $q->whereIn('slug', $tag_slugs);
+                'bundles.tags' => function ($q) use ($tags) {
+                    return $q->whereIn('slug', $tags);
                 }
             ]);
         }

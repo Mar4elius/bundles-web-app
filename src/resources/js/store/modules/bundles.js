@@ -14,13 +14,21 @@ const actions = {
 	 * Filter bundles by passed parameter
 	 *
 	 * @param {*} context
-	 * @param {Array} params
+	 * @param {Array} payload
 	 *
 	 * @returns FIXME: what does it return?
 	 */
-	searchBundles({ commit }, params) {
+	searchBundles({ commit }, payload) {
+		console.log(payload);
 		//TODO: add loading thing
-		return bundlesApi.searchBundles(params);
+		// set default payload if none is supplied
+		if (payload === undefined) {
+			payload = {
+				sections: ['all'],
+				tags: ['all']
+			};
+		}
+		return bundlesApi.searchBundles(payload);
 	},
 
 	/**

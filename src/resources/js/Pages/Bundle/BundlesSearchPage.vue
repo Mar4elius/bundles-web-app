@@ -13,7 +13,7 @@
 			</div>
 			<div class="bg-white rounded-md">
 				<div v-for="section in sectionBundles" :key="section.id" class="my-8">
-					<h3 class="p-4 md:p-6">{{ section.name }}</h3>
+					<h3 class="p-4 md:p-6 text-indigo-600">{{ section.name }}</h3>
 					<div class="grid grid-cols-1 md:grid-cols-3 md:gap-4">
 						<bundle-tile-short v-for="bundle in section.bundles" :bundle="bundle" :key="bundle.slug" />
 					</div>
@@ -50,12 +50,12 @@
 			const store = useStore();
 			let sectionBundles = ref([]);
 
-			async function searchBundles(params) {
-				const { data } = await store.dispatch('bundles/searchBundles', params);
+			async function searchBundles(payload) {
+				const { data } = await store.dispatch('bundles/searchBundles', payload);
 				sectionBundles.value = [...data.bundles];
 			}
 
-			onMounted(searchBundles(['all']));
+			onMounted(searchBundles());
 
 			return {
 				searchBundles,

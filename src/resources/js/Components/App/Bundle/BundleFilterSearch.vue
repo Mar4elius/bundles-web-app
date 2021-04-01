@@ -7,20 +7,21 @@
 			<v-button-outlined
 				id="all"
 				:is-rounded="true"
-				:is-active="selectedFilters.includes('all')"
+				:is-active="selectedFilters.sections.includes('all')"
+				:is-disabled="isOnlyAllSelectedForSections"
 				size="small"
 				:classes="`mr-4 mb-4`"
-				@btnOnClickEvent="searchBundles"
+				@btnOnClickEvent="searchBundles($event, 'sections')"
 				>All</v-button-outlined
 			>
 			<v-button-outlined
 				v-for="section in availableFilters.sections"
 				:key="section.slug"
 				:is-rounded="true"
-				:is-active="selectedFilters.includes(section.slug)"
+				:is-active="selectedFilters.sections.includes(section.slug)"
 				size="small"
 				:classes="`mr-4 mb-4`"
-				@btnOnClickEvent="searchBundles"
+				@btnOnClickEvent="searchBundles($event, 'sections')"
 				:id="section.slug"
 			>
 				{{ section.name }}
@@ -33,20 +34,21 @@
 			<v-button-outlined
 				id="all"
 				:is-rounded="true"
-				:is-active="selectedFilters.includes('all')"
+				:is-active="selectedFilters.tags.includes('all')"
+				:is-disabled="isOnlyAllSelectedForTags"
 				size="small"
 				:classes="`mr-4 mb-4`"
-				@btnOnClickEvent="searchBundles"
+				@btnOnClickEvent="searchBundles($event, 'tags')"
 				>All</v-button-outlined
 			>
 			<v-button-outlined
 				v-for="tag in availableFilters.tags"
 				:key="tag.slug"
 				:is-rounded="true"
-				:is-active="selectedFilters.includes(tag.slug)"
+				:is-active="selectedFilters.tags.includes(tag.slug)"
 				size="small"
 				:classes="`mr-4 mb-4`"
-				@btnOnClickEvent="searchBundles"
+				@btnOnClickEvent="searchBundles($event, 'tags')"
 				:id="tag.slug"
 			>
 				{{ tag.name }}
@@ -57,7 +59,7 @@
 
 <script>
 	// Vue
-	import { onMounted, reactive, ref, toRefs } from 'vue';
+	import { computed, onMounted, reactive, readonly } from 'vue';
 	import { useStore } from 'vuex';
 	// Components
 	import VButtonOutlined from '@/Components/Forms/VButtonOutlined';
@@ -68,11 +70,22 @@
 
 		setup(props, { emit }) {
 			const store = useStore();
-			let availableFilters = reactive({
-				sections: [],
-				tags: []
-			});
-			let selectedFilters = ref([]);
+			const defaultFilters = {
+				sections: ['all'],
+				tags: ['all']
+			};
+
+			let availableFilters = reactive({ ...defaultFilters });
+
+			let selectedFilters = reactive({ ...defaultFilters });
+
+			let isOnlyAllSelectedForSections = computed(
+				() => selectedFilters.sections.length === 1 && selectedFilters.sections.includes('all')
+			);
+
+			let isOnlyAllSelectedForTags = computed(
+				() => selectedFilters.tags.length === 1 && selectedFilters.tags.includes('all')
+			);
 
 			async function getFilterOptions() {
 				const { data } = await store.dispatch('bundles/getFilterOptions');
@@ -80,20 +93,33 @@
 				availableFilters.tags = data.tags;
 			}
 
-			function searchBundles(btnId) {
-				if (selectedFilters.value.includes(btnId)) {
-					selectedFilters.value = selectedFilters.value.filter((item) => !item === btnId);
-				} else {
-					selectedFilters.value = [...selectedFilters.value, btnId];
+			function searchBundles(btnId, filterType) {
+				// if all selected remove any selected filters else remove 'all' filter
+				selectedFilters[filterType] =
+					btnId === 'all'
+						? [...defaultFilters[filterType]]
+						: selectedFilters[filterType].filter((item) => item !== 'all');
+				if (selectedFilters[filterType].includes(btnId) && btnId !== 'all') {
+					// remove filter
+					selectedFilters[filterType] = selectedFilters[filterType].filter((item) => item !== btnId);
+				} else if (btnId !== 'all') {
+					// add filter
+					selectedFilters[filterType] = [...selectedFilters[filterType], btnId];
+				}
+				// if all filters have been deselected set All filter back
+				if (!selectedFilters[filterType].length) {
+					selectedFilters[filterType] = [...defaultFilters[filterType]];
 				}
 
-				emit('btnOnClickEvent', [...selectedFilters.value]);
+				emit('btnOnClickEvent', readonly(selectedFilters));
 			}
 
 			onMounted(getFilterOptions());
 
 			return {
 				availableFilters,
+				isOnlyAllSelectedForTags,
+				isOnlyAllSelectedForSections,
 				searchBundles,
 				selectedFilters
 			};

@@ -24,7 +24,7 @@ class SearchBundlesRequest extends FormRequest
     public function rules()
     {
         return [
-            'params' => 'required|array'
+            // 'params' => 'required'
         ];
     }
 }

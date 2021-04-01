@@ -1,11 +1,9 @@
 import axios from 'axios';
 
 const bundlesApi = {
-	searchBundles: (params) =>
+	searchBundles: (payload) =>
 		axios.get('/api/v1/bundles/search', {
-			params: {
-				params: params
-			}
+			params: payload
 		}),
 
 	getTopTenBundles: (sortBy) =>
