@@ -32,23 +32,32 @@ class BundleController extends Controller
         $bundles = Section::with([
             'bundles.products' => function ($q) {
                 return $q->withPivot('default_quantity');
-            }
+            },
+            'bundles.tags'
         ]);
 
         // filter by section
         if (!in_array('all', $sections)) {
-            $bundles = $bundles->whereIn('slug', $sections);
+            $bundles = $bundles->WhereIn('slug', $sections);
         }
 
         // filter by tags
-        if (in_array('all', $tags)) {
-            $bundles->with('bundles.tags');
-        } else {
-            $bundles->with([
-                'bundles.tags' => function ($q) use ($tags) {
+        if (!in_array('all', $tags)) {
+            // filter section based on if bundle has selected tag
+            $bundles->whereHas(
+                'bundles.tags',
+                function ($q) use ($tags) {
                     return $q->whereIn('slug', $tags);
                 }
-            ]);
+            )->with(
+                // now filter bundles based on the selected tag
+                'bundles',
+                function ($q) use ($tags) {
+                    $q->whereHas('tags', function ($q) use ($tags) {
+                        $q->whereIn('slug', $tags);
+                    });
+                }
+            );
         }
 
         $bundles = $bundles->get();
