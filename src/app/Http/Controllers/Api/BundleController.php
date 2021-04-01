@@ -102,7 +102,8 @@ class BundleController extends Controller
 
     public function getFilterOptions()
     {
-        $sections = Section::all();
+        $sections = Section::whereHas('bundles')
+            ->get();
         $tags = Tag::all();
 
         return response()->json([

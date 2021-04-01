@@ -11,14 +11,53 @@
 			<div class="bg-white rounded-md">
 				<bundle-filter-search @btnOnClickEvent="searchBundles" />
 			</div>
-			<div class="bg-white rounded-md">
+			<!-- Do not show anything if there no sections-->
+			<div class="bg-white rounded-md" v-if="sectionBundles.length">
 				<div v-for="section in sectionBundles" :key="section.id" class="my-8">
 					<h3 class="p-4 md:p-6 text-indigo-600">{{ section.name }}</h3>
-					<div class="grid grid-cols-1 md:grid-cols-3 md:gap-4">
+					<!-- Show if section has any bundles -->
+					<div class="grid grid-cols-1 md:grid-cols-3 md:gap-4" v-if="section.bundles.length">
 						<bundle-tile-short v-for="bundle in section.bundles" :bundle="bundle" :key="bundle.slug" />
 					</div>
+					<!-- slot component -->
+					<message-component v-else>
+						<div class="w-6">
+							<svg
+								class="text-yellow-500"
+								xmlns="http://www.w3.org/2000/svg"
+								fill="none"
+								viewBox="0 0 24 24"
+								stroke="currentColor"
+							>
+								<path
+									stroke-linecap="round"
+									stroke-linejoin="round"
+									stroke-width="2"
+									d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+								/>
+							</svg>
+						</div>
+						<p class="m-auto text-center">Does not look that we have anything for this category.</p>
+					</message-component>
+					<!-- </template> -->
 				</div>
 			</div>
+			<message-component v-else>
+				<div class="flex justify-center items-center">
+					<div class="w-6 mr-2 md:w-8 md:mr-4">
+						<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+							<path
+								class="text-yellow-500"
+								stroke-linecap="round"
+								stroke-linejoin="round"
+								stroke-width="2"
+								d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+							/>
+						</svg>
+					</div>
+					<p>Does not look that we have anything for this request.</p>
+				</div>
+			</message-component>
 		</template>
 	</app-layout>
 </template>
@@ -31,12 +70,14 @@
 	import AppLayout from '@/Layouts/AppLayout';
 	import BundleTileShort from '@/Components/App/Bundle/BundleTileShort';
 	import BundleFilterSearch from '@/Components/App/Bundle/BundleFilterSearch';
+	import MessageComponent from '@/Components/Support/MessageComponent';
 
 	export default {
 		components: {
 			AppLayout,
 			BundleFilterSearch,
-			BundleTileShort
+			BundleTileShort,
+			MessageComponent
 		},
 
 		props: {

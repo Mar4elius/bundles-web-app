@@ -1,58 +1,63 @@
 <template>
-	<div class="p-4 md:p-6">
-		<h3>Filter by:</h3>
-		<!-- Cateogory -->
-		<h4 class="text-indigo-600">Category</h4>
-		<div class="flex justify-start items-center flex-wrap w-full">
-			<v-button-outlined
-				id="all"
-				:is-rounded="true"
-				:is-active="selectedFilters.sections.includes('all')"
-				:is-disabled="isOnlyAllSelectedForSections"
-				size="small"
-				:classes="`mr-4 mb-4`"
-				@btnOnClickEvent="searchBundles($event, 'sections')"
-				>All</v-button-outlined
-			>
-			<v-button-outlined
-				v-for="section in availableFilters.sections"
-				:key="section.slug"
-				:is-rounded="true"
-				:is-active="selectedFilters.sections.includes(section.slug)"
-				size="small"
-				:classes="`mr-4 mb-4`"
-				@btnOnClickEvent="searchBundles($event, 'sections')"
-				:id="section.slug"
-			>
-				{{ section.name }}
-			</v-button-outlined>
-		</div>
+	<div class="p-4 md:p-6 md:flex">
+		<div class="w-full sm:w-2/3">
+			<h3 class="text-indigo-600">Filter by:</h3>
+			<!-- Cateogory -->
+			<h4>Category</h4>
+			<div class="flex justify-start items-center flex-wrap w-full">
+				<v-button-outlined
+					id="all"
+					:is-rounded="true"
+					:is-active="selectedFilters.sections.includes('all')"
+					:is-disabled="isAllSelectedForSections"
+					size="small"
+					:classes="`mr-4 mb-4`"
+					@btnOnClickEvent="searchBundles($event, 'sections')"
+					>All</v-button-outlined
+				>
+				<v-button-outlined
+					v-for="section in availableFilters.sections"
+					:key="section.slug"
+					:is-rounded="true"
+					:is-active="selectedFilters.sections.includes(section.slug)"
+					size="small"
+					:classes="`mr-4 mb-4`"
+					@btnOnClickEvent="searchBundles($event, 'sections')"
+					:id="section.slug"
+				>
+					{{ section.name }}
+				</v-button-outlined>
+			</div>
 
-		<!-- Tags -->
-		<h4 class="text-indigo-600">Tags</h4>
-		<div class="flex justify-start items-center flex-wrap w-full">
-			<v-button-outlined
-				id="all"
-				:is-rounded="true"
-				:is-active="selectedFilters.tags.includes('all')"
-				:is-disabled="isOnlyAllSelectedForTags"
-				size="small"
-				:classes="`mr-4 mb-4`"
-				@btnOnClickEvent="searchBundles($event, 'tags')"
-				>All</v-button-outlined
-			>
-			<v-button-outlined
-				v-for="tag in availableFilters.tags"
-				:key="tag.slug"
-				:is-rounded="true"
-				:is-active="selectedFilters.tags.includes(tag.slug)"
-				size="small"
-				:classes="`mr-4 mb-4`"
-				@btnOnClickEvent="searchBundles($event, 'tags')"
-				:id="tag.slug"
-			>
-				{{ tag.name }}
-			</v-button-outlined>
+			<!-- Tags -->
+			<h4>Tags</h4>
+			<div class="flex justify-start items-center flex-wrap w-full">
+				<v-button-outlined
+					id="all"
+					:is-rounded="true"
+					:is-active="selectedFilters.tags.includes('all')"
+					:is-disabled="isAllSelectedForTags"
+					size="small"
+					:classes="`mr-4 mb-4`"
+					@btnOnClickEvent="searchBundles($event, 'tags')"
+					>All</v-button-outlined
+				>
+				<v-button-outlined
+					v-for="tag in availableFilters.tags"
+					:key="tag.slug"
+					:is-rounded="true"
+					:is-active="selectedFilters.tags.includes(tag.slug)"
+					size="small"
+					:classes="`mr-4 mb-4`"
+					@btnOnClickEvent="searchBundles($event, 'tags')"
+					:id="tag.slug"
+				>
+					{{ tag.name }}
+				</v-button-outlined>
+			</div>
+		</div>
+		<div class="w-full sm:w-1/3">
+			<h3 class="text-indigo-600">Sort by:</h3>
 		</div>
 	</div>
 </template>
@@ -79,11 +84,11 @@
 
 			let selectedFilters = reactive({ ...defaultFilters });
 
-			let isOnlyAllSelectedForSections = computed(
+			let isAllSelectedForSections = computed(
 				() => selectedFilters.sections.length === 1 && selectedFilters.sections.includes('all')
 			);
 
-			let isOnlyAllSelectedForTags = computed(
+			let isAllSelectedForTags = computed(
 				() => selectedFilters.tags.length === 1 && selectedFilters.tags.includes('all')
 			);
 
@@ -118,8 +123,8 @@
 
 			return {
 				availableFilters,
-				isOnlyAllSelectedForTags,
-				isOnlyAllSelectedForSections,
+				isAllSelectedForTags,
+				isAllSelectedForSections,
 				searchBundles,
 				selectedFilters
 			};
