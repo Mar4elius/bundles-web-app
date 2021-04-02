@@ -27,7 +27,6 @@ class BundleController extends Controller
 
         $sections = $request->sections;
         $tags = $request->tags;
-        // dd($tags);
 
         $bundles = Section::with([
             'bundles.products' => function ($q) {
@@ -97,7 +96,7 @@ class BundleController extends Controller
     /**
      * Get bundles filter options
      *
-     * * @return \Symfony\Component\HttpFoundation\Response
+     * @return \Symfony\Component\HttpFoundation\Response
      */
 
     public function getFilterOptions()
@@ -109,6 +108,53 @@ class BundleController extends Controller
         return response()->json([
             'sections'  => $sections,
             'tags'      => $tags
+        ]);
+    }
+
+    /**
+     * Get bundles sort options
+     *
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+
+    public function getSortOptions()
+    {
+        // build data set for radio buttons
+        $sorts = [
+            [
+                'group_name'    => 'popularity',
+                'orders' => [
+                    'asc'           => [
+                        'name'  => 'popularity',
+                        'id'    => 'popularity_asc',
+                        'value' => 'asc'
+                    ],
+                    'desc' => [
+                        'name'  => 'popularity',
+                        'id'    => 'popularity_desc',
+                        'value' => 'desc'
+                    ],
+                ]
+            ],
+            [
+                'group_name'    => 'price',
+                'orders' => [
+                    'asc' => [
+                        'name'  => 'price',
+                        'id'    => 'price_asc',
+                        'value' => 'asc'
+                    ],
+                    'desc' => [
+                        'name'  => 'price',
+                        'id'    => 'price_desc',
+                        'value' => 'desc'
+                    ],
+                ]
+            ]
+        ];
+
+        return response()->json([
+            'sorts'  => $sorts
         ]);
     }
 }

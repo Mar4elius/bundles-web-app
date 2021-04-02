@@ -14,32 +14,33 @@
 			<!-- Do not show anything if there no sections-->
 			<div class="bg-white rounded-md" v-if="sectionBundles.length">
 				<div v-for="section in sectionBundles" :key="section.id" class="my-8">
-					<h3 class="p-4 md:p-6 text-indigo-600">{{ section.name }}</h3>
-					<!-- Show if section has any bundles -->
-					<div class="grid grid-cols-1 md:grid-cols-3 md:gap-4" v-if="section.bundles.length">
-						<bundle-tile-short v-for="bundle in section.bundles" :bundle="bundle" :key="bundle.slug" />
-					</div>
-					<!-- slot component -->
-					<message-component v-else>
-						<div class="w-6">
-							<svg
-								class="text-yellow-500"
-								xmlns="http://www.w3.org/2000/svg"
-								fill="none"
-								viewBox="0 0 24 24"
-								stroke="currentColor"
-							>
-								<path
-									stroke-linecap="round"
-									stroke-linejoin="round"
-									stroke-width="2"
-									d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-								/>
-							</svg>
+					<template v-if="section.bundles.length">
+						<h3 class="p-4 md:p-6 text-indigo-600">{{ section.name }}</h3>
+						<!-- Show if section has any bundles -->
+						<div class="grid grid-cols-1 md:grid-cols-3 md:gap-4" v-if="section.bundles.length">
+							<bundle-tile-short v-for="bundle in section.bundles" :bundle="bundle" :key="bundle.slug" />
 						</div>
-						<p class="m-auto text-center">Does not look that we have anything for this category.</p>
-					</message-component>
-					<!-- </template> -->
+						<!-- slot component -->
+						<message-component v-else>
+							<div class="w-6">
+								<svg
+									class="text-yellow-500"
+									xmlns="http://www.w3.org/2000/svg"
+									fill="none"
+									viewBox="0 0 24 24"
+									stroke="currentColor"
+								>
+									<path
+										stroke-linecap="round"
+										stroke-linejoin="round"
+										stroke-width="2"
+										d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+									/>
+								</svg>
+							</div>
+							<p class="m-auto text-center">Does not look that we have anything for this category.</p>
+						</message-component>
+					</template>
 				</div>
 			</div>
 			<message-component v-else>
@@ -91,7 +92,7 @@
 			const store = useStore();
 			let sectionBundles = ref([]);
 
-			async function searchBundles(payload) {
+			async function searchBundles(payload = null) {
 				const { data } = await store.dispatch('bundles/searchBundles', payload);
 				sectionBundles.value = [...data.bundles];
 			}

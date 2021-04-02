@@ -18,11 +18,10 @@ const actions = {
 	 *
 	 * @returns FIXME: what does it return?
 	 */
-	searchBundles({ commit }, payload) {
-		console.log(payload);
+	searchBundles({ commit }, payload = null) {
 		//TODO: add loading thing
 		// set default payload if none is supplied
-		if (payload === undefined) {
+		if (!payload) {
 			payload = {
 				sections: ['all'],
 				tags: ['all']
@@ -42,15 +41,27 @@ const actions = {
 	getTopTenBundles({ commit }, sortBy) {
 		return bundlesApi.getTopTenBundles(sortBy);
 	},
+
 	/**
 	 * Get bundle filter options
 	 *
-	 * @param {*} param0
+	 * @param {*} context
 	 *
 	 * @returns FIXME: what does it return?
 	 */
 	getFilterOptions({ commit }) {
 		return bundlesApi.getFilterOptions();
+	},
+
+	/**
+	 * Get bundle sort options
+	 *
+	 * @param {*} context
+	 *
+	 * @returns FIXME: what does it return?
+	 */
+	getSortOptions({ commit }) {
+		return bundlesApi.getSortOptions();
 	}
 };
 

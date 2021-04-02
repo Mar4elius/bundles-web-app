@@ -25,5 +25,6 @@ Route::prefix('v1')->group(function () {
         Route::get('/search', [BundleController::class, 'search']);
         Route::get('/top-ten', [BundleController::class, 'getTopTenBundles']);
         Route::get('/filter-options', [BundleController::class, 'getFilterOptions']);
+        Route::get('/sort-options', [BundleController::class, 'getSortOptions']);
     });
 });
