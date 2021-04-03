@@ -103,9 +103,9 @@
 				sections: ['all'],
 				tags: ['all']
 			};
-			let sectionBundles = ref([]);
+			let sectionBundles = ref([]); // gets data from emit event from child component
 			let selectedFilters = reactive({ ...defaultFilters });
-			let selectedSorts = ref([]);
+			let selectedSorts = ref([]); // gets data from emit event from child component
 
 			async function searchBundles(payload = null) {
 				const { data } = await store.dispatch('bundles/searchBundles', payload);
@@ -119,7 +119,7 @@
 
 				const data = {
 					...selectedFilters,
-					sort_by: [...selectedSorts.value]
+					sort_by: selectedSorts.value
 				};
 
 				searchBundles(data);
@@ -131,7 +131,7 @@
 				selectedSorts.value = [...payload];
 				const data = {
 					...selectedFilters,
-					sort_by: [...selectedSorts.value]
+					sort_by: selectedSorts.value
 				};
 
 				searchBundles(data);
