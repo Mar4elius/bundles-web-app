@@ -7,9 +7,16 @@
 				and choose where your money goes, including to charity. Most Bundles come in tiers starting at only $1 -
 				the more you give, the more you get!
 			</p>
-
+			<!-- show filters and sorts when bundles data has been loaded -->
 			<div class="bg-white rounded-md">
-				<bundle-filter-search @btnOnClickEvent="searchBundles" />
+				<div class="p-4 md:p-6 md:flex">
+					<div class="w-full sm:w-2/3">
+						<bundle-filter @btnOnClickEvent="filterBundles" />
+					</div>
+					<div class="w-full sm:w-1/3">
+						<bundle-sort @radioBtnOnClickEvent="sortBundles" />
+					</div>
+				</div>
 			</div>
 			<!-- Do not show anything if there no sections-->
 			<div class="bg-white rounded-md" v-if="sectionBundles.length">
@@ -66,17 +73,19 @@
 <script>
 	// vue
 	import { useStore } from 'vuex';
-	import { ref, onMounted } from '@vue/runtime-core';
+	import { reactive, ref, onMounted } from '@vue/runtime-core';
 	// Components
 	import AppLayout from '@/Layouts/AppLayout';
 	import BundleTileShort from '@/Components/App/Bundle/BundleTileShort';
-	import BundleFilterSearch from '@/Components/App/Bundle/BundleFilterSearch';
+	import BundleFilter from '@/Components/App/Bundle/BundleFilter';
+	import BundleSort from '@/Components/App/Bundle/BundleSort';
 	import MessageComponent from '@/Components/Support/MessageComponent';
 
 	export default {
 		components: {
 			AppLayout,
-			BundleFilterSearch,
+			BundleFilter,
+			BundleSort,
 			BundleTileShort,
 			MessageComponent
 		},
@@ -90,18 +99,51 @@
 
 		setup() {
 			const store = useStore();
+			const defaultFilters = {
+				sections: ['all'],
+				tags: ['all']
+			};
 			let sectionBundles = ref([]);
+			let selectedFilters = reactive({ ...defaultFilters });
+			let selectedSorts = ref([]);
 
 			async function searchBundles(payload = null) {
 				const { data } = await store.dispatch('bundles/searchBundles', payload);
 				sectionBundles.value = [...data.bundles];
 			}
 
+			function filterBundles(payload) {
+				console.log('fitler', payload);
+				// build payload that inlcudes filter and sort options
+				selectedFilters = { ...payload };
+
+				const data = {
+					...selectedFilters,
+					sort_by: [...selectedSorts.value]
+				};
+
+				searchBundles(data);
+			}
+
+			function sortBundles(payload) {
+				console.log('sort', payload);
+				// build payload that inlcudes filter and sort options
+				selectedSorts.value = [...payload];
+				const data = {
+					...selectedFilters,
+					sort_by: [...selectedSorts.value]
+				};
+
+				searchBundles(data);
+			}
+
 			onMounted(searchBundles());
 
 			return {
+				filterBundles,
 				searchBundles,
-				sectionBundles
+				sectionBundles,
+				sortBundles
 			};
 		}
 	};
