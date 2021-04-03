@@ -76,6 +76,7 @@
 								value="desc"
 								class="absolute w-0 h-0 opacity-0"
 								v-model="selectedSorts[index].order"
+								@click="sortBundles()"
 							/>
 							<svg
 								xmlns="http://www.w3.org/2000/svg"
@@ -99,6 +100,7 @@
 								value="asc"
 								class="absolute w-0 h-0 opacity-0"
 								v-model="selectedSorts[index].order"
+								@click="sortBundles()"
 							/>
 							<svg
 								xmlns="http://www.w3.org/2000/svg"
@@ -175,14 +177,29 @@
 					selectedFilters[filterType] = [...defaultFilters[filterType]];
 				}
 
-				emit('btnOnClickEvent', readonly(selectedFilters));
+				// build payload that inlcudes filter and sort options
+				const payload = {
+					...selectedFilters,
+					sort_by: [...selectedSorts.value]
+				};
+				emit('btnOnClickEvent', readonly(payload));
+			}
+
+			function sortBundles() {
+				// build payload that inlcudes filter and sort options
+				console.log(selectedSorts);
+				const payload = {
+					...selectedFilters,
+					sort_by: [...selectedSorts.value]
+				};
+				console.log(payload);
+				emit('btnOnClickEvent', readonly(payload));
 			}
 
 			async function getFilterOptions() {
 				const { data } = await store.dispatch('bundles/getFilterOptions');
 				availableFilters.sections = data.sections;
 				availableFilters.tags = data.tags;
-				//
 			}
 
 			async function getSortOptions() {
@@ -194,8 +211,6 @@
 						order: null
 					};
 				});
-				console.log(selectedSorts.value);
-				console.log(availableSorts);
 			}
 
 			onMounted(() => {
@@ -211,7 +226,8 @@
 				isAllSelectedForSections,
 				searchBundles,
 				selectedFilters,
-				selectedSorts
+				selectedSorts,
+				sortBundles
 			};
 		}
 	};
