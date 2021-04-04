@@ -51,22 +51,24 @@ class BundleController extends Controller
             )->with(
                 // now filter bundles based on the selected tag
                 'bundles',
-                function ($q) use ($tags, $request) {
+                function ($q) use ($tags) {
                     $q->whereHas('tags', function ($q) use ($tags) {
                         $q->whereIn('slug', $tags);
                     });
-                    // build order clause MAYBE FILLED?
-                    if (isset($request->sort_by)) {
-                        foreach ($request->sort_by as $sort) {
-                            $sort = json_decode($sort);
-
-                            if ($sort->order) {
-                                $q->orderBy($sort->name, $sort->order);
-                            }
-                        }
-                    }
                 }
             );
+        }
+
+        // build order clause MAYBE FILLED?
+        if (isset($request->sort_by)) {
+            $bundles->with('bundles', function ($q) use ($request) {
+                foreach ($request->sort_by as $sort) {
+                    $sort = json_decode($sort);
+                    if ($sort->order) {
+                        $q->orderBy($sort->name, $sort->order);
+                    }
+                }
+            });
         }
 
         $bundles = $bundles->get();
