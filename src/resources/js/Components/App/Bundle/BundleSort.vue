@@ -83,7 +83,11 @@
 			}
 
 			function sortBundles() {
-				emit('radioBtnOnClickEvent', readonly(selectedSorts.value));
+				// silly hack that makes sure that selectedSorts array v-model is updated before emit
+				// function fires
+				setTimeout(() => {
+					emit('radioBtnOnClickEvent', readonly(selectedSorts.value));
+				}, 100);
 			}
 
 			onMounted(getSortOptions());
