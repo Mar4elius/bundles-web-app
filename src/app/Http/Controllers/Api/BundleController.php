@@ -48,7 +48,7 @@ class BundleController extends Controller
                 $bundles->whereHas(
                     'bundles.tags',
                     function ($q) use ($tags) {
-                        return $q->whereIn('slu', $tags);
+                        return $q->whereIn('slug', $tags);
                     }
                 )->with(
                     // now filter bundles based on the selected tag
