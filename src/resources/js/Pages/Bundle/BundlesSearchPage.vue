@@ -10,10 +10,10 @@
 			<!-- show filters and sorts when bundles data has been loaded -->
 			<div class="bg-white rounded-md">
 				<div class="p-4 md:p-6 md:flex">
-					<div class="w-full sm:w-2/3">
+					<div class="w-full md:w-2/3">
 						<bundle-filter @btnOnClickEvent="filterBundles" />
 					</div>
-					<div class="w-full sm:w-1/3">
+					<div class="w-full md:w-1/3">
 						<bundle-sort @radioBtnOnClickEvent="sortBundles" />
 					</div>
 				</div>
@@ -113,7 +113,6 @@
 			}
 
 			function filterBundles(payload) {
-				console.log('fitler', payload);
 				// build payload that inlcudes filter and sort options
 				selectedFilters = { ...payload };
 
@@ -125,13 +124,11 @@
 				searchBundles(data);
 			}
 
-			function sortBundles(payload) {
-				console.log('sort', payload);
+			function sortBundles(payload = null) {
 				// build payload that inlcudes filter and sort options
-				selectedSorts.value = [...payload];
 				const data = {
 					...selectedFilters,
-					sort_by: selectedSorts.value
+					sort_by: payload ? (selectedSorts.value = [...payload]) : []
 				};
 
 				searchBundles(data);
