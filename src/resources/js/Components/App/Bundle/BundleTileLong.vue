@@ -3,7 +3,7 @@
 	<div class="flex flex-col sm:flex-row-reverse bg-white my-8 rounded-md">
 		<div class="m-4 items-center relative" @mouseenter="handleMouseEnterEvent" @mouseleave="handleMouseLeaveEvent">
 			<img :src="bundle.image_path" :alt="bundle.name" />
-			<div v-show="showBundleDetails" class="bg-black bg-opacity-60 absolute h-full w-full top-0 left-0">
+			<div v-show="showHoverText" class="bg-black bg-opacity-60 absolute h-full w-full top-0 left-0">
 				<h2 class="text-white text-center">Includes:</h2>
 				<ul class="mx-10 text-white list-disc">
 					<li v-for="product in bundle.products" :key="product.id" class="flex justify-between">
@@ -26,12 +26,12 @@
 
 <script>
 	// FIXME: https://codepen.io/linux/pen/LjWrPZ come back to that later to make better styles
-	// Vue
-	import { ref, computed } from '@vue/reactivity';
 	// Components
 	import BundleDetailsButtons from '@/Components/App/Bundle/BundleDetailsButtons';
 	import BundleTags from '@/Components/App/Bundle/BundleTags';
 	import FontAwesomeIcon from '@/Components/Support/FontAwesomeIcon.vue';
+	// Functions
+	import { useShowTextOnHover } from '@/Composables/useShowTextOnHover';
 
 	export default {
 		components: {
@@ -48,15 +48,7 @@
 		},
 
 		setup(props) {
-			let showBundleDetails = ref(false);
-
-			function handleMouseEnterEvent() {
-				showBundleDetails.value = true;
-			}
-
-			function handleMouseLeaveEvent() {
-				showBundleDetails.value = false;
-			}
+			const { showHoverText, handleMouseEnterEvent, handleMouseLeaveEvent } = useShowTextOnHover();
 
 			function addItemToCart() {
 				console.log('addItemtocart');
@@ -71,7 +63,7 @@
 				handleMouseEnterEvent,
 				handleMouseLeaveEvent,
 				goToBundleDetails,
-				showBundleDetails
+				showHoverText
 			};
 		}
 	};
