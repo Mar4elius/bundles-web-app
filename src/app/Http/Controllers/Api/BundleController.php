@@ -35,17 +35,12 @@ class BundleController extends Controller
                     return $q->withPivot('default_quantity');
                 },
                 'bundles.tags'
-            ]);
-
-            // filter by section
-            if (!in_array('all', $sections)) {
-                $bundles = $bundles->WhereIn('slug', $sections);
-            }
-
-            // filter by tags
-            if (!in_array('all', $tags)) {
-                // filter section based on if bundle has selected tag
-                $bundles->whereHas(
+                // filter by section
+            ])->when(!in_array('all', $sections), function ($q) use ($sections) {
+                return $q->whereIn('slug', $sections);
+                // filter by tags
+            })->when(!in_array('all', $tags), function ($q) use ($tags) {
+                return $q->whereHas(
                     'bundles.tags',
                     function ($q) use ($tags) {
                         return $q->whereIn('slug', $tags);
@@ -59,11 +54,9 @@ class BundleController extends Controller
                         });
                     }
                 );
-            }
-
-            // build order clause MAYBE FILLED?
-            if (isset($request->sort_by)) {
-                $bundles->with('bundles', function ($q) use ($request) {
+                // build order clause 
+            })->when(isset($request->sort_by), function ($q) use ($request) {
+                $q->with('bundles', function ($q) use ($request) {
                     foreach ($request->sort_by as $sort) {
                         $sort = json_decode($sort);
                         if ($sort->order) {
@@ -71,9 +64,7 @@ class BundleController extends Controller
                         }
                     }
                 });
-            }
-
-            $bundles = $bundles->get();
+            })->get();
 
             return response()->json([
                 'bundles' => $bundles
