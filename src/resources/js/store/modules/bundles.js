@@ -16,9 +16,9 @@ const actions = {
 	 * @param {*} context
 	 * @param {Array} payload
 	 *
-	 * @returns FIXME: what does it return?
+	 * @returns JSON Response
 	 */
-	async searchBundles({ commit }, payload = null) {
+	searchBundles({ commit }, payload = null) {
 		// set default payload if none is supplied
 		try {
 			if (!payload) {
@@ -27,7 +27,7 @@ const actions = {
 					tags: ['all']
 				};
 			}
-			return await bundlesApi.searchBundles(payload);
+			return bundlesApi.searchBundles(payload);
 		} catch (error) {
 			console.error('hello');
 		}
@@ -39,7 +39,7 @@ const actions = {
 	 * @param {*} context
 	 * @param {String} sortBy
 	 *
-	 * @returns FIXME: what does it return?
+	 * @returns JSON Response
 	 */
 	getTopTenBundles({ commit }, sortBy) {
 		return bundlesApi.getTopTenBundles(sortBy);
@@ -50,7 +50,7 @@ const actions = {
 	 *
 	 * @param {*} context
 	 *
-	 * @returns FIXME: what does it return?
+	 * @returns JSON Response
 	 */
 	getFilterOptions({ commit }) {
 		return bundlesApi.getFilterOptions();
@@ -61,7 +61,7 @@ const actions = {
 	 *
 	 * @param {*} context
 	 *
-	 * @returns FIXME: what does it return?
+	 * @returns JSON Response
 	 */
 	getSortOptions({ commit }) {
 		return bundlesApi.getSortOptions();

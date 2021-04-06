@@ -1,7 +1,8 @@
 <template>
 	<h3 class="text-indigo-600">Filter by:</h3>
 	<!-- Cateogory -->
-	<h4>Category</h4>
+
+	<h4 class="mr-4">Category</h4>
 	<div class="flex justify-start items-center flex-wrap w-full">
 		<v-button-outlined
 			id="all"
@@ -28,7 +29,8 @@
 	</div>
 
 	<!-- Tags -->
-	<h4>Tags</h4>
+
+	<h4 class="mr-4">Tags</h4>
 	<div class="flex justify-start items-center flex-wrap w-full">
 		<v-button-outlined
 			id="all"

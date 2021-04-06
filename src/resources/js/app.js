@@ -14,6 +14,7 @@ axios.defaults.showLoader = true;
 
 const el = document.getElementById('app');
 createApp({
+	// add interceptor to created hook
 	created() {
 		axios.interceptors.request.use(
 			(config) => {
