@@ -1,6 +1,6 @@
 <template>
 	<div class="flex justify-between items-end w-full">
-		<v-button-filled id="read-more">Read more</v-button-filled>
+		<v-button-filled id="read-more" @btnOnClickEvent="goToBundleDetails">Read more</v-button-filled>
 		<v-button-filled @mouseleave="showButtonPrice" classes="w-44" id="add-to-cart">
 			<div v-show="showPrice" class="flex justify-center" @mouseenter="showButtonText">
 				<span class="mr-1"
@@ -52,8 +52,14 @@
 				showPrice.value = true;
 			}
 
+			function goToBundleDetails() {
+				// this.$inertia.post(route('logout'));
+				window.location.href = `/bundles/${props.bundle.slug}`;
+			}
+
 			return {
 				bundlePrice,
+				goToBundleDetails,
 				showButtonPrice,
 				showButtonText,
 				showPrice

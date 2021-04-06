@@ -12,6 +12,7 @@ use App\Models\Section;
 // Requests
 use App\Http\Requests\Api\Bundles\SearchBundlesRequest;
 use App\Http\Requests\Api\Bundles\GetTopTenBundlesRequest;
+use App\Http\Requests\Api\Bundles\GetBundleDetailsRequest;
 
 class BundleController extends Controller
 {
@@ -203,5 +204,23 @@ class BundleController extends Controller
                 ], 500);
             }
         }
+    }
+
+    /**
+     * Get bundle details
+     *
+     * @param App\Http\Requests\Api\Bundles\GetBundleDetailsRequest $request
+     *
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    public function getBundleDetails(GetBundleDetailsRequest $request)
+    {
+        //FIXME: add try catch
+        $bundle = Bundle::whereSlug($request->slug)
+            ->first();
+
+        return response()->json([
+            'bundle' => $bundle
+        ]);
     }
 }

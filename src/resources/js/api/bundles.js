@@ -14,7 +14,13 @@ const bundlesApi = {
 		}),
 
 	getFilterOptions: () => axios.get('/api/v1/bundles/filter-options'),
-	getSortOptions: () => axios.get('/api/v1/bundles/sort-options')
+	getSortOptions: () => axios.get('/api/v1/bundles/sort-options'),
+	getBundleDetails: (slug) =>
+		axios.get('/api/v1/bundles/show', {
+			params: {
+				slug: slug
+			}
+		})
 };
 
 export default bundlesApi;

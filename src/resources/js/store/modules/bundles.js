@@ -65,6 +65,17 @@ const actions = {
 	 */
 	getSortOptions({ commit }) {
 		return bundlesApi.getSortOptions();
+	},
+	/**
+	 * Get bundle details
+	 *
+	 * @param {*} context
+	 * @param string slug
+	 *
+	 * @returns JSON Response
+	 */
+	getBundleDetails({ commit }, slug) {
+		return bundlesApi.getBundleDetails(slug);
 	}
 };
 

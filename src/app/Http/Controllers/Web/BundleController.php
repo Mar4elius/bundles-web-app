@@ -55,12 +55,18 @@ class BundleController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param  string $slug
+     *
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(string $slug)
     {
-        //
+        $bundle = Bundle::whereSlug($slug)
+            ->first();
+
+        return Inertia::render('Bundle/BundleDetailsPage', [
+            'bundle' => $bundle
+        ]);
     }
 
     /**
