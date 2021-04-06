@@ -1,7 +1,8 @@
 <template>
 	<app-layout>
 		<template v-slot:main>
-			<h1>hello</h1>
+			<h1>Hell</h1>
+			{{ data }}
 		</template>
 	</app-layout>
 </template>
@@ -26,17 +27,17 @@
 
 		setup(props) {
 			const store = useStore();
-			let bundleDetails = reactive({});
+			const data = reactive({ bundle: {} });
+
 			async function getBundleDetails() {
-				const data = await store.dispatch('bundles/getBundleDetails', props.bundle.slug);
-				console.log(data);
-				bundleDetails = { ...data.bundle };
+				const response = await store.dispatch('bundles/getBundleDetails', props.bundle.slug);
+				data.bundle = response.data.bundle_details;
 			}
 
 			onMounted(getBundleDetails());
 
 			return {
-				bundleDetails
+				data
 			};
 		}
 	};

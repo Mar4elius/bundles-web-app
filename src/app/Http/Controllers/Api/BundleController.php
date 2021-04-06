@@ -95,10 +95,8 @@ class BundleController extends Controller
             $sort_by = $request->sort_by;
 
             $most_popular_bundles = Bundle::orderBy($sort_by, 'desc')
+                ->withProductsPivot()
                 ->with([
-                    'products' => function ($q) {
-                        return $q->withPivot('default_quantity');
-                    },
                     'tags'
                 ])
                 ->take(10)
@@ -217,10 +215,11 @@ class BundleController extends Controller
     {
         //FIXME: add try catch
         $bundle = Bundle::whereSlug($request->slug)
+            ->withProductsPivot()
             ->first();
 
         return response()->json([
-            'bundle' => $bundle
+            'bundle_details' => $bundle
         ]);
     }
 }

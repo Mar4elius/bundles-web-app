@@ -34,13 +34,6 @@ class Bundle extends Model
         return $this->belongsToMany(Order::class);
     }
 
-    // /**
-    //  * Get products that belong to bundle
-    //  */
-    // public function products()
-    // {
-    //     return $this->belongsToMany(Product::class);
-    // }
     /**
      * Get products that belong to bundle
      */
@@ -63,5 +56,20 @@ class Bundle extends Model
     public function section()
     {
         return $this->belongsTo(Section::class);
+    }
+
+    // SCOPES
+    /**
+     * Get bundle products pivot table data
+     *
+     * @param $query
+     *
+     * @return
+     */
+    public function scopeWithProductsPivot($query)
+    {
+        return $query->with('products', function ($q) {
+            return $q->withPivot('default_quantity');
+        });
     }
 }
