@@ -10,20 +10,8 @@
 					</div>
 				</div>
 				<h4>{{ bundle.name }}</h4>
-				<table class="mb-5">
-					<thead>
-						<tr>
-							<th class="text-left">Items</th>
-							<th class="text-right">Quantity</th>
-						</tr>
-					</thead>
-					<tbody>
-						<tr v-for="product in bundle.products" :key="product.slug">
-							<td class="w-4/5">{{ product.name }}</td>
-							<td class="text-center w-1/5">{{ product.pivot.default_quantity }}</td>
-						</tr>
-					</tbody>
-				</table>
+
+				<bundle-products-list :products="bundle.products" />
 			</div>
 			<div class="w-full">
 				<bundle-tags :tags="bundle.tags" :id="bundle.slug" />
@@ -37,12 +25,14 @@
 <script>
 	// Components
 	import BundleDetailsButtons from '@/Components/App/Bundle/BundleDetailsButtons';
+	import BundleProductsList from '@/Components/App/Bundle/BundleProductsList';
 	import BundleTags from '@/Components/App/Bundle/BundleTags';
 	// Functions
 	import { useShowTextOnHover } from '@/Composables/useShowTextOnHover';
 	export default {
 		components: {
 			BundleDetailsButtons,
+			BundleProductsList,
 			BundleTags
 		},
 
