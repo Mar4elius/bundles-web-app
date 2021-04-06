@@ -48,7 +48,7 @@
 			</div>
 		</div>
 		<div class="text-right">
-			<v-button-filled classes="w-40" @btnOnClickEvent="resetSorts()">Reset</v-button-filled>
+			<v-button-filled classes="w-40" id="reset-button" @btnOnClickEvent="resetSorts()">Reset</v-button-filled>
 		</div>
 	</div>
 </template>

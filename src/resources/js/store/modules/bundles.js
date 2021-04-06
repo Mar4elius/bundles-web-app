@@ -18,16 +18,19 @@ const actions = {
 	 *
 	 * @returns FIXME: what does it return?
 	 */
-	searchBundles({ commit }, payload = null) {
-		//TODO: add loading thing
+	async searchBundles({ commit }, payload = null) {
 		// set default payload if none is supplied
-		if (!payload) {
-			payload = {
-				sections: ['all'],
-				tags: ['all']
-			};
+		try {
+			if (!payload) {
+				payload = {
+					sections: ['all'],
+					tags: ['all']
+				};
+			}
+			return await bundlesApi.searchBundles(payload);
+		} catch (error) {
+			console.error('hello');
 		}
-		return bundlesApi.searchBundles(payload);
 	},
 
 	/**
