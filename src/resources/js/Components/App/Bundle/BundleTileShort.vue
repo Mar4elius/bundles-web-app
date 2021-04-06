@@ -6,7 +6,7 @@
 					<img :src="bundle.image_path" :alt="bundle.name" />
 					<div v-show="showHoverText" class="bg-black bg-opacity-60 absolute h-full w-full top-0 left-0">
 						<h4 class="text-white text-center">Description</h4>
-						<p class="text-white text-center">{{ bundle.description }}</p>
+						<p class="text-white mx-4">{{ bundle.description }}</p>
 					</div>
 				</div>
 				<h4>{{ bundle.name }}</h4>
