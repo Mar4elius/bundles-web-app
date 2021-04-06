@@ -1,21 +1,24 @@
 <template>
 	<app-layout>
 		<template v-slot:main>
-			<h1>Hell</h1>
-			{{ data }}
+			<!-- TODO: Create crumbersum menu -->
+			<div class="w-full text-gray-700 text-2xl font-semibold">Bundles->{{ bundle.name }}</div>
+			<bundle-details :bundle-slug="bundle.slug" />
+			<bundles-more-products />
 		</template>
 	</app-layout>
 </template>
 <script>
-	// Vue
-	import { onMounted, reactive } from 'vue';
-	import { useStore } from 'vuex';
 	// Components
 	import AppLayout from '@/Layouts/AppLayout';
+	import BundleDetails from '@/Components/App/Bundle/BundleDetails';
+	import BundlesMoreProducts from '@/Components/App/Bundle/BundlesMoreProducts';
 
 	export default {
 		components: {
-			AppLayout
+			AppLayout,
+			BundleDetails,
+			BundlesMoreProducts
 		},
 
 		props: {
@@ -23,22 +26,6 @@
 				type: Object,
 				required: true
 			}
-		},
-
-		setup(props) {
-			const store = useStore();
-			const data = reactive({ bundle: {} });
-
-			async function getBundleDetails() {
-				const response = await store.dispatch('bundles/getBundleDetails', props.bundle.slug);
-				data.bundle = response.data.bundle_details;
-			}
-
-			onMounted(getBundleDetails());
-
-			return {
-				data
-			};
 		}
 	};
 </script>

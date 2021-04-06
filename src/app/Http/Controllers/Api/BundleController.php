@@ -219,7 +219,7 @@ class BundleController extends Controller
             ->first();
 
         return response()->json([
-            'bundle_details' => $bundle
+            'bundle' => $bundle
         ]);
     }
 }
