@@ -23,48 +23,53 @@
 					</div>
 
 					<div class="mt-2">
-						<h4>Includes:</h4>
+						<h4 class="text-indigo-600">Includes:</h4>
 						<bundle-products-list :products="data.bundle.products" />
 					</div>
 
-					<div class="mt-2">
-						<label class="text-gray-700 text-sm" for="count">Count:</label>
+					<div class="mt-2 flex items-center">
+						<label class="text-gray-700" for="count">Count:</label>
 						<div class="flex items-center mt-1">
-							<button class="text-gray-500 focus:outline-none focus:text-gray-600">
-								<svg
-									class="h-5 w-5"
-									fill="none"
-									stroke-linecap="round"
-									stroke-linejoin="round"
-									stroke-width="2"
-									viewBox="0 0 24 24"
-									stroke="currentColor"
-								>
-									<path d="M12 9v3m0 0v3m0-3h3m-3 0H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-								</svg>
+							<button
+								class="text-gray-500 focus:outline-none hover:text-indigo-600"
+								@click="incrementCount()"
+							>
+								<svg-hero-icon>
+									<svg
+										fill="none"
+										stroke-linecap="round"
+										stroke-linejoin="round"
+										stroke-width="2"
+										viewBox="0 0 24 24"
+										stroke="currentColor"
+									>
+										<path d="M12 9v3m0 0v3m0-3h3m-3 0H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+									</svg>
+								</svg-hero-icon>
 							</button>
-							<span class="text-gray-700 text-lg mx-2">{{ count }}</span>
-							<button class="text-gray-500 focus:outline-none focus:text-gray-600">
-								<svg
-									class="h-5 w-5"
-									fill="none"
-									stroke-linecap="round"
-									stroke-linejoin="round"
-									stroke-width="2"
-									viewBox="0 0 24 24"
-									stroke="currentColor"
-								>
-									<path d="M15 12H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-								</svg>
+
+							<span class="mx-2">{{ count }}</span>
+							<button
+								class="text-gray-500 focus:outline-none hover:text-indigo-600"
+								@click="decrementCount()"
+							>
+								<svg-hero-icon>
+									<svg
+										fill="none"
+										stroke-linecap="round"
+										stroke-linejoin="round"
+										stroke-width="2"
+										viewBox="0 0 24 24"
+										stroke="currentColor"
+									>
+										<path d="M15 12H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+									</svg>
+								</svg-hero-icon>
 							</button>
 						</div>
 					</div>
 					<div class="flex items-center mt-6">
-						<button
-							class="px-8 py-2 bg-indigo-600 text-white text-sm font-medium rounded hover:bg-indigo-500 focus:outline-none focus:bg-indigo-500"
-						>
-							Order Now
-						</button>
+						<v-button-filled id="order-now"> Order Now </v-button-filled>
 						<button class="mx-2 text-gray-600 border rounded-md p-2 hover:bg-gray-200 focus:outline-none">
 							<svg
 								class="h-5 w-5"
@@ -93,6 +98,8 @@
 	import { useStore } from 'vuex';
 	// Components
 	import BundleProductsList from '@/Components/App/Bundle/BundleProductsList';
+	import VButtonFilled from '@/Components/Forms/VButtonFilled';
+	import SvgHeroIcon from '@/Components/Support/SvgHeroIcon';
 	export default {
 		props: {
 			bundleSlug: {
@@ -102,7 +109,9 @@
 		},
 
 		components: {
-			BundleProductsList
+			BundleProductsList,
+			VButtonFilled,
+			SvgHeroIcon
 		},
 
 		setup(props) {
@@ -115,11 +124,23 @@
 				data.bundle = response.data.bundle;
 			}
 
+			function incrementCount() {
+				count.value++;
+			}
+
+			function decrementCount() {
+				if (count.value > 1) {
+					count.value--;
+				}
+			}
+
 			onMounted(getBundleDetails());
 
 			return {
 				count,
-				data
+				decrementCount,
+				data,
+				incrementCount
 			};
 		}
 	};
