@@ -19,8 +19,8 @@ const actions = {
 	 * @returns JSON Response
 	 */
 	searchBundles({ commit }, payload = null) {
-		// set default payload if none is supplied
 		try {
+			// set default payload if none is supplied
 			if (!payload) {
 				payload = {
 					sections: ['all'],
@@ -37,12 +37,12 @@ const actions = {
 	 * Get top 10 bundles based on sort_by params
 	 *
 	 * @param {*} context
-	 * @param {String} sortBy
+	 * @param {Object} params
 	 *
 	 * @returns JSON Response
 	 */
-	getTopTenBundles({ commit }, sortBy) {
-		return bundlesApi.getTopTenBundles(sortBy);
+	getAdditionalBundles({ commit }, params) {
+		return bundlesApi.getAdditionalBundles(params);
 	},
 
 	/**

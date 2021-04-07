@@ -11,13 +11,13 @@ use App\Models\Tag;
 use App\Models\Section;
 // Requests
 use App\Http\Requests\Api\Bundles\SearchBundlesRequest;
-use App\Http\Requests\Api\Bundles\GetTopTenBundlesRequest;
+use App\Http\Requests\Api\Bundles\GetAdditionalBundlesRequest;
 use App\Http\Requests\Api\Bundles\GetBundleDetailsRequest;
 
 class BundleController extends Controller
 {
     /**
-     * Filter available bundles based on path param
+     * Filter and Sort available bundles based on path param
      *
      * @param App\Http\Requests\Api\SearchBundlesRequest $request
      *
@@ -83,23 +83,24 @@ class BundleController extends Controller
     }
 
     /**
-     * Sort available bundles based on path param
+     * Get general bundles data
      *
-     * @param App\Http\Requests\Api\Bundles\GetTopTenBundlesRequest $request
+     * @param App\Http\Requests\Api\Bundles\GetAdditionalBundlesRequest $request
      *
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function getTopTenBundles(GetTopTenBundlesRequest $request)
+    public function getAdditionalBundles(GetAdditionalBundlesRequest $request)
     {
         try {
-            $sort_by = $request->sort_by;
+            $use_sort = $request->sort_by && $request->order;
 
-            $most_popular_bundles = Bundle::orderBy($sort_by, 'desc')
-                ->withProductsPivot()
+            $most_popular_bundles = Bundle::withProductsPivot()
                 ->with([
                     'tags'
-                ])
-                ->take(10)
+                ])->when($use_sort, function ($q) use ($request) {
+                    return $q->orderBy($request->sort_by, $request->order);
+                })
+                ->take($request->quantity)
                 ->get();
 
             return response()->json([

@@ -35,14 +35,19 @@
 		setup() {
 			const store = useStore();
 			let bundlesByPopularity = ref([]);
+			const params = {
+				quantity: 10,
+				order: 'desc',
+				sort_by: 'popularity'
+			};
 			const isLoading = computed(() => store.state.loader.loading);
 
-			async function getTopTenBundles(sortBy) {
-				const { data } = await store.dispatch('bundles/getTopTenBundles', sortBy);
+			async function getAdditionalBundles(params) {
+				const { data } = await store.dispatch('bundles/getAdditionalBundles', params);
 				bundlesByPopularity.value = [...data.bundles];
 			}
 
-			onMounted(getTopTenBundles('popularity'));
+			onMounted(getAdditionalBundles(params));
 
 			return {
 				bundlesByPopularity,

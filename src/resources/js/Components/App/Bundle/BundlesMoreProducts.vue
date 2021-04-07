@@ -125,3 +125,32 @@
 		</div>
 	</div>
 </template>
+
+<script>
+	import { onMounted } from '@vue/runtime-core';
+	import { useStore } from 'vuex';
+	export default {
+		props: {
+			title: {
+				type: String,
+				required: true
+			},
+
+			queryParams: {
+				type: Array,
+				required: true
+			}
+		},
+
+		setup() {
+			const store = useStore();
+			const params = {
+				quantity: 10,
+				order: '',
+				sort_by: ''
+			};
+
+			onMounted(store.dispatch('bundles/getAdditionalBundles', params));
+		}
+	};
+</script>

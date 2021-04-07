@@ -6,11 +6,9 @@ const bundlesApi = {
 			params: payload
 		}),
 
-	getTopTenBundles: (sortBy) =>
-		axios.get('/api/v1/bundles/top-ten', {
-			params: {
-				sort_by: sortBy
-			}
+	getAdditionalBundles: (payload) =>
+		axios.get('/api/v1/bundles/additional', {
+			params: payload
 		}),
 
 	getFilterOptions: () => axios.get('/api/v1/bundles/filter-options'),
