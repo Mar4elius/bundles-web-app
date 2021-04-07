@@ -2,7 +2,7 @@
 	<table class="mb-5 w-full">
 		<thead>
 			<tr>
-				<th class="text-left">Items</th>
+				<th class="text-left">Item</th>
 				<th class="text-right">Quantity</th>
 			</tr>
 		</thead>

@@ -216,7 +216,7 @@ class BundleController extends Controller
         //FIXME: add try catch
         $bundle = Bundle::whereSlug($request->slug)
             ->withProductsPivot()
-            ->first();
+            ->firstOrFail();
 
         return response()->json([
             'bundle' => $bundle

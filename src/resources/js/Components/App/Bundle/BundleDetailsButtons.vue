@@ -53,8 +53,7 @@
 			}
 
 			function goToBundleDetails() {
-				// this.$inertia.post(route('logout'));
-				window.location.href = `/bundles/${props.bundle.slug}`;
+				window.location.href = route('bundles.show', props.bundle.slug);
 			}
 
 			return {

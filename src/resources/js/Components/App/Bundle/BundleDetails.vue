@@ -2,7 +2,7 @@
 	<div class="bg-white rounded-md p-4 md:p-6">
 		<div class="container mx-auto">
 			<div class="md:flex items-center">
-				<div class="w-full h-64 md:w-1/2 lg:h-96">
+				<div class="w-full h-64 md:w-1/2 lg:h-96 flex justify-center">
 					<img
 						class="h-full w-full rounded-md object-cover max-w-xl"
 						:src="data.bundle.image_path"
