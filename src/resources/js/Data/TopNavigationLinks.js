@@ -12,6 +12,12 @@ export const topNavigationLinks = [
 		url: '/bundles/search'
 	}
 	// {
+	// 	name: 'About',
+	// 	route: 'bundles.search',
+	// 	icon: '',
+	// 	url: '/bundles/search'
+	// }
+	// {
 	// 	name: 'Sign In',
 	// 	route: 'home',
 	// 	icon: '',

@@ -1,5 +1,5 @@
 <template>
-	<div class="bg-white rounded-md p-4 md:p-6">
+	<div class="bg-white rounded-md p-4 my-6 md:p-6 md:my-8">
 		<div class="container mx-auto">
 			<div class="md:flex items-center">
 				<div class="w-full h-64 md:w-1/2 lg:h-96 flex justify-center">

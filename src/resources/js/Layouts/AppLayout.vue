@@ -19,7 +19,6 @@
 </template>
 
 <script>
-	// import TopNavigation from '@/Layouts/TopNavigation';
 	import TopNavigation from '@/Layouts/TopNavigation';
 	import PageFooter from '@/Layouts/PageFooter';
 

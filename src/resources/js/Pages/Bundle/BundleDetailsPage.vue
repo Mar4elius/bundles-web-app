@@ -1,8 +1,6 @@
 <template>
 	<app-layout>
 		<template v-slot:main>
-			<!-- TODO: Create crumbersum menu -->
-			<div class="w-full text-gray-700 text-2xl font-semibold">Bundles->{{ bundle.name }}</div>
 			<bundle-details :bundle-slug="bundle.slug" />
 			<bundles-more-products />
 		</template>
