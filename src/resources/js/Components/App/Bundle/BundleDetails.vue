@@ -28,7 +28,6 @@
 					</div>
 
 					<div class="mt-2">
-						<h6 class="" for="count">Count:</h6>
 						<div class="flex items-center mt-1">
 							<button
 								class="text-gray-500 focus:outline-none hover:text-indigo-600"

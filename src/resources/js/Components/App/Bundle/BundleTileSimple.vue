@@ -4,10 +4,10 @@
 			<img class="w-full object-cover" :src="bundle.image_path" :alt="bundle.name" />
 		</div>
 		<div class="px-5 py-3">
-			<h6 class="text-gray-700 uppercase">{{ bundle.name }}</h6>
+			<h6 class="text-gray-700 uppercase text-sm">{{ bundle.name }}</h6>
 			<span class="text-gray-500 mt-3">${{ bundlePrice }}</span>
 			<div class="flex justify-around mt-3">
-				<v-button-filled>
+				<v-button-filled id="read-more" @btnOnClickEvent="goToBundleDetails">
 					<svg-hero-icon>
 						<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
 							<path
@@ -19,7 +19,7 @@
 						</svg>
 					</svg-hero-icon>
 				</v-button-filled>
-				<v-button-filled>
+				<v-button-filled id="add-to-cart">
 					<svg-hero-icon>
 						<svg
 							fill="none"
@@ -61,6 +61,7 @@
 
 		setup(props) {
 			const bundlePrice = computed(() => props.bundle.price / 100);
+
 			function goToBundleDetails() {
 				window.location.href = route('bundles.show', props.bundle.slug);
 			}
