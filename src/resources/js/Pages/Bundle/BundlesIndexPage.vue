@@ -38,7 +38,9 @@
 			const params = {
 				quantity: 10,
 				order: 'desc',
-				sort_by: 'popularity'
+				sort_by: 'popularity',
+				category: '',
+				section_id: ''
 			};
 			const isLoading = computed(() => store.state.loader.loading);
 

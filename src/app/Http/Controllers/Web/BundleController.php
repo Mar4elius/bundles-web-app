@@ -62,6 +62,7 @@ class BundleController extends Controller
     public function show(string $slug)
     {
         $bundle = Bundle::whereSlug($slug)
+            ->with('section')
             ->first();
 
         return Inertia::render('Bundle/BundleDetailsPage', [

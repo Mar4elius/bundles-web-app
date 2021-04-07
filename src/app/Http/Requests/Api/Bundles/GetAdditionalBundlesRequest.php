@@ -24,9 +24,10 @@ class GetAdditionalBundlesRequest extends FormRequest
     public function rules()
     {
         return [
-            'quantity'  => 'required|numeric',
-            'sort_by'   => 'string|nullable',
-            'order'     => 'string|nullable'
+            'quantity'      => 'numeric|nullable',
+            'sort_by'       => 'string|nullable',
+            'order'         => 'string|nullable',
+            'section_id'    => 'numeric|nullable'
         ];
     }
 }

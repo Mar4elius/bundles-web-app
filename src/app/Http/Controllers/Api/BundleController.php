@@ -94,17 +94,23 @@ class BundleController extends Controller
         try {
             $use_sort = $request->sort_by && $request->order;
 
-            $most_popular_bundles = Bundle::withProductsPivot()
+            $bundles = Bundle::withProductsPivot()
                 ->with([
-                    'tags'
-                ])->when($use_sort, function ($q) use ($request) {
+                    'tags',
+                    'section'
+                    // section id check
+                ])->when($request->section_id, function ($q) use ($request) {
+                    return $q->whereSectionId($request->section_id);
+                    // sort by and order check
+                })->when($use_sort, function ($q) use ($request) {
                     return $q->orderBy($request->sort_by, $request->order);
-                })
-                ->take($request->quantity)
-                ->get();
+                    // quantity check
+                })->when($request->quantity, function ($q) use ($request) {
+                    return $q->take($request->quantity);
+                })->get();
 
             return response()->json([
-                'bundles' => $most_popular_bundles
+                'bundles' => $bundles
             ]);
         } catch (Exception $e) {
             if (config('app.env') !== 'production') {
@@ -217,6 +223,7 @@ class BundleController extends Controller
         //FIXME: add try catch
         $bundle = Bundle::whereSlug($request->slug)
             ->withProductsPivot()
+            ->with('section')
             ->firstOrFail();
 
         return response()->json([
