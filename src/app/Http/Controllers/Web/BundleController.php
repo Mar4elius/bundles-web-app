@@ -65,7 +65,7 @@ class BundleController extends Controller
             ->with('section')
             ->first();
 
-        return Inertia::render('Bundle/BundleDetailsPage', [
+        return Inertia::render('Bundle/BundleShowPage', [
             'bundle' => $bundle
         ]);
     }
