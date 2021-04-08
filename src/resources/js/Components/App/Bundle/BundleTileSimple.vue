@@ -5,7 +5,7 @@
 		</div>
 		<div class="px-5 py-3">
 			<h6 class="text-gray-700 uppercase text-sm">{{ bundle.name }}</h6>
-			<span class="text-gray-500 mt-3">${{ bundlePrice }}</span>
+			<span class="text-gray-500 mt-3">{{ calculatePrice(bundle.price) }}</span>
 			<div class="flex justify-around mt-3">
 				<v-button-filled id="read-more" @btnOnClickEvent="goToBundleDetails">
 					<svg-hero-icon>
@@ -46,6 +46,8 @@
 	// Components
 	import VButtonFilled from '@/Components/Forms/VButtonFilled';
 	import SvgHeroIcon from '@/Components/Support/SvgHeroIcon';
+	// Helpers
+	import { calculatePrice } from '@/helpers.js';
 	export default {
 		components: {
 			VButtonFilled,
@@ -60,14 +62,12 @@
 		},
 
 		setup(props) {
-			const bundlePrice = computed(() => props.bundle.price / 100);
-
 			function goToBundleDetails() {
 				window.location.href = route('bundles.show', props.bundle.slug);
 			}
 
 			return {
-				bundlePrice,
+				calculatePrice,
 				goToBundleDetails
 			};
 		}

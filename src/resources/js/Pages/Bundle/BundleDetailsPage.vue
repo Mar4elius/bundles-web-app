@@ -2,7 +2,7 @@
 	<app-layout>
 		<template v-slot:main>
 			<whole-page-loading-animation v-if="isLoading" />
-			<bundle-details :bundle-slug="bundle.slug" />
+			<bundle-show :bundle-slug="bundle.slug" />
 			<bundles-more-products :title="moreFromCategoryTitle" :bundle="bundle" :params="categoryParams" />
 			<bundles-more-products :title="moreRandomBundlesTitle" :bundle="bundle" :params="randomParams" />
 		</template>
@@ -14,14 +14,14 @@
 	import { useStore } from 'vuex';
 	// Components
 	import AppLayout from '@/Layouts/AppLayout';
-	import BundleDetails from '@/Components/App/Bundle/BundleDetails';
+	import BundleShow from '@/Components/App/Bundle/BundleShow';
 	import BundlesMoreProducts from '@/Components/App/Bundle/BundlesMoreProducts';
 	import WholePageLoadingAnimation from '@/Components/Support/WholePageLoadingAnimation';
 
 	export default {
 		components: {
 			AppLayout,
-			BundleDetails,
+			BundleShow,
 			BundlesMoreProducts,
 			WholePageLoadingAnimation
 		},

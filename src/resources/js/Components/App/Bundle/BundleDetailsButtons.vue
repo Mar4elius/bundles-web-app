@@ -4,7 +4,7 @@
 		<v-button-filled @mouseleave="showButtonPrice" classes="w-44 ml-5" id="add-to-cart">
 			<div v-show="showPrice" class="flex justify-center" @mouseenter="showButtonText">
 				<span class="mr-1"
-					><strong>${{ bundlePrice }}</strong></span
+					><strong>{{ calculatePrice(bundle.price) }}</strong></span
 				>
 				|
 				<div class="w-6 ml-1">
@@ -28,6 +28,8 @@
 	import { ref, computed } from 'vue';
 	// Components
 	import VButtonFilled from '@/Components/Forms/VButtonFilled';
+	// Helpers
+	import { calculatePrice } from '@/helpers.js';
 	export default {
 		components: {
 			VButtonFilled
@@ -42,7 +44,6 @@
 
 		setup(props) {
 			let showPrice = ref(true);
-			const bundlePrice = computed(() => props.bundle.price / 100);
 
 			function showButtonText() {
 				showPrice.value = false;
@@ -57,7 +58,7 @@
 			}
 
 			return {
-				bundlePrice,
+				calculatePrice,
 				goToBundleDetails,
 				showButtonPrice,
 				showButtonText,
