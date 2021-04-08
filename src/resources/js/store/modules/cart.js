@@ -60,11 +60,8 @@ const actions = {
 
 // mutations
 const mutations = {
-	pushProductToCart(state, { id }) {
-		state.items.push({
-			id,
-			quantity: 1
-		});
+	pushProductToCart(state, product) {
+		state.items.push(product);
 	},
 
 	incrementItemQuantity(state, { id }) {

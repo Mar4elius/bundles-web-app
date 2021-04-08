@@ -68,7 +68,11 @@
 						</div>
 					</div>
 					<div class="flex items-center mt-6">
-						<v-button-filled id="order-now" classes="w-32 flex justify-center">
+						<v-button-filled
+							id="order-now"
+							classes="w-32 flex justify-center"
+							@btnOnClickEvent="pushProductToCart"
+						>
 							<svg
 								class="w-6 md:w-8"
 								fill="none"
@@ -134,6 +138,13 @@
 				}
 			}
 
+			function pushProductToCart() {
+				store.commit('cart/pushProductToCart', {
+					...data.bundle,
+					count: count.value
+				});
+			}
+
 			onMounted(getBundleDetails());
 
 			return {
@@ -141,7 +152,8 @@
 				count,
 				decrementCount,
 				data,
-				incrementCount
+				incrementCount,
+				pushProductToCart
 			};
 		}
 	};
