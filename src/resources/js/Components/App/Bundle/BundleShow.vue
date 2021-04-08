@@ -13,7 +13,7 @@
 				<div class="w-full max-w-lg mx-auto mt-5 md:ml-8 md:mt-0 md:w-1/2">
 					<h3 class="text-indigo-600 uppercase">{{ data.bundle.name }}</h3>
 					<span class="text-gray-500 mt-3">{{
-						data.bundle.price ? `$${data.bundle.price / 100}` : 'Calculating...'
+						data.bundle.price ? calculatePrice(data.bundle.price) : 'Calculating...'
 					}}</span>
 
 					<hr class="my-3" />
@@ -98,6 +98,8 @@
 	import BundleProductsList from '@/Components/App/Bundle/BundleProductsList';
 	import VButtonFilled from '@/Components/Forms/VButtonFilled';
 	import SvgHeroIcon from '@/Components/Support/SvgHeroIcon';
+	// Helpers
+	import { calculatePrice } from '@/helpers.js';
 	export default {
 		props: {
 			bundleSlug: {
@@ -135,6 +137,7 @@
 			onMounted(getBundleDetails());
 
 			return {
+				calculatePrice,
 				count,
 				decrementCount,
 				data,
