@@ -27,7 +27,7 @@ class GetAdditionalBundlesRequest extends FormRequest
             'quantity'      => 'numeric|nullable',
             'sort_by'       => 'string|nullable',
             'order'         => 'string|nullable',
-            'section_id'    => 'numeric|nullable'
+            'bundle'        => 'nullable'
         ];
     }
 }

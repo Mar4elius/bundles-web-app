@@ -37,17 +37,23 @@
 			const store = useStore();
 			const isLoading = computed(() => store.state.loader.loading);
 			const randomParams = {
-				quantity: '6',
+				quantity: '8',
 				order: '',
 				sort_by: '',
-				section_id: ''
+				bundle: {
+					section_id: '',
+					bundle_id: props.bundle.id
+				}
 			};
 
 			const categoryParams = {
-				quantity: '6',
+				quantity: '8',
 				order: '',
 				sort_by: '',
-				section_id: props.bundle.section_id
+				bundle: {
+					section_id: props.bundle.section_id,
+					bundle_id: props.bundle.id
+				}
 			};
 
 			const moreFromCategoryTitle = `More bundles from ${props.bundle.section?.name} category`;

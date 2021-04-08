@@ -13,9 +13,15 @@ export const topNavigationLinks = [
 	}
 	// {
 	// 	name: 'About',
-	// 	route: 'bundles.search',
+	// 	route: 'about',
 	// 	icon: '',
-	// 	url: '/bundles/search'
+	// 	url: '/about'
+	// },
+	// {
+	// 	name: 'Contact Us',
+	// 	route: 'contact',
+	// 	icon: '',
+	// 	url: '/contact'
 	// }
 	// {
 	// 	name: 'Sign In',

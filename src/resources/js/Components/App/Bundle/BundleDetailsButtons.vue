@@ -1,7 +1,7 @@
 <template>
 	<div class="flex justify-between items-end w-full">
-		<v-button-filled id="read-more" @btnOnClickEvent="goToBundleDetails">Read more</v-button-filled>
-		<v-button-filled @mouseleave="showButtonPrice" classes="w-44" id="add-to-cart">
+		<v-button-filled id="read-more" size="regular" @btnOnClickEvent="goToBundleDetails">Read more</v-button-filled>
+		<v-button-filled @mouseleave="showButtonPrice" classes="w-44 ml-5" id="add-to-cart">
 			<div v-show="showPrice" class="flex justify-center" @mouseenter="showButtonText">
 				<span class="mr-1"
 					><strong>${{ bundlePrice }}</strong></span

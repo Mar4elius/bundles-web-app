@@ -34,12 +34,7 @@
 
 			params: {
 				type: Object,
-				default: () => ({
-					quantity: '',
-					order: '',
-					sort_by: '',
-					section_id: ''
-				})
+				required: true
 			}
 		},
 

@@ -92,15 +92,19 @@ class BundleController extends Controller
     public function getAdditionalBundles(GetAdditionalBundlesRequest $request)
     {
         try {
+            $request_bundle = $request->bundle ? json_decode($request->bundle) : null;
             $use_sort = $request->sort_by && $request->order;
 
             $bundles = Bundle::withProductsPivot()
                 ->with([
                     'tags',
                     'section'
+                    // don't include current bundle if provided
+                ])->when($request_bundle && $request_bundle->bundle_id, function ($q) use ($request_bundle) {
+                    return $q->where('id', '!=', $request_bundle->bundle_id);
                     // section id check
-                ])->when($request->section_id, function ($q) use ($request) {
-                    return $q->whereSectionId($request->section_id);
+                })->when($request_bundle && $request_bundle->section_id, function ($q) use ($request_bundle) {
+                    return $q->whereSectionId($request_bundle->section_id);
                     // sort by and order check
                 })->when($use_sort, function ($q) use ($request) {
                     return $q->orderBy($request->sort_by, $request->order);
