@@ -4,7 +4,7 @@
 		<div class="mx-3">
 			<h3 class="text-sm text-gray-600">{{ bundle.name }}</h3>
 			<div class="flex items-center mt-2">
-				<button @click="incrementQuantity()" class="text-gray-500 focus:outline-none focus:text-gray-600">
+				<v-button-icon @btnOnClickEvent="incrementQuantity()">
 					<svg
 						class="w-5 md:w-6"
 						fill="none"
@@ -16,9 +16,9 @@
 					>
 						<path d="M12 9v3m0 0v3m0-3h3m-3 0H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z"></path>
 					</svg>
-				</button>
+				</v-button-icon>
 				<span class="text-gray-700 mx-2">{{ bundle.quantity }}</span>
-				<button @click="decrementQuantity()" class="text-gray-500 focus:outline-none focus:text-gray-600">
+				<v-button-icon @btnOnClickEvent="decrementQuantity()">
 					<svg
 						class="w-5 md:w-6"
 						fill="none"
@@ -30,11 +30,11 @@
 					>
 						<path d="M15 12H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z"></path>
 					</svg>
-				</button>
+				</v-button-icon>
 			</div>
 		</div>
 		<div class="flex flex-wrap content-between justify-end">
-			<button @click="removeBundleFromCart()" class="text-gray-500 focus:outline-none focus:text-gray-600">
+			<v-button-icon @btnOnClickEvent="removeBundleFromCart()">
 				<svg
 					class="w-5 md:w-6 text-red-600"
 					fill="none"
@@ -46,7 +46,7 @@
 				>
 					<path d="M6 18L18 6M6 6l12 12"></path>
 				</svg>
-			</button>
+			</v-button-icon>
 			<span class="text-gray-600">{{ calculatePrice(bundle.price) }}</span>
 		</div>
 	</div>
@@ -57,8 +57,14 @@
 	import { useStore } from 'vuex';
 	// Helpers
 	import { calculatePrice } from '@/helpers.js';
+	// Components
+	import VButtonIcon from '@/Components/Forms/VButtonIcon';
 
 	export default {
+		components: {
+			VButtonIcon
+		},
+
 		props: {
 			bundle: {
 				type: Object,

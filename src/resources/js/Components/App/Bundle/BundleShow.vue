@@ -29,10 +29,7 @@
 
 					<div class="mt-2">
 						<div class="flex items-center mt-1">
-							<button
-								class="text-gray-500 focus:outline-none hover:text-indigo-600"
-								@click="incrementCount()"
-							>
+							<v-button-icon @btnOnClickEvent="incrementCount()">
 								<svg-hero-icon>
 									<svg
 										fill="none"
@@ -45,13 +42,10 @@
 										<path d="M12 9v3m0 0v3m0-3h3m-3 0H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z"></path>
 									</svg>
 								</svg-hero-icon>
-							</button>
+							</v-button-icon>
 
 							<span class="mx-2">{{ quantity }}</span>
-							<button
-								class="text-gray-500 focus:outline-none hover:text-indigo-600"
-								@click="decrementCount()"
-							>
+							<v-button-icon @btnOnClickEvent="decrementCount()">
 								<svg-hero-icon>
 									<svg
 										fill="none"
@@ -64,7 +58,7 @@
 										<path d="M15 12H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z"></path>
 									</svg>
 								</svg-hero-icon>
-							</button>
+							</v-button-icon>
 						</div>
 					</div>
 					<div class="flex items-center mt-6">
@@ -101,6 +95,7 @@
 	// Components
 	import BundleProductsList from '@/Components/App/Bundle/BundleProductsList';
 	import VButtonFilled from '@/Components/Forms/VButtonFilled';
+	import VButtonIcon from '@/Components/Forms/VButtonIcon';
 	import SvgHeroIcon from '@/Components/Support/SvgHeroIcon';
 	// Helpers
 	import { calculatePrice } from '@/helpers.js';
@@ -114,6 +109,7 @@
 
 		components: {
 			BundleProductsList,
+			VButtonIcon,
 			VButtonFilled,
 			SvgHeroIcon
 		},
