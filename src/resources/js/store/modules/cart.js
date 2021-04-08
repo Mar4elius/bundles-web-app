@@ -1,6 +1,6 @@
 // initial state
-// shape: [{ id, quantity }]
 const state = {
+	isOpen: false,
 	items: [],
 	checkoutStatus: null
 };
@@ -78,6 +78,10 @@ const mutations = {
 
 	setCheckoutStatus(state, status) {
 		state.checkoutStatus = status;
+	},
+
+	setIsOpen(state, value) {
+		state.isOpen = value;
 	}
 };
 

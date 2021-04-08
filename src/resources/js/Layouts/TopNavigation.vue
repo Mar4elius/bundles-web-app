@@ -108,6 +108,7 @@
 					</button>
 
 					<button
+						@click="showShoppingCart"
 						class="bg-gray-800 p-1 rounded-full text-gray-400 hover:text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white"
 					>
 						<span class="sr-only">Shopping Cart</span>
@@ -204,6 +205,8 @@
 <script>
 	// Vue
 	import { ref } from '@vue/reactivity';
+	import { useStore } from 'vuex';
+	import { computed } from '@vue/runtime-core';
 	// Components
 	import NavLink from '@/Components/Forms/NavLink';
 	import ProfileLink from '@/Components/Forms/ProfileLink';
@@ -217,8 +220,10 @@
 		},
 
 		setup() {
+			const store = useStore();
 			let isMobileMenuOpen = ref(false);
 			let isProfileMenuOpen = ref(false);
+			let cartOpen = computed(() => store.state.cart.isOpen);
 
 			function displayMobileMenu() {
 				isMobileMenuOpen.value = !isMobileMenuOpen.value;
@@ -228,11 +233,20 @@
 				isProfileMenuOpen.value = !isProfileMenuOpen.value;
 			}
 
+			function showShoppingCart() {
+				if (!cartOpen.value) {
+					store.commit('cart/setIsOpen', true);
+				} else {
+					store.commit('cart/setIsOpen', false);
+				}
+			}
+
 			return {
 				isMobileMenuOpen,
 				isProfileMenuOpen,
 				displayMobileMenu,
 				displayProfileMenu,
+				showShoppingCart,
 				topNavigationLinks,
 				userProfileLinks
 			};

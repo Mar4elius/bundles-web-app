@@ -9,9 +9,12 @@
 		</header>
 
 		<!-- Page Content -->
-		<main class="max-w-7xl mx-auto px-2 sm:px-6 lg:px-8">
-			<slot name="main"></slot>
-		</main>
+		<div class="flex">
+			<main class="max-w-7xl mx-auto px-2 sm:px-6 lg:px-8">
+				<slot name="main"></slot>
+			</main>
+			<shopping-cart />
+		</div>
 
 		<!-- Page Footer -->
 		<page-footer />
@@ -21,10 +24,12 @@
 <script>
 	import TopNavigation from '@/Layouts/TopNavigation';
 	import PageFooter from '@/Layouts/PageFooter';
+	import ShoppingCart from '@/Layouts/ShoppingCart';
 
 	export default {
 		components: {
 			TopNavigation,
+			ShoppingCart,
 			PageFooter
 		},
 
