@@ -234,11 +234,9 @@
 			}
 
 			function showShoppingCart() {
-				if (!cartOpen.value) {
-					store.commit('cart/setIsOpen', true);
-				} else {
-					store.commit('cart/setIsOpen', false);
-				}
+				cartOpen.value = cartOpen.value
+					? store.commit('cart/setIsOpen', false)
+					: store.commit('cart/setIsOpen', true);
 			}
 
 			return {

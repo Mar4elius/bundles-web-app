@@ -25,7 +25,7 @@
 
 <script>
 	// Vue
-	import { ref, computed } from 'vue';
+	import { ref } from 'vue';
 	// Components
 	import VButtonFilled from '@/Components/Forms/VButtonFilled';
 	// Helpers

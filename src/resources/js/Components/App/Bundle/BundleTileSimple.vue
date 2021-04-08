@@ -41,8 +41,6 @@
 </template>
 
 <script>
-	// Vue
-	import { computed } from 'vue';
 	// Components
 	import VButtonFilled from '@/Components/Forms/VButtonFilled';
 	import SvgHeroIcon from '@/Components/Support/SvgHeroIcon';

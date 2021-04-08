@@ -47,7 +47,7 @@
 								</svg-hero-icon>
 							</button>
 
-							<span class="mx-2">{{ count }}</span>
+							<span class="mx-2">{{ quantity }}</span>
 							<button
 								class="text-gray-500 focus:outline-none hover:text-indigo-600"
 								@click="decrementCount()"
@@ -121,7 +121,7 @@
 		setup(props) {
 			const store = useStore();
 			const data = reactive({ bundle: {} });
-			const count = ref(1);
+			const quantity = ref(1);
 
 			async function getBundleDetails() {
 				const response = await store.dispatch('bundles/getBundleDetails', props.bundleSlug);
@@ -129,19 +129,19 @@
 			}
 
 			function incrementCount() {
-				count.value++;
+				quantity.value++;
 			}
 
 			function decrementCount() {
-				if (count.value > 1) {
-					count.value--;
+				if (quantity.value > 1) {
+					quantity.value--;
 				}
 			}
 
 			function pushProductToCart() {
-				store.commit('cart/pushProductToCart', {
+				store.dispatch('cart/addProductToCart', {
 					...data.bundle,
-					count: count.value
+					quantity: quantity.value
 				});
 			}
 
@@ -149,10 +149,10 @@
 
 			return {
 				calculatePrice,
-				count,
-				decrementCount,
 				data,
+				decrementCount,
 				incrementCount,
+				quantity,
 				pushProductToCart
 			};
 		}
