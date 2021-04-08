@@ -1,7 +1,7 @@
 <template>
 	<div class="w-full max-w-sm mx-auto rounded-md shadow-md overflow-hidden">
 		<div class="flex items-end justify-end h-56 w-full bg-cover">
-			<img class="w-full object-cover" :src="bundle.image_path" :alt="bundle.name" />
+			<img class="w-full object-cover rounded-md" :src="bundle.image_path" :alt="bundle.name" />
 		</div>
 		<div class="px-5 py-3">
 			<h6 class="text-gray-700 uppercase text-sm">{{ bundle.name }}</h6>
