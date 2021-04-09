@@ -47,8 +47,8 @@
 									</svg>
 								</svg-hero-icon>
 							</v-button-icon>
-
-							<span class="mx-2">{{ data.bundle.quantity }}</span>
+							<!-- use separate variable so not to interfier with shopping cart quantities -->
+							<span class="mx-2">{{ quantity }}</span>
 							<v-button-icon @btnOnClickEvent="decrementCount()">
 								<svg-hero-icon>
 									<svg
@@ -121,6 +121,7 @@
 		setup(props) {
 			const store = useStore();
 			const data = reactive({ bundle: {} });
+			const quantity = ref(1);
 
 			async function getBundleDetails() {
 				const response = await store.dispatch('bundles/getBundleDetails', props.bundleSlug);
@@ -140,7 +141,7 @@
 			}
 
 			function incrementCount() {
-				data.bundle.quantity++;
+				quantity.value++;
 			}
 
 			function incrementProductCount(product) {
@@ -158,13 +159,16 @@
 			}
 
 			function decrementCount() {
-				if (data.bundle.quantity > 1) {
-					data.bundle.quantity--;
+				if (quantity.value > 1) {
+					quantity.value--;
 				}
 			}
 
 			function pushProductToCart() {
-				store.dispatch('cart/addProductToCart', data.bundle);
+				store.dispatch('cart/addProductToCart', {
+					...data.bundle,
+					quantity: quantity.value
+				});
 			}
 
 			onMounted(getBundleDetails());
@@ -176,7 +180,8 @@
 				decrementProductCount,
 				incrementCount,
 				incrementProductCount,
-				pushProductToCart
+				pushProductToCart,
+				quantity
 			};
 		}
 	};
