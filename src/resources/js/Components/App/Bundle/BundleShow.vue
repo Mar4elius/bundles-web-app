@@ -13,7 +13,7 @@
 				<div class="w-full max-w-lg mx-auto mt-5 md:ml-8 md:mt-0 md:w-1/2">
 					<h3 class="text-indigo-600 uppercase">{{ data.bundle.name }}</h3>
 					<span class="text-gray-500 mt-3">{{
-						data.bundle.price ? calculatePrice(data.bundle.price) : 'Calculating...'
+						data.bundle.price ? calculatePrice(totalBundlePrice) : 'Calculating...'
 					}}</span>
 
 					<hr class="my-3" />
@@ -94,7 +94,7 @@
 
 <script>
 	// Vue
-	import { onMounted, reactive, ref } from 'vue';
+	import { computed, onMounted, reactive, ref } from 'vue';
 	import { useStore } from 'vuex';
 	// Components
 	import BundleProductsList from '@/Components/App/Bundle/BundleProductsList';
@@ -122,6 +122,11 @@
 			const store = useStore();
 			const data = reactive({ bundle: {} });
 			const quantity = ref(1);
+			const totalBundlePrice = computed(() => {
+				return data.bundle.products.reduce((total, product) => {
+					return total + product.price * product.quantity;
+				}, 0);
+			});
 
 			async function getBundleDetails() {
 				const response = await store.dispatch('bundles/getBundleDetails', props.bundleSlug);
@@ -169,13 +174,14 @@
 				let bundle = JSON.parse(
 					JSON.stringify({
 						...data.bundle,
+						price: totalBundlePrice.value,
 						products: data.bundle.products.filter((p) => p.is_active), // get only active products
 						quantity: quantity.value,
 						cart_id: randomAlphaNumericString(10) // generate unique string so we can defirintiate between same bundles
 					})
 				);
 
-				store.dispatch('cart/addProductToCart', bundle);
+				store.dispatch('cart/addBundleToCart', bundle);
 			}
 
 			onMounted(getBundleDetails());
@@ -188,6 +194,7 @@
 				incrementCount,
 				incrementProductCount,
 				pushProductToCart,
+				totalBundlePrice,
 				quantity
 			};
 		}

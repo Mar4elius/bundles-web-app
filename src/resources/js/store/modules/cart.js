@@ -18,9 +18,15 @@ const getters = {
 		});
 	},
 
-	cartTotalPrice: (state, getters) => {
-		return getters.cartProducts.reduce((total, product) => {
-			return total + product.price * product.quantity;
+	cartTotalPrice: (state) => {
+		return state.items.reduce((grandTotal, item) => {
+			return (
+				grandTotal +
+				item.products.reduce((total, product) => {
+					return total + product.price * product.quantity;
+				}, 0) *
+					item.quantity
+			);
 		}, 0);
 	}
 };
@@ -43,8 +49,7 @@ const actions = {
 		);
 	},
 
-	addProductToCart({ state, commit }, bundle) {
-		console.log(bundle);
+	addBundleToCart({ state, commit }, bundle) {
 		commit('setCheckoutStatus', null);
 		if (bundle.quantity > 0) {
 			const cartItem = state.items.find((item) => item.cart_id === bundle.cart_id);

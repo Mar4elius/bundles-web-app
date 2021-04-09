@@ -20,6 +20,7 @@
 				</svg-hero-icon>
 			</button>
 		</div>
+
 		<hr class="my-3" />
 
 		<template v-if="cartBundles.length">
@@ -31,6 +32,10 @@
 			<p class="text-small text-gray-600 text-center">You cart is empty at the moment.</p>
 		</template>
 
+		<hr class="my-3" />
+		<div>
+			<p class="text-right"><span class="font-bold">Total:</span> {{ calculatePrice(cartTotalPrice) }}</p>
+		</div>
 		<v-button-filled
 			id="checkout"
 			:is-disabled="!!cartBundles.length"
@@ -60,6 +65,8 @@
 	import CartTile from '@/Components/App/Cart/CartTile';
 	import VButtonFilled from '@/Components/Forms/VButtonFilled';
 	import SvgHeroIcon from '@/Components/Support/SvgHeroIcon';
+	// Helper
+	import { calculatePrice } from '@/helpers';
 
 	export default {
 		components: {
@@ -68,18 +75,21 @@
 			SvgHeroIcon
 		},
 
-		setup() {
+		setup(props) {
 			const store = useStore();
 			let cartOpen = computed(() => store.state.cart.isOpen);
 			let cartBundles = computed(() => store.state.cart.items);
+			let cartTotalPrice = computed(() => store.getters['cart/cartTotalPrice']);
 
 			function closeCart() {
 				store.commit('cart/setIsOpen', false);
 			}
 
 			return {
+				calculatePrice,
 				cartOpen,
 				cartBundles,
+				cartTotalPrice,
 				closeCart
 			};
 		}
