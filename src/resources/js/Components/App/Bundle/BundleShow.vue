@@ -169,6 +169,7 @@
 				let bundle = JSON.parse(
 					JSON.stringify({
 						...data.bundle,
+						products: data.bundle.products.filter((p) => p.is_active), // get only active products
 						quantity: quantity.value,
 						cart_id: randomAlphaNumericString(10) // generate unique string so we can defirintiate between same bundles
 					})

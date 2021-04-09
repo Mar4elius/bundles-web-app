@@ -51,9 +51,6 @@ const actions = {
 			if (!cartItem) {
 				commit('pushBundleToCart', bundle);
 			}
-			// else {
-			// 	commit('incrementItemQuantity', bundle);
-			// }
 			// remove 1 item from stock FIXME: figure out the way to update items left quantity
 			// commit('products/decrementProductInventory', { id: bundle.id }, { root: true });
 		}

@@ -14,7 +14,7 @@
 				</td>
 				<td class="w-3/5">{{ product.name }}</td>
 				<td class="flex align-baseline justify-end">
-					<v-button-icon @btnOnClickEvent="incrementQuantity(product)">
+					<v-button-icon @btnOnClickEvent="incrementQuantity(product)" :is-disabled="!product.is_active">
 						<svg
 							class="w-5"
 							fill="none"
@@ -29,7 +29,7 @@
 					</v-button-icon>
 					<!-- quantity props not always avaialable, so use default that is always there -->
 					<span class="mx-2">{{ product.quantity || product.pivot.default_quantity }}</span>
-					<v-button-icon @btnOnClickEvent="decrementQuantity(product)">
+					<v-button-icon @btnOnClickEvent="decrementQuantity(product)" :is-disabled="!product.is_active">
 						<svg
 							class="w-5"
 							fill="none"
@@ -48,6 +48,8 @@
 	</table>
 </template>
 <script>
+	// Vue
+	import { computed } from '@vue/runtime-core';
 	// Components
 	import VButtonIcon from '@/Components/Forms/VButtonIcon';
 	import VCheckbox from '@/Components/Forms/VCheckbox';
