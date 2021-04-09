@@ -33,7 +33,7 @@
 
 		<v-button-filled
 			id="checkout"
-			:is-disabled="cartBundles.length"
+			:is-disabled="!!cartBundles.length"
 			classes="flex items-center justify-center mt-4 w-full"
 		>
 			<span>Checkout</span>
