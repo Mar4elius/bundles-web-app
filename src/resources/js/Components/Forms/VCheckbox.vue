@@ -2,35 +2,39 @@
 	<input
 		type="checkbox"
 		:value="value"
-		v-model="proxyChecked"
+		v-model="checked"
 		class="rounded border-gray-300 text-indigo-600 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
 	/>
 </template>
 
 <script>
+	import { computed } from '@vue/runtime-core';
 	export default {
-		emits: ['update:checked'],
-
 		props: {
-			checked: {
-				type: [Array, Boolean],
+			isChecked: {
+				type: Boolean,
 				default: false
 			},
+
 			value: {
 				default: null
 			}
 		},
 
-		computed: {
-			proxyChecked: {
+		setup(props, { emit }) {
+			const checked = computed({
 				get() {
-					return this.checked;
+					return props.isChecked;
 				},
 
 				set(val) {
-					this.$emit('update:checked', val);
+					emit('update:checked', val);
 				}
-			}
+			});
+
+			return {
+				checked
+			};
 		}
 	};
 </script>

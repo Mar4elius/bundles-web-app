@@ -9,7 +9,9 @@
 		</thead>
 		<tbody>
 			<tr v-for="product in products" :key="product.slug">
-				<td class="w-1/12"><input type="checkbox" /></td>
+				<td class="w-1/12">
+					<v-checkbox :is-checked="product.is_active" @update:checked="product.is_active = $event" />
+				</td>
 				<td class="w-3/5">{{ product.name }}</td>
 				<td class="flex align-baseline justify-end">
 					<v-button-icon @btnOnClickEvent="incrementQuantity(product)">
@@ -48,9 +50,12 @@
 <script>
 	// Components
 	import VButtonIcon from '@/Components/Forms/VButtonIcon';
+	import VCheckbox from '@/Components/Forms/VCheckbox';
+
 	export default {
 		components: {
-			VButtonIcon
+			VButtonIcon,
+			VCheckbox
 		},
 
 		props: {

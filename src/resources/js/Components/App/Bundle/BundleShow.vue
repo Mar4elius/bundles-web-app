@@ -133,6 +133,7 @@
 				data.bundle.products = data.bundle.products.map((product) => {
 					return {
 						...product,
+						is_active: true,
 						quantity: product.pivot.default_quantity
 					};
 				});
@@ -143,12 +144,15 @@
 			}
 
 			function incrementProductCount(product) {
-				data.bundle.products.find((p) => p.id === product.id).quantity++;
+				const index = data.bundle.products.findIndex((p) => p.id === product.id);
+				if (data.bundle.products[index].is_active) {
+					data.bundle.products[index].quantity++;
+				}
 			}
 
 			function decrementProductCount(product) {
 				const index = data.bundle.products.findIndex((p) => p.id === product.id);
-				if (data.bundle.products[index].quantity > 1) {
+				if (data.bundle.products[index].quantity > 1 && data.bundle.products[index].is_active) {
 					data.bundle.products[index].quantity--;
 				}
 			}
