@@ -1,8 +1,10 @@
 <?php
-
-use App\Http\Controllers\Api\BundleController;
+// Support
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+// Controllers
+use App\Http\Controllers\Api\BundleController;
+use App\Http\Controllers\Api\ProductController;
 
 /*
 |--------------------------------------------------------------------------
@@ -21,11 +23,18 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 
 Route::prefix('v1')->group(function () {
+    // Bundles
     Route::prefix('bundles')->group(function () {
         Route::get('/search', [BundleController::class, 'search']);
         Route::get('/additional', [BundleController::class, 'getAdditionalBundles']);
         Route::get('/filter-options', [BundleController::class, 'getFilterOptions']);
         Route::get('/sort-options', [BundleController::class, 'getSortOptions']);
         Route::get('/show', [BundleController::class, 'getBundleDetails']);
+    });
+
+    // Products
+    Route::resource('products', ProductController::class);
+    Route::prefix('products')->group(function () {
+        Route::get('/all', [ProductController::class, 'all']);
     });
 });
