@@ -12,7 +12,7 @@
 				<td class="w-1/12"><input type="checkbox" /></td>
 				<td class="w-3/5">{{ product.name }}</td>
 				<td class="flex align-baseline justify-end">
-					<v-button-icon @btnOnClickEvent="incrementQuantity()">
+					<v-button-icon @btnOnClickEvent="incrementQuantity(product)">
 						<svg
 							class="w-5"
 							fill="none"
@@ -25,8 +25,9 @@
 							<path d="M12 9v3m0 0v3m0-3h3m-3 0H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z"></path>
 						</svg>
 					</v-button-icon>
-					<span class="mx-2">{{ product.pivot.default_quantity }}</span>
-					<v-button-icon @btnOnClickEvent="decrementQuantity()">
+					<!-- quantity props not always avaialable, so use default that is always there -->
+					<span class="mx-2">{{ product.quantity || product.pivot.default_quantity }}</span>
+					<v-button-icon @btnOnClickEvent="decrementQuantity(product)">
 						<svg
 							class="w-5"
 							fill="none"
@@ -47,8 +48,6 @@
 <script>
 	// Components
 	import VButtonIcon from '@/Components/Forms/VButtonIcon';
-	// Helpers
-	import { incrementQuantity, decrementQuantity } from '@/helpers.js';
 	export default {
 		components: {
 			VButtonIcon
@@ -61,7 +60,21 @@
 			}
 		},
 
-		setup() {
+		setup(props, { emit }) {
+			function incrementQuantity({ id }) {
+				emit('incrementQuantityBtnClick', {
+					id: id,
+					quantity: 1
+				});
+			}
+
+			function decrementQuantity({ id }) {
+				emit('decrementQuantityBtnClick', {
+					id: id,
+					quantity: 1
+				});
+			}
+
 			return {
 				incrementQuantity,
 				decrementQuantity

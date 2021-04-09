@@ -24,7 +24,11 @@
 
 					<div class="mt-2">
 						<h4 class="text-indigo-600">Includes:</h4>
-						<bundle-products-list :products="data.bundle.products" />
+						<bundle-products-list
+							:products="data.bundle.products"
+							@incrementQuantityBtnClick="incrementProductCount"
+							@decrementQuantityBtnClick="decrementProductCount"
+						/>
 					</div>
 
 					<div class="mt-2">
@@ -44,7 +48,7 @@
 								</svg-hero-icon>
 							</v-button-icon>
 
-							<span class="mx-2">{{ quantity }}</span>
+							<span class="mx-2">{{ data.bundle.quantity }}</span>
 							<v-button-icon @btnOnClickEvent="decrementCount()">
 								<svg-hero-icon>
 									<svg
@@ -117,28 +121,46 @@
 		setup(props) {
 			const store = useStore();
 			const data = reactive({ bundle: {} });
-			const quantity = ref(1);
 
 			async function getBundleDetails() {
 				const response = await store.dispatch('bundles/getBundleDetails', props.bundleSlug);
-				data.bundle = response.data.bundle;
+				// add quantity to the bundle so we can track how many user wants to buy
+				data.bundle = {
+					...response.data.bundle,
+					quantity: 1
+				};
+				// add quantity to the bundle product so we can track how many of products user wants in the bundle
+				data.bundle.products = data.bundle.products.map((product) => {
+					return {
+						...product,
+						quantity: product.pivot.default_quantity
+					};
+				});
 			}
 
 			function incrementCount() {
-				quantity.value++;
+				data.bundle.quantity++;
+			}
+
+			function incrementProductCount(product) {
+				data.bundle.products.find((p) => p.id === product.id).quantity++;
+			}
+
+			function decrementProductCount(product) {
+				const index = data.bundle.products.findIndex((p) => p.id === product.id);
+				if (data.bundle.products[index].quantity > 1) {
+					data.bundle.products[index].quantity--;
+				}
 			}
 
 			function decrementCount() {
-				if (quantity.value > 1) {
-					quantity.value--;
+				if (data.bundle.quantity > 1) {
+					data.bundle.quantity--;
 				}
 			}
 
 			function pushProductToCart() {
-				store.dispatch('cart/addProductToCart', {
-					...data.bundle,
-					quantity: quantity.value
-				});
+				store.dispatch('cart/addProductToCart', data.bundle);
 			}
 
 			onMounted(getBundleDetails());
@@ -147,8 +169,9 @@
 				calculatePrice,
 				data,
 				decrementCount,
+				decrementProductCount,
 				incrementCount,
-				quantity,
+				incrementProductCount,
 				pushProductToCart
 			};
 		}
