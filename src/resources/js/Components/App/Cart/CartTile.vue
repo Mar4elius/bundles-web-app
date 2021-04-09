@@ -77,14 +77,14 @@
 
 			function incrementQuantity() {
 				store.commit('cart/incrementItemQuantity', {
-					id: props.bundle.id,
+					cart_id: props.bundle.cart_id,
 					quantity: 1
 				});
 			}
 
 			function decrementQuantity() {
 				store.commit('cart/decrementItemQuantity', {
-					id: props.bundle.id,
+					cart_id: props.bundle.cart_id,
 					quantity: 1
 				});
 			}

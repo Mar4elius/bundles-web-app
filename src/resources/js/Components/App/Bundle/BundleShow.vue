@@ -102,7 +102,7 @@
 	import VButtonIcon from '@/Components/Forms/VButtonIcon';
 	import SvgHeroIcon from '@/Components/Support/SvgHeroIcon';
 	// Helpers
-	import { calculatePrice } from '@/helpers.js';
+	import { calculatePrice, randomAlphaNumericString } from '@/helpers.js';
 	export default {
 		props: {
 			bundleSlug: {
@@ -165,10 +165,16 @@
 			}
 
 			function pushProductToCart() {
-				store.dispatch('cart/addProductToCart', {
-					...data.bundle,
-					quantity: quantity.value
-				});
+				// break vue reactivity
+				let bundle = JSON.parse(
+					JSON.stringify({
+						...data.bundle,
+						quantity: quantity.value,
+						cart_id: randomAlphaNumericString(10) // generate unique string so we can defirintiate between same bundles
+					})
+				);
+
+				store.dispatch('cart/addProductToCart', bundle);
 			}
 
 			onMounted(getBundleDetails());
