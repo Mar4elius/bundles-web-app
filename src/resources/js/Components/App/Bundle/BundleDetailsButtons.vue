@@ -1,7 +1,7 @@
 <template>
-	<div class="flex justify-between items-end w-full">
+	<div class="flex justify-end items-end w-full">
 		<v-button-filled id="read-more" size="regular" @btnOnClickEvent="goToBundleDetails">Read more</v-button-filled>
-		<v-button-filled @mouseleave="showButtonPrice" classes="w-44 ml-5" id="add-to-cart">
+		<!-- <v-button-filled @mouseleave="showButtonPrice" classes="w-44 ml-5" id="add-to-cart">
 			<div v-show="showPrice" class="flex justify-center" @mouseenter="showButtonText">
 				<span class="mr-1"
 					><strong>{{ calculatePrice(bundle.price) }}</strong></span
@@ -19,13 +19,11 @@
 				</div>
 			</div>
 			<div v-show="!showPrice">Add To Cart</div>
-		</v-button-filled>
+		</v-button-filled> -->
 	</div>
 </template>
 
 <script>
-	// Vue
-	import { ref } from 'vue';
 	// Components
 	import VButtonFilled from '@/Components/Forms/VButtonFilled';
 	// Helpers
@@ -43,26 +41,13 @@
 		},
 
 		setup(props) {
-			let showPrice = ref(true);
-
-			function showButtonText() {
-				showPrice.value = false;
-			}
-
-			function showButtonPrice() {
-				showPrice.value = true;
-			}
-
 			function goToBundleDetails() {
 				window.location.href = route('bundles.show', props.bundle.slug);
 			}
 
 			return {
 				calculatePrice,
-				goToBundleDetails,
-				showButtonPrice,
-				showButtonText,
-				showPrice
+				goToBundleDetails
 			};
 		}
 	};

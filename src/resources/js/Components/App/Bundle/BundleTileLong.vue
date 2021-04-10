@@ -16,8 +16,14 @@
 				<p class="mb-4">{{ bundle.description }}</p>
 			</div>
 
-			<bundle-tags :tags="bundle.tags" :id="bundle.slug" />
-			<bundle-details-buttons :bundle="bundle" />
+			<div class="w-full flex items-center">
+				<div class="w-3/5">
+					<bundle-tags :tags="bundle.tags" :id="bundle.slug" />
+				</div>
+				<div class="w-2/5 float-right">
+					<bundle-details-buttons :bundle="bundle" />
+				</div>
+			</div>
 		</div>
 	</div>
 </template>

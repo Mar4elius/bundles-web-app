@@ -2,19 +2,23 @@
 	<table class="mb-5 w-full">
 		<thead>
 			<tr>
-				<th />
+				<th v-if="isEditable" />
 				<th class="text-left">Item</th>
 				<th class="text-right">Quantity</th>
 			</tr>
 		</thead>
 		<tbody>
 			<tr v-for="product in products" :key="product.slug">
-				<td class="w-1/12">
+				<td class="w-1/12" v-if="isEditable">
 					<v-checkbox :is-checked="product.is_active" @update:checked="product.is_active = $event" />
 				</td>
 				<td class="w-3/5">{{ product.name }}</td>
 				<td class="flex align-baseline justify-end">
-					<v-button-icon @btnOnClickEvent="incrementQuantity(product)" :is-disabled="!product.is_active">
+					<v-button-icon
+						@btnOnClickEvent="incrementQuantity(product)"
+						:is-disabled="!product.is_active"
+						v-if="isEditable"
+					>
 						<svg
 							class="w-5"
 							fill="none"
@@ -29,7 +33,11 @@
 					</v-button-icon>
 					<!-- quantity props not always avaialable, so use default that is always there -->
 					<span class="mx-2">{{ product.quantity || product.pivot.default_quantity }}</span>
-					<v-button-icon @btnOnClickEvent="decrementQuantity(product)" :is-disabled="!product.is_active">
+					<v-button-icon
+						@btnOnClickEvent="decrementQuantity(product)"
+						:is-disabled="!product.is_active"
+						v-if="isEditable"
+					>
 						<svg
 							class="w-5"
 							fill="none"
@@ -48,8 +56,6 @@
 	</table>
 </template>
 <script>
-	// Vue
-	import { computed } from '@vue/runtime-core';
 	// Components
 	import VButtonIcon from '@/Components/Forms/VButtonIcon';
 	import VCheckbox from '@/Components/Forms/VCheckbox';
@@ -64,6 +70,11 @@
 			products: {
 				type: Array,
 				required: true
+			},
+
+			isEditable: {
+				type: Boolean,
+				default: false
 			}
 		},
 

@@ -28,6 +28,7 @@
 							:products="data.bundle.products"
 							@incrementQuantityBtnClick="incrementProductCount"
 							@decrementQuantityBtnClick="decrementProductCount"
+							:is-editable="true"
 						/>
 					</div>
 
