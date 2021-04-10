@@ -13,6 +13,9 @@
 					</div>
 				</div>
 				<h4>{{ bundle.name }}</h4>
+				<p class="text-gray-600 mb-3">
+					Starts from <span class="font-bold">{{ calculatePrice(bundle.price) }}</span>
+				</p>
 
 				<bundle-products-list :products="bundle.products" />
 			</div>
@@ -32,6 +35,9 @@
 	import BundleTags from '@/Components/App/Bundle/BundleTags';
 	// Functions
 	import { useShowTextOnHover } from '@/Composables/useShowTextOnHover';
+	// Helpers
+	import { calculatePrice } from '@/helpers';
+
 	export default {
 		components: {
 			BundleDetailsButtons,
@@ -50,6 +56,7 @@
 			const { showHoverText, handleMouseEnterEvent, handleMouseLeaveEvent } = useShowTextOnHover();
 
 			return {
+				calculatePrice,
 				showHoverText,
 				handleMouseEnterEvent,
 				handleMouseLeaveEvent

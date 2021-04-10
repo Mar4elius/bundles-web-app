@@ -13,6 +13,9 @@
 		<div class="m-4 flex flex-col content-between">
 			<div class="h-full">
 				<h3>{{ bundle.name }}</h3>
+				<p class="text-gray-600 mb-3">
+					Starts from <span class="font-bold">{{ calculatePrice(bundle.price) }}</span>
+				</p>
 				<p class="mb-4">{{ bundle.description }}</p>
 			</div>
 
@@ -37,6 +40,8 @@
 	import FontAwesomeIcon from '@/Components/Support/FontAwesomeIcon.vue';
 	// Functions
 	import { useShowTextOnHover } from '@/Composables/useShowTextOnHover';
+	// Helpers
+	import { calculatePrice } from '@/helpers';
 
 	export default {
 		components: {
@@ -66,6 +71,7 @@
 
 			return {
 				addItemToCart,
+				calculatePrice,
 				handleMouseEnterEvent,
 				handleMouseLeaveEvent,
 				goToBundleDetails,
