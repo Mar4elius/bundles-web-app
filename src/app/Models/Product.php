@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\Bundle;
 use App\Models\Category;
+use App\Models\CartBundle;
 
 class Product extends Model
 {
@@ -28,13 +29,6 @@ class Product extends Model
         'qnt_left'
     ];
 
-    // /**
-    //  * Get bundles to which product belongs
-    //  */
-    // public function bundles()
-    // {
-    //     return $this->belongsToMany(Bundle::class);
-    // }
     /**
      * Get bundles to which product belongs
      */
@@ -48,6 +42,14 @@ class Product extends Model
      */
     public function category()
     {
-        return $this->belongsTo(category::class);
+        return $this->belongsTo(Category::class);
+    }
+
+    /**
+     * Get cart bundles to which product belongs
+     */
+    public function cartBundles()
+    {
+        return $this->belongsToMany(CartBundle::class);
     }
 }

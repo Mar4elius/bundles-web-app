@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 
 // Models
 use App\Models\User;
-use App\Models\Bundle;
+use App\Models\CartBundle;
 
 class Order extends Model
 {
@@ -36,8 +36,8 @@ class Order extends Model
     /**
      * Get bundles that belong to order
      */
-    public function bundles()
+    public function cartBundles()
     {
-        return $this->belongsToMany(Bundle::class);
+        return $this->hasMany(CartBundle::class);
     }
 }
