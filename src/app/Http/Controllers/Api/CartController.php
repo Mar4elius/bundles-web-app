@@ -6,9 +6,11 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use Exception;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Http\Request;
 // Models
 use App\Models\Cart;
+// Requests
+use Illuminate\Http\Request;
+use App\Http\Requests\Api\Carts\StoreCartRequest;
 
 class CartController extends Controller
 {
@@ -25,10 +27,11 @@ class CartController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  App\Http\Requests\Api\Carts\StoreCartRequest
+     *
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(StoreCartRequest $request)
     {
         try {
             $cart = new Cart();

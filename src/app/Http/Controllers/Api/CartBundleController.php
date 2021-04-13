@@ -10,6 +10,8 @@ use Illuminate\Http\Request;
 // Models
 use App\Models\Cart;
 use App\Models\CartBundle;
+// Requests
+use App\Http\Requests\Api\Carts\StoreCartBundleRequest;
 
 class CartBundleController extends Controller
 {
@@ -26,11 +28,11 @@ class CartBundleController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  App\Http\Requests\Api\Carts\StoreCartBundleRequest  $request
      *
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(StoreCartBundleRequest $request)
     {
         try {
             $cart = Cart::find($request->cart_id);
