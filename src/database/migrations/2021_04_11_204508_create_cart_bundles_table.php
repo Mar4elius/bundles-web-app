@@ -18,13 +18,14 @@ class CreateCartBundlesTable extends Migration
             $table->foreignId('cart_id')
                 ->references('id')
                 ->on('carts');
-            $table->foreignId('order_id')
-                ->references('id')
-                ->on('orders');
+            $table->integer('order_id')
+                ->nullable();
             $table->integer('quantity')
                 ->default(1);
             $table->integer('price_per_bundle')
                 ->default(1);
+            $table->string('image_path')
+                ->nullable();
             $table->timestamps();
         });
     }

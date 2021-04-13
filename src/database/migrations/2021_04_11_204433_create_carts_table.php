@@ -15,11 +15,13 @@ class CreateCartsTable extends Migration
     {
         Schema::create('carts', function (Blueprint $table) {
             $table->id();
+            $table->integer('user_id')
+                ->nullable();
             $table->boolean('is_completed')
                 ->default(false);
             $table->boolean('is_checked_out')
                 ->default(false);
-            $table->integer('total');
+            $table->integer('sub_total');
             $table->timestamps();
         });
     }
