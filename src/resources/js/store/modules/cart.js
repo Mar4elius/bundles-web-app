@@ -117,6 +117,23 @@ const actions = {
 	async storeCartBundle({ state, commit }, bundle) {
 		const response = await cartsApi.storeCartBundle(bundle);
 		commit('setCartItems', response.data.cart_bundles);
+	},
+
+	/**
+	 * Destroy bundle tht belongs to cart
+	 *
+	 * @param {Number} cartBundleId
+	 *
+	 * @returns JSON Response
+	 */
+	destroyCartBundle({ state, commit }, cart_bundle_id) {
+		try {
+			const response = cartsApi.destroyCartBundle(cart_bundle_id);
+			commit('removeBundleFromCart', cart_bundle_id);
+			return response;
+		} catch (error) {
+			console.error(error);
+		}
 	}
 };
 
@@ -138,8 +155,8 @@ const mutations = {
 		}
 	},
 
-	removeBundleFromCart(state, { cart_id }) {
-		state.items = state.items.filter((item) => item.cart_id !== cart_id);
+	removeBundleFromCart(state, cart_bundle_id) {
+		state.items = state.items.filter((item) => item.id !== cart_bundle_id);
 	},
 
 	setActiveCart(state, cart) {

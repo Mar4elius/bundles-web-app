@@ -86,11 +86,18 @@ class CartBundleController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param  App\Models\CartBundle $cart_bundle
+     *
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(CartBundle $cart_bundle)
     {
-        //
+        // delete cart_bundle_product records
+        $cart_bundle->products()->detach();
+        $cart_bundle->delete();
+
+        return response()->json([
+            'message' => 'Bundle has been removed from the cart'
+        ]);
     }
 }

@@ -25,7 +25,7 @@
 
 		<template v-if="cartBundles.length">
 			<div class="flex justify-between mt-6" v-for="bundle in cartBundles" :key="bundle.id">
-				<cart-tile :bundle="bundle" />
+				<cart-tile :cart-bundle="bundle" />
 			</div>
 		</template>
 		<template v-else>
