@@ -93,11 +93,13 @@
 
 			async function removeBundleFromCart() {
 				// remove cart bundle from cart
-				if (cartBundles.value.length) {
+				if (cartBundles.value.length > 1) {
 					await store.dispatch('cart/destroyCartBundle', props.cartBundle.id);
 				} else {
-					// if there are not items left in cart, delete it
-					// await store.dispatch('cart/destroy', bundle);
+					// if there is 1 bundle left remove it
+					await store.dispatch('cart/destroyCartBundle', props.cartBundle.id);
+					// then delete cart
+					await store.dispatch('cart/destroy', props.cartBundle.cart_id);
 				}
 			}
 

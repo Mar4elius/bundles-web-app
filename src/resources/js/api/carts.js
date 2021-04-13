@@ -20,13 +20,13 @@ const cartsApi = {
 	show: ({ cart_id }) => axios.get(`/api/v1/carts/${cart_id}`),
 
 	/**
-	 *  Get cart's data (bundles and their products)
+	 *  Destroy cart
 	 *
-	 * @param {Object} cart
+	 * @param {Number} cart_id
 	 *
 	 * @returns
 	 */
-	show: ({ cart_id }) => axios.get(`/api/v1/carts/${cart_id}`),
+	destroy: (cart_id) => axios.delete(`/api/v1/carts/${cart_id}`),
 
 	/**
 	 *  Get cart's data (bundles and their products)

@@ -108,6 +108,18 @@ const actions = {
 	},
 
 	/**
+	 * Destroy cart
+	 *
+	 * @param {Number} cart_id
+	 *
+	 * @returns JSON Response
+	 */
+	async destroy({ state, commit }, cart_id) {
+		const response = await cartsApi.destroy(cart_id);
+		commit('setActiveCart', null);
+	},
+
+	/**
 	 * Create new bundle that belong to cart
 	 *
 	 * @param {Object} bundle
