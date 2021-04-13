@@ -224,14 +224,24 @@ class BundleController extends Controller
      */
     public function getBundleDetails(GetBundleDetailsRequest $request)
     {
-        //FIXME: add try catch
-        $bundle = Bundle::whereSlug($request->slug)
-            ->withProductsPivot()
-            ->with('section')
-            ->firstOrFail();
+        try {
+            $bundle = Bundle::whereSlug($request->slug)
+                ->withProductsPivot()
+                ->with('section')
+                ->firstOrFail();
 
-        return response()->json([
-            'bundle' => $bundle
-        ]);
+            return response()->json([
+                'bundle' => $bundle
+            ]);
+        } catch (Exception $e) {
+            if (config('app.env') !== 'production') {
+                return $e->getMessage();
+            } else {
+                Log::error($e->getMessage());
+                return response()->json([
+                    'error' => 'This request failed successfully in bundle details.'
+                ]);
+            }
+        }
     }
 }

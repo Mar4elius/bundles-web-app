@@ -4,13 +4,11 @@ namespace App\Http\Controllers\Api;
 
 // Support
 use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\DB;
 use Exception;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Http\Request;
 // Models
 use App\Models\Cart;
-use App\Models\CartBundle;
 
 class CartController extends Controller
 {
@@ -32,15 +30,26 @@ class CartController extends Controller
      */
     public function store(Request $request)
     {
-        $cart = new Cart();
-        // create cart
-        $cart->sub_total = $request->cart_sub_total;
-        $cart->save();
+        try {
+            $cart = new Cart();
+            // create cart
+            $cart->sub_total = $request->cart_sub_total;
+            $cart->save();
 
-        return response()->json([
-            'cart' => $cart->refresh(),
-            'message' => 'Cart has been created.'
-        ]);
+            return response()->json([
+                'cart' => $cart->refresh(),
+                'message' => 'Cart has been created.'
+            ]);
+        } catch (Exception $e) {
+            if (config('app.env') !== 'production') {
+                return $e->getMessage();
+            } else {
+                Log::error($e->getMessage());
+                return response()->json([
+                    'error' => 'This request failed successfully in cart store.'
+                ]);
+            }
+        }
     }
 
     /**
@@ -98,10 +107,21 @@ class CartController extends Controller
      */
     public function destroy(Cart $cart)
     {
-        $cart->delete();
+        try {
+            $cart->delete();
 
-        return response()->json([
-            'message' => 'Cart has been deleted.'
-        ]);
+            return response()->json([
+                'message' => 'Cart has been deleted.'
+            ]);
+        } catch (Exception $e) {
+            if (config('app.env') !== 'production') {
+                return $e->getMessage();
+            } else {
+                Log::error($e->getMessage());
+                return response()->json([
+                    'error' => 'This request failed successfully in cart destroy.'
+                ]);
+            }
+        }
     }
 }
