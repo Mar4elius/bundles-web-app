@@ -20,6 +20,7 @@ class CreateCartBundlesTable extends Migration
                 ->on('carts');
             $table->integer('order_id')
                 ->nullable();
+            $table->string('name');
             $table->integer('quantity')
                 ->default(1);
             $table->integer('price_per_bundle')

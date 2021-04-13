@@ -23,14 +23,9 @@ const getters = {
 
 	cartTotalPrice: (state) => {
 		return state.items.reduce((grandTotal, item) => {
-			return (
-				grandTotal +
-				item.products.reduce((total, product) => {
-					return total + product.price * product.pivot.quantity;
-				}, 0) *
-					item.quantity
-			);
+			return grandTotal + item.price_per_bundle * item.quantity;
 		}, 0);
+		return 1;
 	}
 };
 
@@ -71,8 +66,24 @@ const actions = {
 	 *
 	 * @returns JSON Response
 	 */
-	store({ state, commit }, bundle) {
-		return cartsApi.store(bundle);
+	async store({ commit }, bundle) {
+		// save bundle first
+		const cartResponse = await cartsApi.store({
+			// use bundle sub total because we will create a new cart
+			// that will have only 1 bundle at the start
+			cart_sub_total: bundle.price
+		});
+
+		commit('setActiveCart', cartResponse.data.cart);
+		if (cartResponse.status === 200) {
+			// update cart_id value
+			bundle.cart_id = cartResponse.data.cart.id;
+			const cartBundleResponse = await cartsApi.storeCartBundle(bundle);
+			// update store with newly created data
+			commit('setCartItems', cartBundleResponse.data.cart_bundles);
+
+			return cartBundleResponse;
+		}
 	},
 
 	/**
@@ -86,8 +97,10 @@ const actions = {
 		const response = await cartsApi.show(cart);
 		// if cart exists - update store
 		if (response.data.cart) {
-			commit('setActiveCart', response.data.cart);
-			commit('setCartItems', response.data.cart);
+			// Destructure object
+			const { cart_bundles: cartBundles, ...cart } = { ...response.data.cart };
+			commit('setActiveCart', cart);
+			commit('setCartItems', cartBundles);
 		} else {
 			// else remove cookie
 			document.cookie = `bundle_cart_id=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;`;
@@ -103,7 +116,7 @@ const actions = {
 	 */
 	async storeCartBundle({ state, commit }, bundle) {
 		const response = await cartsApi.storeCartBundle(bundle);
-		// commit('setCartItems', response.data.cart);
+		commit('setCartItems', response.data.cart_bundles);
 	}
 };
 
@@ -130,12 +143,11 @@ const mutations = {
 	},
 
 	setActiveCart(state, cart) {
-		const { cart_bundles } = cart;
 		state.active = cart;
 	},
 
 	setCartItems(state, cart) {
-		state.items = cart.cart_bundles;
+		state.items = cart;
 	},
 
 	setCheckoutStatus(state, status) {

@@ -33,31 +33,13 @@ class CartController extends Controller
     public function store(Request $request)
     {
         $cart = new Cart();
-        DB::transaction(function () use ($cart, $request) {
-            // create cart
-            $cart->sub_total = $request->cart_sub_total;
-            $cart->save();
-
-            // create cart bundle record
-            $cart_bundle = new CartBundle();
-            $cart_bundle->cart_id = $cart->id;
-            $cart_bundle->quantity = $request->quantity;
-            $cart_bundle->price_per_bundle = $request->price;
-            $cart_bundle->image_path = $request->image_path;
-            $cart_bundle->save();
-
-            // create cartBundle-Product record
-            $products = $request->products;
-            foreach ($products as $product) {
-                $cart_bundle->products()->attach($product['id'], [
-                    'quantity' => $product['quantity']
-                ]);
-            }
-        });
+        // create cart
+        $cart->sub_total = $request->cart_sub_total;
+        $cart->save();
 
         return response()->json([
             'cart' => $cart->refresh(),
-            'message' => 'Bundle has been added to the cart.'
+            'message' => 'Cart has been created.'
         ]);
     }
 
