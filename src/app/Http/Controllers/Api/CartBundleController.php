@@ -12,6 +12,7 @@ use App\Models\Cart;
 use App\Models\CartBundle;
 // Requests
 use App\Http\Requests\Api\Carts\StoreCartBundleRequest;
+use App\Http\Requests\Api\Carts\UpdateCartBundleRequest;
 
 class CartBundleController extends Controller
 {
@@ -90,13 +91,28 @@ class CartBundleController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param  App\Http\Requests\Api\Carts\UpdateCartBundleRequest  $request
+     * @param  App\Models\CartBundle $cart_bundle
+     *
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(UpdateCartBundleRequest $request, CartBundle $cart_bundle)
     {
-        //
+        // increment_qnt not always in the request. Need to check if it exist
+        $increment_qnt = $request->increment_qnt ?? null;
+
+        if (!is_null($increment_qnt)) {
+            $cart_bundle->quantity = $increment_qnt ? $cart_bundle->quantity + 1 : $cart_bundle->quantity - 1;
+        }
+
+        $cart_bundle->save();
+
+        $cart_bundle->load('products');
+
+        return response()->json([
+            'message'       => 'Bundle has been updated.',
+            'cart_bundle'   => $cart_bundle
+        ]);
     }
 
     /**

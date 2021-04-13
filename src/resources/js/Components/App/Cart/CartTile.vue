@@ -77,18 +77,22 @@
 			const store = useStore();
 			let cartBundles = computed(() => store.state.cart.items);
 
-			function incrementQuantity() {
-				store.commit('cart/incrementItemQuantity', {
-					cart_id: props.cartBundle.cart_id,
-					quantity: 1
-				});
+			async function incrementQuantity() {
+				const data = {
+					cart_bundle_id: props.cartBundle.id,
+					increment_qnt: true
+				};
+				await store.dispatch('cart/updateCartBundle', data);
 			}
 
-			function decrementQuantity() {
-				store.commit('cart/decrementItemQuantity', {
-					cart_id: props.cartBundle.cart_id,
-					quantity: 1
-				});
+			async function decrementQuantity() {
+				const data = {
+					cart_bundle_id: props.cartBundle.id,
+					increment_qnt: false
+				};
+				if (props.cartBundle.quantity > 1) {
+					await store.dispatch('cart/updateCartBundle', data);
+				}
 			}
 
 			async function removeBundleFromCart() {

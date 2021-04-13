@@ -132,7 +132,7 @@ const actions = {
 	},
 
 	/**
-	 * Destroy bundle tht belongs to cart
+	 * Destroy cart bundle that belongs to cart
 	 *
 	 * @param {Number} cartBundleId
 	 *
@@ -142,6 +142,23 @@ const actions = {
 		try {
 			const response = cartsApi.destroyCartBundle(cart_bundle_id);
 			commit('removeBundleFromCart', cart_bundle_id);
+			return response;
+		} catch (error) {
+			console.error(error);
+		}
+	},
+
+	/**
+	 * Update cart bundle that belongs to cart
+	 *
+	 * @param {Number} cartBundleId
+	 *
+	 * @returns JSON Response
+	 */
+	async updateCartBundle({ state, commit }, cartBundle) {
+		try {
+			const response = await cartsApi.updateCartBundle(cartBundle);
+			commit('updateCartItems', response.data.cart_bundle);
 			return response;
 		} catch (error) {
 			console.error(error);
@@ -185,6 +202,10 @@ const mutations = {
 
 	setIsOpen(state, value) {
 		state.isOpen = value;
+	},
+
+	updateCartItems(state, cartBundle) {
+		state.items = state.items.map((item) => (item.id === cartBundle.id ? cartBundle : item));
 	}
 };
 

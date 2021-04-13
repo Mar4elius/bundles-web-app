@@ -44,7 +44,19 @@ const cartsApi = {
 	 *
 	 * #returns
 	 */
-	destroyCartBundle: (cart_bundle_id) => axios.delete(`/api/v1/cart-bundles/${cart_bundle_id}`)
+	destroyCartBundle: (cart_bundle_id) => axios.delete(`/api/v1/cart-bundles/${cart_bundle_id}`),
+
+	/**
+	 * Update cart bundle that belongs to cart
+	 *
+	 * @param {Object} payload
+	 *
+	 * #returns
+	 */
+	updateCartBundle: ({ cart_bundle_id, ...payload }) =>
+		axios.patch(`/api/v1/cart-bundles/${cart_bundle_id}`, payload, {
+			showLoader: !payload.hasOwnProperty('increment_qnt') // disable loader if user increments or decrements quantity
+		})
 };
 
 export default cartsApi;
