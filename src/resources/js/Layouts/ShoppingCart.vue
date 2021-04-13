@@ -59,14 +59,14 @@
 
 <script>
 	// Vuex
-	import { computed } from '@vue/runtime-core';
+	import { computed, onMounted } from '@vue/runtime-core';
 	import { useStore } from 'vuex';
 	// Components
 	import CartTile from '@/Components/App/Cart/CartTile';
 	import VButtonFilled from '@/Components/Forms/VButtonFilled';
 	import SvgHeroIcon from '@/Components/Support/SvgHeroIcon';
 	// Helper
-	import { calculatePrice } from '@/helpers';
+	import { calculatePrice, getCookie } from '@/helpers';
 
 	export default {
 		components: {
@@ -80,6 +80,17 @@
 			let cartOpen = computed(() => store.state.cart.isOpen);
 			let cartBundles = computed(() => store.state.cart.items);
 			let cartTotalPrice = computed(() => store.getters['cart/cartTotalPrice']);
+
+			onMounted(() => {
+				// get cart id
+				const cartId = getCookie('bundle_cart_id');
+
+				if (cartId) {
+					store.dispatch('cart/show', {
+						cart_id: cartId
+					});
+				}
+			});
 
 			function closeCart() {
 				store.commit('cart/setIsOpen', false);

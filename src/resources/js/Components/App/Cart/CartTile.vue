@@ -47,7 +47,7 @@
 					<path d="M6 18L18 6M6 6l12 12"></path>
 				</svg>
 			</v-button-icon>
-			<span class="text-gray-600">{{ calculatePrice(bundle.price) }}</span>
+			<span class="text-gray-600">{{ calculatePrice(bundle.price_per_bundle) }}</span>
 		</div>
 	</div>
 </template>

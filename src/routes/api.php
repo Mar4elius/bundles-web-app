@@ -4,6 +4,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 // Controllers
 use App\Http\Controllers\Api\BundleController;
+use App\Http\Controllers\Api\CartBundleController;
+use App\Http\Controllers\Api\CartController;
 use App\Http\Controllers\Api\ProductController;
 
 /*
@@ -37,4 +39,9 @@ Route::prefix('v1')->group(function () {
     Route::prefix('products')->group(function () {
         Route::get('/all', [ProductController::class, 'all']);
     });
+
+    // Carts
+    Route::resource('carts', CartController::class);
+    // Cart Bundles
+    Route::resource('cart-bundles', CartBundleController::class);
 });

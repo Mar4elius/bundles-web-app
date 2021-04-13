@@ -1,5 +1,8 @@
+import cartsApi from '@/api/carts';
+
 // initial state
 const state = {
+	active: null,
 	isOpen: false,
 	items: [],
 	checkoutStatus: null
@@ -23,7 +26,7 @@ const getters = {
 			return (
 				grandTotal +
 				item.products.reduce((total, product) => {
-					return total + product.price * product.quantity;
+					return total + product.price * product.pivot.quantity;
 				}, 0) *
 					item.quantity
 			);
@@ -59,6 +62,48 @@ const actions = {
 			// remove 1 item from stock FIXME: figure out the way to update items left quantity
 			// commit('products/decrementProductInventory', { id: bundle.id }, { root: true });
 		}
+	},
+
+	/**
+	 * Store new cart in db
+	 *
+	 * @param {Object} bundle
+	 *
+	 * @returns JSON Response
+	 */
+	store({ state, commit }, bundle) {
+		return cartsApi.store(bundle);
+	},
+
+	/**
+	 * Show cart in db
+	 *
+	 * @param {Object} cart
+	 *
+	 * @returns JSON Response
+	 */
+	async show({ state, commit }, cart) {
+		const response = await cartsApi.show(cart);
+		// if cart exists - update store
+		if (response.data.cart) {
+			commit('setActiveCart', response.data.cart);
+			commit('setCartItems', response.data.cart);
+		} else {
+			// else remove cookie
+			document.cookie = `bundle_cart_id=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;`;
+		}
+	},
+
+	/**
+	 * Create new bundle that belong to cart
+	 *
+	 * @param {Object} bundle
+	 *
+	 * @returns JSON Response
+	 */
+	async storeCartBundle({ state, commit }, bundle) {
+		const response = await cartsApi.storeCartBundle(bundle);
+		// commit('setCartItems', response.data.cart);
 	}
 };
 
@@ -84,8 +129,13 @@ const mutations = {
 		state.items = state.items.filter((item) => item.cart_id !== cart_id);
 	},
 
-	setCartItems(state, { items }) {
-		state.items = items;
+	setActiveCart(state, cart) {
+		const { cart_bundles } = cart;
+		state.active = cart;
+	},
+
+	setCartItems(state, cart) {
+		state.items = cart.cart_bundles;
 	},
 
 	setCheckoutStatus(state, status) {

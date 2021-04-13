@@ -39,4 +39,17 @@ function randomAlphaNumericString(length) {
 	return result.join('');
 }
 
-export { capitalizeFirstLetter, calculatePrice, randomAlphaNumericString };
+/**
+ * Get cookie from client
+ *
+ * @param {String} name
+ *
+ * @return String
+ */
+function getCookie(name) {
+	const value = `; ${document.cookie}`;
+	const parts = value.split(`; ${name}=`);
+	if (parts.length === 2) return parts.pop().split(';').shift();
+}
+
+export { capitalizeFirstLetter, calculatePrice, getCookie, randomAlphaNumericString };

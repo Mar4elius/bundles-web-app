@@ -128,6 +128,7 @@
 					return total + product.price * product.quantity;
 				}, 0);
 			});
+			const activeCart = computed(() => store.state.cart.active);
 
 			async function getBundleDetails() {
 				const response = await store.dispatch('bundles/getBundleDetails', props.bundleSlug);
@@ -170,7 +171,7 @@
 				}
 			}
 
-			function pushProductToCart() {
+			async function pushProductToCart() {
 				// break vue reactivity
 				let bundle = JSON.parse(
 					JSON.stringify({
@@ -178,11 +179,26 @@
 						price: totalBundlePrice.value,
 						products: data.bundle.products.filter((p) => p.is_active), // get only active products
 						quantity: quantity.value,
-						cart_id: randomAlphaNumericString(10) // generate unique string so we can defirintiate between same bundles
+						cart_id: activeCart.value.id,
+						cart_sub_total: totalBundlePrice.value
 					})
 				);
 
-				store.dispatch('cart/addBundleToCart', bundle);
+				let response = null;
+				if (activeCart.value.id) {
+					// create new cart item and attach it to the cart
+					store.dispatch('cart/storeCartBundle', bundle);
+				} else {
+					// create new cart
+					response = await store.dispatch('cart/store', bundle);
+				}
+				// create new cart
+				// user wasn't logged in create a cookie so we can retrieve his cart when they come back
+				if (!response.data.cart.user_id) {
+					const oneMonthFromNow = new Date();
+					oneMonthFromNow.setDate(oneMonthFromNow.getDate() + 30);
+					document.cookie = `bundle_cart_id=${response.data.cart.id};expires=${oneMonthFromNow};path=/`;
+				}
 			}
 
 			onMounted(getBundleDetails());

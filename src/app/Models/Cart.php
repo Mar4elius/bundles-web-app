@@ -24,6 +24,16 @@ class Cart extends Model
     ];
 
     /**
+     * The attributes that should be cast.
+     *
+     * @var array
+     */
+    protected $casts = [
+        'is_completed'      => 'boolean',
+        'is_checked_out'    => 'boolean',
+    ];
+
+    /**
      * Get cart bundles
      */
     public function cartBundles()
