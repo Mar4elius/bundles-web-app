@@ -12,7 +12,9 @@
 				<td class="w-1/12" v-if="isEditable">
 					<v-checkbox :is-checked="product.is_active" @update:checked="product.is_active = $event" />
 				</td>
-				<td class="w-3/5" :class="[product.is_active ? '' : 'bg-gray-300']">{{ product.name }}</td>
+				<td class="w-3/5" :class="[product.is_active ? '' : 'bg-gray-300']">
+					{{ product.name }}
+				</td>
 				<td class="flex align-baseline justify-end" :class="[product.is_active ? '' : 'bg-gray-300']">
 					<v-button-icon
 						@btnOnClickEvent="incrementQuantity(product)"

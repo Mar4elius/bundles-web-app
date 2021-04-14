@@ -129,7 +129,7 @@
 
 					<!-- Profile dropdown. Show only on screens bigger then small -->
 					<div class="ml-3 relative hidden sm:block">
-						<div>
+						<div v-if="activeUser">
 							<button
 								type="button"
 								class="bg-gray-800 flex text-sm rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white"
@@ -143,6 +143,9 @@
 									alt=""
 								/>
 							</button>
+						</div>
+						<div v-else>
+							<nav-link :href="route('login')">Sign in</nav-link>
 						</div>
 
 						<!--
@@ -224,6 +227,7 @@
 			let isMobileMenuOpen = ref(false);
 			let isProfileMenuOpen = ref(false);
 			let cartOpen = computed(() => store.state.cart.isOpen);
+			const activeUser = computed(() => store.state.users.active);
 
 			function displayMobileMenu() {
 				isMobileMenuOpen.value = !isMobileMenuOpen.value;
@@ -238,8 +242,9 @@
 					? store.commit('cart/setIsOpen', false)
 					: store.commit('cart/setIsOpen', true);
 			}
-
+			console.log(activeUser.value);
 			return {
+				activeUser,
 				isMobileMenuOpen,
 				isProfileMenuOpen,
 				displayMobileMenu,
