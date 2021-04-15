@@ -14,7 +14,7 @@ module.exports = {
 				sans: ['Nunito', ...defaultTheme.fontFamily.sans]
 			},
 			backgroundImage: (theme) => ({
-				// 'signup-image': "url('picsum.photos/640/480')"
+				'signup-image': "url('https://picsum.photos/640/480')"
 			})
 		}
 	},
