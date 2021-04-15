@@ -145,7 +145,7 @@
 							</button>
 						</div>
 						<div v-else>
-							<nav-link :href="route('login')">Sign in</nav-link>
+							<!-- <nav-link :href="route('login')">Sign in</nav-link> -->
 						</div>
 
 						<!--
