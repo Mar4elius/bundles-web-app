@@ -42,7 +42,7 @@
 								success-message="Nice and secure!"
 							/>
 							<v-text-input
-								name="confirm_password"
+								name="password_confirmation"
 								type="password"
 								label="Confirm Password"
 								placeholder="Type it again"
@@ -110,8 +110,8 @@
 				first_name: string().required(),
 				last_name: string().required(),
 				email: string().email().required(),
-				password: string().min(6).required(),
-				confirm_password: string()
+				password: string().min(8).required(),
+				password_confirmation: string()
 					.required()
 					.oneOf([ref('password')], 'Passwords do not match')
 			});
