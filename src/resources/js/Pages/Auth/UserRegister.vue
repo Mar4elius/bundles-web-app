@@ -13,35 +13,35 @@
 							<h3>Sign Up</h3>
 						</div>
 						<Form @submit="onSubmit" :validation-schema="schema">
-							<VTextInput
+							<v-text-input
 								name="first_name"
 								type="text"
 								label="First Name"
 								placeholder="Firt Name"
 								success-message="Nice to meet you!"
 							/>
-							<VTextInput
+							<v-text-input
 								name="last_name"
 								type="text"
 								label="Last Name"
 								placeholder="Last Name"
 								success-message="Nice to meet you!"
 							/>
-							<VTextInput
+							<v-text-input
 								name="email"
 								type="email"
 								label="E-mail"
 								placeholder="Your email address"
 								success-message="Got it, we won't spam you!"
 							/>
-							<VTextInput
+							<v-text-input
 								name="password"
 								type="password"
 								label="Password"
 								placeholder="Your password"
 								success-message="Nice and secure!"
 							/>
-							<VTextInput
+							<v-text-input
 								name="confirm_password"
 								type="password"
 								label="Confirm Password"
@@ -81,11 +81,15 @@
 </template>
 
 <script>
+	// Vue
+	import { useStore } from 'vuex';
+	// Components
 	import VButtonFilled from '@/Components/Forms/VButtonFilled';
 	import VCheckbox from '@/Components/Forms/VCheckbox';
 	import VTextInput from '@/Components/Forms/VTextInput';
+	// Vee-validation and Yup
 	import { Form } from 'vee-validate';
-	import * as Yup from 'yup';
+	import { string, required, email, min, oneOf, object, shape, ref } from 'yup';
 
 	export default {
 		components: {
@@ -96,19 +100,20 @@
 		},
 
 		setup() {
+			const store = useStore();
+
 			function onSubmit(values) {
-				console.log(values);
-				// alert(JSON.stringify(values, null, 2));
+				store.dispatch('users/store', values);
 			}
 
-			const schema = Yup.object().shape({
-				first_name: Yup.string().required(),
-				last_name: Yup.string().required(),
-				email: Yup.string().email().required(),
-				password: Yup.string().min(6).required(),
-				confirm_password: Yup.string()
+			const schema = object().shape({
+				first_name: string().required(),
+				last_name: string().required(),
+				email: string().email().required(),
+				password: string().min(6).required(),
+				confirm_password: string()
 					.required()
-					.oneOf([Yup.ref('password')], 'Passwords do not match')
+					.oneOf([ref('password')], 'Passwords do not match')
 			});
 
 			return {
