@@ -14,23 +14,23 @@
 						</div>
 						<div>
 							<v-label value="First Name" />
-							<v-input />
+							<v-input @update:input="signUpForm.first_name = $event" />
 						</div>
 						<div>
 							<v-label value="Last Name" />
-							<v-input />
+							<v-input @update:input="signUpForm.last_name = $event" />
 						</div>
 						<div>
 							<v-label value="Email" />
-							<v-input type="email" />
+							<v-input type="email" @update:input="signUpForm.email = $event" />
 						</div>
 						<div>
 							<v-label value="Password" />
-							<v-input type="password" />
+							<v-input type="password" @update:input="signUpForm.password = $event" />
 						</div>
 						<div>
 							<v-label value="Confirm Password" />
-							<v-input type="password" />
+							<v-input type="password" @update:input="signUpForm.password_confirmation = $event" />
 						</div>
 						<div class="flex justify-between">
 							<div class="flex">
@@ -67,6 +67,7 @@
 	import VCheckbox from '@/Components/Forms/VCheckbox';
 	import VInput from '@/Components/Forms/VInput';
 	import VLabel from '@/Components/Forms/VLabel';
+	import { reactive } from '@vue/reactivity';
 
 	export default {
 		components: {
@@ -74,6 +75,20 @@
 			VCheckbox,
 			VInput,
 			VLabel
+		},
+
+		setup() {
+			const signUpForm = reactive({
+				first_name: '',
+				last_name: '',
+				email: '',
+				password: '',
+				password_confirmation: ''
+			});
+
+			return {
+				signUpForm
+			};
 		}
 	};
 </script>
