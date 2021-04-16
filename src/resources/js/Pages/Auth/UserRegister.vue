@@ -12,37 +12,55 @@
 							/>
 							<h3>Sign Up</h3>
 						</div>
-						<div>
-							<v-label value="First Name" />
-							<v-input @update:input="signUpForm.first_name = $event" />
-						</div>
-						<div>
-							<v-label value="Last Name" />
-							<v-input @update:input="signUpForm.last_name = $event" />
-						</div>
-						<div>
-							<v-label value="Email" />
-							<v-input type="email" @update:input="signUpForm.email = $event" />
-						</div>
-						<div>
-							<v-label value="Password" />
-							<v-input type="password" @update:input="signUpForm.password = $event" />
-						</div>
-						<div>
-							<v-label value="Confirm Password" />
-							<v-input type="password" @update:input="signUpForm.password_confirmation = $event" />
-						</div>
+						<Form @submit="onSubmit" :validation-schema="schema">
+							<VTextInput
+								name="first_name"
+								type="text"
+								label="First Name"
+								placeholder="Firt Name"
+								success-message="Nice to meet you!"
+							/>
+							<VTextInput
+								name="last_name"
+								type="text"
+								label="Last Name"
+								placeholder="Last Name"
+								success-message="Nice to meet you!"
+							/>
+							<VTextInput
+								name="email"
+								type="email"
+								label="E-mail"
+								placeholder="Your email address"
+								success-message="Got it, we won't spam you!"
+							/>
+							<VTextInput
+								name="password"
+								type="password"
+								label="Password"
+								placeholder="Your password"
+								success-message="Nice and secure!"
+							/>
+							<VTextInput
+								name="confirm_password"
+								type="password"
+								label="Confirm Password"
+								placeholder="Type it again"
+								success-message="Glad you remembered it!"
+							/>
+
+							<div class="w-full flex justify-center my-4 md:my-6">
+								<v-button-filled id="create-accoung"> Create Account</v-button-filled>
+							</div>
+						</Form>
 						<div class="flex justify-between">
 							<div class="flex">
-								<v-checkbox :is-checked="false" class="mr-4">Remember me</v-checkbox>
+								<v-checkbox :is-checked="false" class="flex flex-row-reverse" label="Remember me" />
 								<v-label value="Remember me" />
 							</div>
 							<inertia-link href="#" class="font-bold text-indigo-600 hover:text-indigo-500"
 								>Forgot your password?</inertia-link
 							>
-						</div>
-						<div class="w-full flex justify-center mt-4 md:mt-6">
-							<v-button-filled id="create-accoung"> Create Account</v-button-filled>
 						</div>
 						<div class="mt-4 md:mt-6 text-center">
 							<p>
@@ -65,29 +83,37 @@
 <script>
 	import VButtonFilled from '@/Components/Forms/VButtonFilled';
 	import VCheckbox from '@/Components/Forms/VCheckbox';
-	import VInput from '@/Components/Forms/VInput';
-	import VLabel from '@/Components/Forms/VLabel';
-	import { reactive } from '@vue/reactivity';
+	import VTextInput from '@/Components/Forms/VTextInput';
+	import { Form } from 'vee-validate';
+	import * as Yup from 'yup';
 
 	export default {
 		components: {
+			Form,
 			VButtonFilled,
 			VCheckbox,
-			VInput,
-			VLabel
+			VTextInput
 		},
 
 		setup() {
-			const signUpForm = reactive({
-				first_name: '',
-				last_name: '',
-				email: '',
-				password: '',
-				password_confirmation: ''
+			function onSubmit(values) {
+				console.log(values);
+				// alert(JSON.stringify(values, null, 2));
+			}
+
+			const schema = Yup.object().shape({
+				first_name: Yup.string().required(),
+				last_name: Yup.string().required(),
+				email: Yup.string().email().required(),
+				password: Yup.string().min(6).required(),
+				confirm_password: Yup.string()
+					.required()
+					.oneOf([Yup.ref('password')], 'Passwords do not match')
 			});
 
 			return {
-				signUpForm
+				onSubmit,
+				schema
 			};
 		}
 	};
