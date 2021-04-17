@@ -53,15 +53,7 @@
 								<v-button-filled id="create-accoung"> Create Account</v-button-filled>
 							</div>
 						</Form>
-						<div class="flex justify-between">
-							<div class="flex">
-								<v-checkbox :is-checked="false" class="flex flex-row-reverse" label="Remember me" />
-								<v-label value="Remember me" />
-							</div>
-							<inertia-link href="#" class="font-bold text-indigo-600 hover:text-indigo-500"
-								>Forgot your password?</inertia-link
-							>
-						</div>
+
 						<div class="mt-4 md:mt-6 text-center">
 							<p>
 								Already have an account?<inertia-link

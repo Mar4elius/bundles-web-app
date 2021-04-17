@@ -7,7 +7,6 @@ use Symfony\Component\HttpFoundation\Request;
 use Inertia\Inertia;
 // Models
 use App\Models\Bundle;
-use App\Models\Section;
 
 class BundleController extends Controller
 {
