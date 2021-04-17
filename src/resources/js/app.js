@@ -8,14 +8,19 @@ import { FontAwesomeIcon } from '@/Plugins/font-awesome';
 import axios from 'axios';
 // Store
 import store from './store/index';
-
+import { useStore } from 'vuex';
 // Enable loader display
 axios.defaults.showLoader = true;
 
 const el = document.getElementById('app');
 createApp({
-	// add interceptor to created hook
 	created() {
+		const user = document.querySelector("meta[name='user']").getAttribute('content');
+		// if user is logged in
+		if (user) {
+			useStore().commit('users/setActiveUser', user);
+		}
+		// add interceptor to created hook
 		axios.interceptors.request.use(
 			(config) => {
 				if (config.showLoader) {

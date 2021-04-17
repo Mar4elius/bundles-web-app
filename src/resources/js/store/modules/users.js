@@ -35,7 +35,9 @@ const actions = {
 };
 
 const mutations = {
-	//
+	setActiveUser(state, data) {
+		state.active = JSON.parse(data);
+	}
 };
 
 export default {
