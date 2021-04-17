@@ -20,6 +20,17 @@ const actions = {
 	 */
 	store({ commit }, data) {
 		return usersApi.store(data);
+	},
+
+	/**
+	 * Login user
+	 *
+	 * @param {Object} data
+	 *
+	 * @return JSON Response
+	 */
+	login({ commit }, data) {
+		return usersApi.login(data);
 	}
 };
 

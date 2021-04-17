@@ -10,22 +10,15 @@
 								src="https://tailwindui.com/img/logos/workflow-mark-indigo-500.svg"
 								alt="Workflow"
 							/>
-							<h3>Sign in to your account</h3>
+							<h3 class="text-center">Sign in to your account</h3>
 						</div>
 						<Form @submit="onSubmit" :validation-schema="schema">
-							<v-text-input
-								name="email"
-								type="email"
-								label="E-mail"
-								placeholder="Your email address"
-								success-message="Got it, we won't spam you!"
-							/>
+							<v-text-input name="email" type="email" label="E-mail" placeholder="Your email address" />
 							<v-text-input
 								name="password"
 								type="password"
 								label="Password"
 								placeholder="Your password"
-								success-message="Nice and secure!"
 							/>
 
 							<div class="w-full flex justify-center my-4 md:my-6">
@@ -82,7 +75,7 @@
 			const store = useStore();
 
 			function onSubmit(values) {
-				store.dispatch('users/store', values);
+				store.dispatch('users/login', values);
 			}
 
 			const schema = object().shape({

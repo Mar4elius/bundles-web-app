@@ -6,7 +6,7 @@
 					<div class="w-full sm:w-4/5 md:w-3/5 lg:w-4/5 xl:w-3/5 bg-white rounded-md p-4 md:p-6">
 						<div class="flex-col flex-shrink-0 flex items-center">
 							<img
-								class="block h-8 w-auto"
+								class="block h-10 w-auto"
 								src="https://tailwindui.com/img/logos/workflow-mark-indigo-500.svg"
 								alt="Workflow"
 							/>
@@ -77,7 +77,6 @@
 	import { useStore } from 'vuex';
 	// Components
 	import VButtonFilled from '@/Components/Forms/VButtonFilled';
-	import VCheckbox from '@/Components/Forms/VCheckbox';
 	import VTextInput from '@/Components/Forms/VTextInput';
 	// Vee-validation and Yup
 	import { Form } from 'vee-validate';
@@ -87,7 +86,6 @@
 		components: {
 			Form,
 			VButtonFilled,
-			VCheckbox,
 			VTextInput
 		},
 

@@ -8,7 +8,15 @@ const usersApi = {
 	 *
 	 * @returns
 	 */
-	store: (payload) => axios.post('/register', payload)
+	store: (payload) => axios.post('/register', payload),
+	/**
+	 * Login user
+	 *
+	 * @param {Object} payload
+	 *
+	 * @returns
+	 */
+	login: (payload) => axios.post('/login', payload)
 };
 
 export default usersApi;
