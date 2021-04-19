@@ -12,10 +12,10 @@
 		setup(props) {
 			const requests = ['POST', 'PUT', 'PATCH', 'DELETE'];
 
-			let isButton = computed(() => (requests.includes(props.method) ? 'link' : 'button'));
-			console.log(isButton);
+			let button = computed(() => (requests.includes(props.method) ? 'button' : 'link'));
+			console.log(button.value);
 			return {
-				isButton
+				button
 			};
 		}
 	};

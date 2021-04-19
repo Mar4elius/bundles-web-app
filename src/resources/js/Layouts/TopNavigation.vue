@@ -172,6 +172,14 @@
 							>
 								{{ link.name }}
 							</profile-link>
+							<!-- Use button for logut route so we can send XHR request that will have CSRF token  -->
+							<button
+								id="logout"
+								@click="logout"
+								class="w-full text-left block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+							>
+								Sign out
+							</button>
 						</div>
 					</div>
 				</div>
@@ -217,6 +225,7 @@
 	// Data
 	import { topNavigationLinks } from '@/Data/TopNavigationLinks';
 	import { userProfileLinks } from '@/Data/UserProfileLinks';
+
 	export default {
 		components: {
 			NavLink,
@@ -224,6 +233,7 @@
 		},
 
 		setup() {
+			// { name: 'Sign Out', route: 'logout', icon: '', url: '/logout', method: 'POST' }
 			const store = useStore();
 			let isMobileMenuOpen = ref(false);
 			let isProfileMenuOpen = ref(false);
@@ -244,12 +254,18 @@
 					: store.commit('cart/setIsOpen', true);
 			}
 
+			async function logout() {
+				await store.dispatch('users/logout');
+				window.location.href = route('bundles.index');
+			}
+
 			return {
 				activeUser,
 				isMobileMenuOpen,
 				isProfileMenuOpen,
 				displayMobileMenu,
 				displayProfileMenu,
+				logout,
 				showShoppingCart,
 				topNavigationLinks,
 				userProfileLinks

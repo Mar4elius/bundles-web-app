@@ -71,8 +71,7 @@
 			VTextInput
 		},
 
-		setup(props, { inertia }) {
-			console.log(inertia);
+		setup(props) {
 			const store = useStore();
 
 			async function onSubmit(values) {

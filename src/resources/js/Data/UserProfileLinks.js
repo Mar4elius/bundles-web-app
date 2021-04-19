@@ -5,12 +5,5 @@ export const userProfileLinks = [
 		icon: '',
 		url: '/my-account',
 		method: 'GET'
-	},
-	{
-		name: 'Sign Out',
-		route: 'logout',
-		icon: '',
-		url: '/logout',
-		method: 'POST'
 	}
 ];

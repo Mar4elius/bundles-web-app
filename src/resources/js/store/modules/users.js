@@ -37,6 +37,22 @@ const actions = {
 				console.error(error);
 			}
 		}
+	},
+
+	/**
+	 * Logout user
+	 *
+	 * @return JSON Response
+	 */
+	logout({ commit }) {
+		console.log('logout');
+		try {
+			return usersApi.logout();
+		} catch (error) {
+			if (process.env.NODE_ENV !== 'production') {
+				console.error(error);
+			}
+		}
 	}
 };
 

@@ -37,6 +37,12 @@ class FortifyServiceProvider extends ServiceProvider
         Fortify::updateUserPasswordsUsing(UpdateUserPassword::class);
         Fortify::resetUserPasswordsUsing(ResetUserPassword::class);
 
+        // TODO: put logic here for admin login
+        // $this->app->singleton(
+        //     \Laravel\Fortify\Contracts\LoginResponse::class,
+        //     \App\Http\Responses\LoginResponse::class
+        // );
+
         Fortify::registerView(function () {
             // return view('auth.register');
             return Inertia::render('Auth/UserRegister');
