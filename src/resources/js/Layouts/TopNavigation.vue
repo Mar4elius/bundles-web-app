@@ -168,6 +168,7 @@
 								:href="route(link.route)"
 								classes="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
 								:key="link.name"
+								:method="link.method"
 							>
 								{{ link.name }}
 							</profile-link>
@@ -242,7 +243,7 @@
 					? store.commit('cart/setIsOpen', false)
 					: store.commit('cart/setIsOpen', true);
 			}
-			console.log(activeUser.value);
+
 			return {
 				activeUser,
 				isMobileMenuOpen,

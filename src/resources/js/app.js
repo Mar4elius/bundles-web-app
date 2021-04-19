@@ -15,7 +15,7 @@ axios.defaults.showLoader = true;
 const el = document.getElementById('app');
 createApp({
 	created() {
-		const user = document.querySelector("meta[name='user']").getAttribute('content');
+		const user = document.querySelector("meta[name='user']")?.getAttribute('content');
 		// if user is logged in
 		if (user) {
 			useStore().commit('users/setActiveUser', user);

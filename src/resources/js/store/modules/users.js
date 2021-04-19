@@ -30,7 +30,13 @@ const actions = {
 	 * @return JSON Response
 	 */
 	login({ commit }, data) {
-		return usersApi.login(data);
+		try {
+			return usersApi.login(data);
+		} catch (error) {
+			if (process.env.NODE_ENV !== 'production') {
+				console.error(error);
+			}
+		}
 	}
 };
 

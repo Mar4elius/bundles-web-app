@@ -22,7 +22,7 @@
 							/>
 
 							<div class="w-full flex justify-center my-4 md:my-6">
-								<v-button-filled id="create-accoung"> Sign in</v-button-filled>
+								<v-button-filled id="create-accoung">Sign in</v-button-filled>
 							</div>
 						</Form>
 						<div class="flex justify-between">
@@ -71,11 +71,13 @@
 			VTextInput
 		},
 
-		setup() {
+		setup(props, { inertia }) {
+			console.log(inertia);
 			const store = useStore();
 
-			function onSubmit(values) {
-				store.dispatch('users/login', values);
+			async function onSubmit(values) {
+				await store.dispatch('users/login', values);
+				window.location.href = route('bundles.index');
 			}
 
 			const schema = object().shape({
