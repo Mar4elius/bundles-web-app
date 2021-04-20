@@ -225,6 +225,8 @@
 	// Data
 	import { topNavigationLinks } from '@/Data/TopNavigationLinks';
 	import { userProfileLinks } from '@/Data/UserProfileLinks';
+	// Functions
+	import { useUserLogout } from '@/composables/useUserLogout';
 
 	export default {
 		components: {
@@ -233,13 +235,15 @@
 		},
 
 		setup() {
-			// { name: 'Sign Out', route: 'logout', icon: '', url: '/logout', method: 'POST' }
 			const store = useStore();
 			let isMobileMenuOpen = ref(false);
 			let isProfileMenuOpen = ref(false);
+
 			let cartOpen = computed(() => store.state.cart.isOpen);
 			const activeUser = computed(() => store.state.users.active);
 
+			// functions
+			const { logout } = useUserLogout();
 			function displayMobileMenu() {
 				isMobileMenuOpen.value = !isMobileMenuOpen.value;
 			}
@@ -252,11 +256,6 @@
 				cartOpen.value = cartOpen.value
 					? store.commit('cart/setIsOpen', false)
 					: store.commit('cart/setIsOpen', true);
-			}
-
-			async function logout() {
-				await store.dispatch('users/logout');
-				window.location.href = route('bundles.index');
 			}
 
 			return {
