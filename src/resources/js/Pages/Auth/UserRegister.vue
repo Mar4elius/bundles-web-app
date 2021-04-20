@@ -92,8 +92,9 @@
 		setup() {
 			const store = useStore();
 
-			function onSubmit(values) {
-				store.dispatch('users/store', values);
+			async function onSubmit(values) {
+				await store.dispatch('users/store', values);
+				window.location.href = route('verification.notice');
 			}
 
 			const schema = object().shape({

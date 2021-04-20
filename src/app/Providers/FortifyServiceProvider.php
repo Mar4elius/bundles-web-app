@@ -38,6 +38,7 @@ class FortifyServiceProvider extends ServiceProvider
         Fortify::resetUserPasswordsUsing(ResetUserPassword::class);
 
         // TODO: put logic here for admin login
+        //https://laracasts.com/discuss/channels/laravel/version-8-redirects
         // $this->app->singleton(
         //     \Laravel\Fortify\Contracts\LoginResponse::class,
         //     \App\Http\Responses\LoginResponse::class
@@ -51,6 +52,8 @@ class FortifyServiceProvider extends ServiceProvider
         Fortify::loginView(function () {
             return Inertia::render('Auth/UserLogin');
         });
+
+        Fortify::verifyEmailView(fn () => Inertia::render('Auth/UserEmailConfirmation'));
 
         RateLimiter::for('login', function (Request $request) {
             return Limit::perMinute(5)->by($request->email . $request->ip());
