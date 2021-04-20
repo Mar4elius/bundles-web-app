@@ -226,7 +226,7 @@
 	import { topNavigationLinks } from '@/Data/TopNavigationLinks';
 	import { userProfileLinks } from '@/Data/UserProfileLinks';
 	// Functions
-	import { useUserLogout } from '@/composables/useUserLogout';
+	import { useAuthLogout } from '@/composables/useAuthLogout';
 
 	export default {
 		components: {
@@ -243,7 +243,7 @@
 			const activeUser = computed(() => store.state.users.active);
 
 			// functions
-			const { logout } = useUserLogout();
+			const { logout } = useAuthLogout();
 			function displayMobileMenu() {
 				isMobileMenuOpen.value = !isMobileMenuOpen.value;
 			}

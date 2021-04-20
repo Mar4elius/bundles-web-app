@@ -20,53 +20,6 @@ const actions = {
 	 */
 	store({ commit }, data) {
 		return usersApi.store(data);
-	},
-
-	/**
-	 * Login user
-	 *
-	 * @param {Object} data
-	 *
-	 * @return JSON Response
-	 */
-	login({ commit }, data) {
-		try {
-			return usersApi.login(data);
-		} catch (error) {
-			if (process.env.NODE_ENV !== 'production') {
-				console.error(error);
-			}
-		}
-	},
-
-	/**
-	 * Logout user
-	 *
-	 * @return JSON Response
-	 */
-	logout({ commit }) {
-		try {
-			return usersApi.logout();
-		} catch (error) {
-			if (process.env.NODE_ENV !== 'production') {
-				console.error(error);
-			}
-		}
-	},
-
-	/**
-	 * Send email verification to logged in user
-	 *
-	 * @return JSON Response
-	 */
-	sendEmailVerification({ commit }) {
-		try {
-			return usersApi.sendEmailVerification();
-		} catch (error) {
-			if (process.env.NODE_ENV !== 'production') {
-				console.error(error);
-			}
-		}
 	}
 };
 

@@ -45,7 +45,7 @@
 			});
 
 			async function onSubmit(values) {
-				await store.dispatch('users/login', values);
+				await store.dispatch('auth/forgotPassword', values);
 			}
 
 			return {

@@ -46,15 +46,15 @@ class FortifyServiceProvider extends ServiceProvider
 
         Fortify::registerView(function () {
             // return view('auth.register');
-            return Inertia::render('Auth/UserRegister');
+            return Inertia::render('Auth/AuthRegister');
         });
 
         Fortify::loginView(function () {
-            return Inertia::render('Auth/UserLogin');
+            return Inertia::render('Auth/AuthLogin');
         });
 
-        Fortify::verifyEmailView(fn () => Inertia::render('Auth/UserEmailConfirmation'));
-        Fortify::requestPasswordResetLinkView(fn () => Inertia::render('Auth/UserPasswordResetLink'));
+        Fortify::verifyEmailView(fn () => Inertia::render('Auth/AuthEmailConfirmation'));
+        Fortify::requestPasswordResetLinkView(fn () => Inertia::render('Auth/AuthPasswordResetLink'));
 
         RateLimiter::for('login', function (Request $request) {
             return Limit::perMinute(5)->by($request->email . $request->ip());

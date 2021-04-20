@@ -28,7 +28,7 @@
 	import VButtonFilled from '@/Components/Forms/VButtonFilled';
 	import VButtonOutlined from '@/Components/Forms/VButtonOutlined';
 	// Functions
-	import { useUserLogout } from '@/Composables/useUserLogout';
+	import { useAuthLogout } from '@/Composables/useAuthLogout';
 	import { useStore } from 'vuex';
 
 	export default {
@@ -41,10 +41,10 @@
 		setup() {
 			const store = useStore();
 			function resendVerificationEmail() {
-				store.dispatch('users/sendEmailVerification');
+				store.dispatch('auth/sendEmailVerification');
 			}
 
-			const { logout } = useUserLogout();
+			const { logout } = useAuthLogout();
 			return {
 				resendVerificationEmail,
 				logout

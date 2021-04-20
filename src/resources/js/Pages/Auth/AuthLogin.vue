@@ -63,7 +63,7 @@
 			const store = useStore();
 
 			async function onSubmit(values) {
-				await store.dispatch('users/login', values);
+				await store.dispatch('auth/login', values);
 				window.location.href = route('bundles.index');
 			}
 
