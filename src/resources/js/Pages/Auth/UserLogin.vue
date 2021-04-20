@@ -21,7 +21,7 @@
 				<v-checkbox :is-checked="false" class="flex flex-row-reverse" label="Remember me" />
 				<v-label value="Remember me" />
 			</div>
-			<inertia-link href="#" class="font-bold text-indigo-600 hover:text-indigo-500"
+			<inertia-link :href="route('password.request')" class="font-bold text-indigo-600 hover:text-indigo-500"
 				>Forgot your password?</inertia-link
 			>
 		</div>

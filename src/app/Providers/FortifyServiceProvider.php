@@ -54,6 +54,7 @@ class FortifyServiceProvider extends ServiceProvider
         });
 
         Fortify::verifyEmailView(fn () => Inertia::render('Auth/UserEmailConfirmation'));
+        Fortify::requestPasswordResetLinkView(fn () => Inertia::render('Auth/UserPasswordResetLink'));
 
         RateLimiter::for('login', function (Request $request) {
             return Limit::perMinute(5)->by($request->email . $request->ip());
