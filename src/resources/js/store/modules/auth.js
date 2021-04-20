@@ -66,9 +66,26 @@ const actions = {
 	 *
 	 * @return JSON Response
 	 */
-	forgotPassword({ commit }, data) {
+	sendForgotPasswordLink({ commit }, data) {
 		try {
-			return authApi.forgotPassword();
+			return authApi.sendForgotPasswordLink(data);
+		} catch (error) {
+			if (process.env.NODE_ENV !== 'production') {
+				console.error(error);
+			}
+		}
+	},
+
+	/**
+	 * Reset password
+	 *
+	 * @param {Object} data
+	 *
+	 * @return JSON Response
+	 */
+	resetPassword({ commit }, data) {
+		try {
+			return authApi.resetPassword(data);
 		} catch (error) {
 			if (process.env.NODE_ENV !== 'production') {
 				console.error(error);

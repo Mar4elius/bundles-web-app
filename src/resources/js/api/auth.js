@@ -25,13 +25,22 @@ const authApi = {
 	sendEmailVerification: () => axios.post('/email/verification-notification'),
 
 	/**
-	 * Send verification email to logged in user
+	 * Send link for resetting a password
 	 *
 	 * @param {Object} payload
 	 *
 	 * @returns
 	 */
-	forgotPassword: () => axios.post('/forgot-password')
+	sendForgotPasswordLink: (payload) => axios.post('/forgot-password', payload),
+
+	/**
+	 * Reset password
+	 *
+	 * @param {Object} payload
+	 *
+	 * @returns
+	 */
+	resetPassword: (payload) => axios.post('/reset-password', payload)
 };
 
 export default authApi;

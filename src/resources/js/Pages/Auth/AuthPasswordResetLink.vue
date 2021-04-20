@@ -13,10 +13,10 @@
 		</div>
 		<div class="my-4 md:my-6">
 			<Form @submit="onSubmit" :validation-schema="schema">
-				<v-text-input name="email" type="email" label="Email" />
+				<v-text-input name="email" type="email" label="Email" autofocus />
 
 				<div class="w-full flex justify-center my-4 md:my-6">
-					<v-button-filled id="create-accoung">Reset Password</v-button-filled>
+					<v-button-filled id="create-accoung">Email Password Reset Link</v-button-filled>
 				</div>
 			</Form>
 		</div>
@@ -30,6 +30,8 @@
 	// Vee-validation and Yup
 	import { Form } from 'vee-validate';
 	import { string, required, email, object, shape } from 'yup';
+	// Vue
+	import { useStore } from 'vuex';
 
 	export default {
 		components: {
@@ -40,12 +42,14 @@
 		},
 
 		setup(props) {
+			const store = useStore();
+
 			const schema = object().shape({
 				email: string().email().required()
 			});
 
 			async function onSubmit(values) {
-				await store.dispatch('auth/forgotPassword', values);
+				await store.dispatch('auth/sendForgotPasswordLink', values);
 			}
 
 			return {

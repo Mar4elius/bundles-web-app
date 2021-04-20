@@ -8,6 +8,7 @@
 			:value="inputValue"
 			@input="handleChange"
 			@blur="handleBlur"
+			:disabled="isDisabled"
 			class="appearance-none border border-gray-300 placeholder-gray-500 text-gray-900 w-full px-3 py-2 rounded mb-2 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm transition-colors duration-300 ease-in-out"
 			:class="{ 'bg-red-200': !!errorMessage }"
 		/>
@@ -46,6 +47,10 @@
 			successMessage: {
 				type: String,
 				default: ''
+			},
+			isDisabled: {
+				type: Boolean,
+				default: false
 			}
 		},
 		setup(props) {
