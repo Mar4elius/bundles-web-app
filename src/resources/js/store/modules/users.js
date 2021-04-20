@@ -45,9 +45,23 @@ const actions = {
 	 * @return JSON Response
 	 */
 	logout({ commit }) {
-		console.log('logout');
 		try {
 			return usersApi.logout();
+		} catch (error) {
+			if (process.env.NODE_ENV !== 'production') {
+				console.error(error);
+			}
+		}
+	},
+
+	/**
+	 * Send email verification to logged in user
+	 *
+	 * @return JSON Response
+	 */
+	sendEmailVerification({ commit }) {
+		try {
+			return usersApi.sendEmailVerification();
 		} catch (error) {
 			if (process.env.NODE_ENV !== 'production') {
 				console.error(error);

@@ -22,11 +22,16 @@ const usersApi = {
 	/**
 	 * Logout user
 	 *
-	 * @param {Object} payload
+	 * @returns
+	 */
+	logout: () => axios.post('/logout'),
+
+	/**
+	 * Send verification email to logged in user
 	 *
 	 * @returns
 	 */
-	logout: () => axios.post('/logout')
+	sendEmailVerification: () => axios.post('/email/verification-notification')
 };
 
 export default usersApi;
