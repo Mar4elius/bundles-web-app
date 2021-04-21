@@ -67,13 +67,15 @@ const actions = {
 	 *
 	 * @return JSON Response
 	 */
-	sendForgotPasswordLink({ commit }, data) {
+	async sendForgotPasswordLink({ commit }, data) {
 		try {
-			return authApi.sendForgotPasswordLink(data);
+			return await authApi.sendForgotPasswordLink(data);
 		} catch (error) {
 			if (process.env.NODE_ENV !== 'production') {
 				console.error(error);
 			}
+
+			return error.response.data;
 		}
 	},
 

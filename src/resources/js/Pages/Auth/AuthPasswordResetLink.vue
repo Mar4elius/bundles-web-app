@@ -15,7 +15,7 @@
 			<Form @submit="onSubmit" :validation-schema="schema">
 				<v-text-input name="email" type="email" label="Email" autofocus />
 
-				<div class="w-full flex justify-center my-4 md:my-6">
+				<div class="w-full flex justify-center my-6 md:my-8">
 					<v-button-filled id="create-accoung">Email Password Reset Link</v-button-filled>
 				</div>
 			</Form>
@@ -50,9 +50,13 @@
 				email: string().email().required()
 			});
 
-			async function onSubmit(values) {
+			async function onSubmit(values, actions) {
 				const response = await store.dispatch('auth/sendForgotPasswordLink', values);
-				toast(response.data.message);
+				if (!response.errors) {
+					toast(response.data.message);
+				} else {
+					actions.setErrors(response.errors);
+				}
 			}
 
 			return {
