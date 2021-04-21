@@ -8,14 +8,14 @@
 			/>
 			<h3 class="text-center">Sign in to your account</h3>
 		</div>
-		<Form @submit="onSubmit" :validation-schema="schema">
+		<validate-form @submit="onSubmit" :validation-schema="schema">
 			<v-text-input name="email" type="email" label="E-mail" placeholder="Your email address" />
 			<v-text-input name="password" type="password" label="Password" placeholder="Your password" />
 
 			<div class="w-full flex justify-center my-4 md:my-6">
 				<v-button-filled id="create-accoung">Sign in</v-button-filled>
 			</div>
-		</Form>
+		</validate-form>
 		<div class="flex justify-between">
 			<div class="flex">
 				<v-checkbox :is-checked="false" class="flex flex-row-reverse" label="Remember me" />
@@ -47,13 +47,13 @@
 	import VCheckbox from '@/Components/Forms/VCheckbox';
 	import VTextInput from '@/Components/Forms/VTextInput';
 	// Vee-validation and Yup
-	import { Form } from 'vee-validate';
+	import { Form as ValidateForm } from 'vee-validate';
 	import { string, required, email, object, shape } from 'yup';
 
 	export default {
 		components: {
 			AuthLayout,
-			Form,
+			ValidateForm,
 			VButtonFilled,
 			VCheckbox,
 			VTextInput
@@ -61,10 +61,14 @@
 
 		setup(props) {
 			const store = useStore();
-
-			async function onSubmit(values) {
-				await store.dispatch('auth/login', values);
-				window.location.href = route('bundles.index');
+			async function onSubmit(values, actions) {
+				const response = await store.dispatch('auth/login', values);
+				console.log('response', response.errors);
+				if (!response.errors) {
+					window.location.href = route('bundles.index');
+				} else {
+					actions.setErrors(response.errors);
+				}
 			}
 
 			const schema = object().shape({

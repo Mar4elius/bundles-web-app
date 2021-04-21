@@ -19,13 +19,15 @@ const actions = {
 	 *
 	 * @return JSON Response
 	 */
-	login({ commit }, data) {
+	async login({ commit }, data) {
+		console.log('login');
 		try {
-			return authApi.login(data);
+			return await authApi.login(data);
 		} catch (error) {
 			if (process.env.NODE_ENV !== 'production') {
 				console.error(error);
 			}
+			return error.response.data;
 		}
 	},
 
