@@ -33,6 +33,8 @@
 	// Vue
 	import { useStore } from 'vuex';
 
+	import { useToast } from 'vue-toastification';
+
 	export default {
 		components: {
 			AuthLayout,
@@ -43,13 +45,14 @@
 
 		setup(props) {
 			const store = useStore();
-
+			const toast = useToast();
 			const schema = object().shape({
 				email: string().email().required()
 			});
 
 			async function onSubmit(values) {
-				await store.dispatch('auth/sendForgotPasswordLink', values);
+				const response = await store.dispatch('auth/sendForgotPasswordLink', values);
+				toast(response.data.message);
 			}
 
 			return {

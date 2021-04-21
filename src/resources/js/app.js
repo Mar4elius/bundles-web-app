@@ -11,6 +11,11 @@ import store from './store/index';
 import { useStore } from 'vuex';
 // Enable loader display
 axios.defaults.showLoader = true;
+// Vue Toast
+// https://github.com/Maronato/vue-toastification/tree/next#installation
+import Toast from 'vue-toastification';
+// TODO: might wanna creat own styles
+import 'vue-toastification/dist/index.css';
 
 const el = document.getElementById('app');
 createApp({
@@ -63,6 +68,7 @@ createApp({
 	.mixin({ methods: { route } })
 	.use(InertiaPlugin)
 	.use(store)
+	.use(Toast)
 	.component('font-awesome-icon', FontAwesomeIcon)
 	.mount(el);
 
