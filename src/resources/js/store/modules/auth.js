@@ -20,7 +20,6 @@ const actions = {
 	 * @return JSON Response
 	 */
 	async login({ commit }, data) {
-		console.log('login');
 		try {
 			return await authApi.login(data);
 		} catch (error) {

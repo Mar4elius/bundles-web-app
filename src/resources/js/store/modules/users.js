@@ -18,8 +18,15 @@ const actions = {
 	 *
 	 * @return JSON Response
 	 */
-	store({ commit }, data) {
-		return usersApi.store(data);
+	async store({ commit }, data) {
+		try {
+			return await usersApi.store(data);
+		} catch (error) {
+			if (process.env.NODE_ENV !== 'production') {
+				console.error(error);
+			}
+			return error.response.data;
+		}
 	}
 };
 
