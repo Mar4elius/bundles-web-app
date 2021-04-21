@@ -9,12 +9,10 @@
 		</header>
 
 		<!-- Page Content -->
-		<div class="flex">
-			<main class="max-w-7xl mx-auto px-2 sm:px-6 lg:px-8">
-				<slot name="main"></slot>
-			</main>
-			<shopping-cart />
-		</div>
+		<main class="max-w-7xl mx-auto px-2 sm:px-6 lg:px-8">
+			<slot name="main"></slot>
+		</main>
+		<shopping-cart />
 
 		<!-- Page Footer -->
 		<page-footer />

@@ -1,9 +1,9 @@
 export const userProfileLinks = [
 	{
 		name: 'My Account',
-		route: 'bundles.index',
+		route: 'profile',
 		icon: '',
-		url: '/my-account',
+		url: '/profile',
 		method: 'GET'
 	}
 ];
