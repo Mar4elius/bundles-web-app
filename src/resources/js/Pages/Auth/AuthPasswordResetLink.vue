@@ -32,7 +32,7 @@
 	import { string, required, email, object, shape } from 'yup';
 	// Vue
 	import { useStore } from 'vuex';
-
+	// Toast
 	import { useToast } from 'vue-toastification';
 
 	export default {
@@ -53,7 +53,7 @@
 			async function onSubmit(values, actions) {
 				const response = await store.dispatch('auth/sendForgotPasswordLink', values);
 				if (!response.errors) {
-					toast(response.data.message);
+					toast.success(response.data.message);
 				} else {
 					actions.setErrors(response.errors);
 				}

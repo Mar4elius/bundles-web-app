@@ -42,6 +42,8 @@
 	import { string, required, email, min, oneOf, object, shape, ref } from 'yup';
 	// Vue
 	import { useStore } from 'vuex';
+	// Toast
+	import { useToast } from 'vue-toastification';
 
 	export default {
 		components: {
@@ -60,6 +62,7 @@
 
 		setup(props) {
 			const store = useStore();
+			const toast = useToast();
 
 			const schema = object().shape({
 				email: string().email().required(),
@@ -73,7 +76,10 @@
 				// add reset email token that comes from the password reset link
 				values.token = route().params.token;
 				await store.dispatch('auth/resetPassword', values);
-				window.location.href = route('bundles.index');
+				toast.success('Password has been reset. You will be redirect to login page shortly.');
+				setTimeout(() => {
+					window.location.href = route('login');
+				}, 5000);
 			}
 
 			return {
