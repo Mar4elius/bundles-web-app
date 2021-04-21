@@ -12,6 +12,7 @@
 	import AppLayout from '@/Layouts/AppLayout';
 	import UserProfile from '@/Components/App/User/UserProfile';
 	import UserUpdatePassword from '@/Components/App/User/UserUpdatePassword';
+
 	export default {
 		components: {
 			AppLayout,

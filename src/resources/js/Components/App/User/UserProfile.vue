@@ -6,6 +6,11 @@
 		</div>
 		<div class="w-full md:w-3/5 rounded-md bg-white p-4 md:p-6 lg:p-8">
 			<validate-form @submit="onSubmit" :validation-schema="schema">
+				<!-- user photo -->
+				<div>
+					<h6>Photo</h6>
+					<user-photo />
+				</div>
 				<div class="flex">
 					<v-text-input
 						name="first_name"
@@ -42,6 +47,7 @@
 	// Components
 	import VTextInput from '@/Components/Forms/VTextInput';
 	import VButtonFilled from '@/Components/Forms/VButtonFilled';
+	import UserPhoto from '@/Components/App/User/UserPhoto';
 	// Vee-validation and Yup
 	import { Form as ValidateForm } from 'vee-validate';
 	import { string, required, email, object, shape } from 'yup';
@@ -51,7 +57,8 @@
 		components: {
 			ValidateForm,
 			VButtonFilled,
-			VTextInput
+			VTextInput,
+			UserPhoto
 		},
 
 		setup(props) {

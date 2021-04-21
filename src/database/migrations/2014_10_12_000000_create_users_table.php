@@ -34,6 +34,8 @@ class CreateUsersTable extends Migration
                 ->nullable();
             $table->string('password');
             $table->rememberToken();
+            $table->text('profile_photo_path')
+                ->nullable();
             $table->timestamps();
         });
     }
