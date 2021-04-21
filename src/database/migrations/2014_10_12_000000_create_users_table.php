@@ -19,6 +19,19 @@ class CreateUsersTable extends Migration
             $table->string('last_name');
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
+            $table->string('address')
+                ->nullable();
+            $table->string('city')
+                ->nullable();
+            $table->foreignId('province_id')
+                ->nullable()
+                ->references('id')
+                ->on('provinces');
+            $table->string('postal_code')
+                ->nullable();;
+            //FIXME: add location column
+            $table->string('phone', 11)
+                ->nullable();
             $table->string('password');
             $table->rememberToken();
             $table->timestamps();
