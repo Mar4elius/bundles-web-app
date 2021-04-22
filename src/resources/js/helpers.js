@@ -52,4 +52,18 @@ function getCookie(name) {
 	if (parts.length === 2) return parts.pop().split(';').shift();
 }
 
-export { capitalizeFirstLetter, calculatePrice, getCookie, randomAlphaNumericString };
+/**
+ * Get first letter from user's first and last name
+ *
+ * @param {Object} user
+ *
+ * @return String
+ */
+function getUserInitials(user) {
+	const firstNameFirstLetter = user.first_name.charAt(0).toUpperCase();
+	const lastNameFirstLetter = user.last_name.charAt(0).toUpperCase();
+
+	return `${firstNameFirstLetter}${lastNameFirstLetter}`;
+}
+
+export { capitalizeFirstLetter, calculatePrice, getCookie, randomAlphaNumericString, getUserInitials };

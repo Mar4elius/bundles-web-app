@@ -37,7 +37,7 @@
 					:value="activeUser.email"
 				/>
 				<div class="text-right">
-					<v-button-filled id="order-now" @btnOnClickEvent="pushProductToCart">Save</v-button-filled>
+					<v-button-filled id="order-now" @btnOnClickEvent="updateUserData">Save</v-button-filled>
 				</div>
 			</validate-form>
 		</div>
@@ -51,6 +51,7 @@
 	// Vee-validation and Yup
 	import { Form as ValidateForm } from 'vee-validate';
 	import { string, required, email, object, shape } from 'yup';
+	// Vue
 	import { useStore } from 'vuex';
 	import { computed } from '@vue/runtime-core';
 	export default {
@@ -63,7 +64,6 @@
 
 		setup(props) {
 			const store = useStore();
-
 			const activeUser = computed(() => store.state.users.active);
 
 			return {

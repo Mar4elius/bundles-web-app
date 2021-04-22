@@ -7,7 +7,7 @@
 		<div class="w-full md:w-3/5 rounded-md bg-white p-4 md:p-6 lg:p-8">
 			<validate-form @submit="onSubmit" :validation-schema="schema">
 				<v-text-input
-					name="current-password"
+					name="current_password"
 					type="password"
 					label="Current Password"
 					placeholder="Current password"

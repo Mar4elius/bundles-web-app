@@ -1,5 +1,11 @@
 <template>
-	<button :id="id" :type="type" :class="combinedClasses" :disabled="isDisabled" @click="handelOnClickEvent($event)">
+	<button
+		:id="id"
+		:type="type"
+		:class="combinedClasses"
+		:disabled="isDisabled"
+		@click.prevent="handelOnClickEvent($event)"
+	>
 		<slot></slot>
 	</button>
 </template>
