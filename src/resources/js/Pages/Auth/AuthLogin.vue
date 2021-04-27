@@ -19,7 +19,6 @@
 		<div class="flex justify-between">
 			<div class="flex">
 				<v-checkbox :is-checked="false" class="flex flex-row-reverse" label="Remember me" />
-				<v-label value="Remember me" />
 			</div>
 			<inertia-link :href="route('password.request')" class="font-bold text-indigo-600 hover:text-indigo-500"
 				>Forgot your password?</inertia-link
@@ -61,6 +60,7 @@
 
 		setup(props) {
 			const store = useStore();
+
 			async function onSubmit(values, actions) {
 				const response = await store.dispatch('auth/login', values);
 				if (!response.errors) {

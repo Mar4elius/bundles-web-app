@@ -226,7 +226,7 @@
 	import { topNavigationLinks } from '@/Data/TopNavigationLinks';
 	import { userProfileLinks } from '@/Data/UserProfileLinks';
 	// Functions
-	import { useAuthLogout } from '@/composables/useAuthLogout';
+	import { useAuthLogout } from '@/Composables/useAuthLogout';
 
 	export default {
 		components: {
