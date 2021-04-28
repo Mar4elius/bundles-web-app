@@ -37,7 +37,7 @@
 					:value="activeUser.email"
 				/>
 				<div class="text-right">
-					<v-button-filled id="order-now" @btnOnClickEvent="updateUserData">Save</v-button-filled>
+					<v-button-filled id="update-user-data" @btnOnClickEvent="updateUserData">Save</v-button-filled>
 				</div>
 			</validate-form>
 		</div>
@@ -65,9 +65,20 @@
 		setup(props) {
 			const store = useStore();
 			const activeUser = computed(() => store.state.users.active);
+			const schema = object().shape();
+			function onSubmit() {
+				//
+			}
+
+			function updateUserData() {
+				//
+			}
 
 			return {
-				activeUser
+				activeUser,
+				onSubmit,
+				updateUserData,
+				schema
 			};
 		}
 	};

@@ -30,7 +30,7 @@
 				/>
 
 				<div class="text-right">
-					<v-button-filled id="order-now" @btnOnClickEvent="pushProductToCart">Save</v-button-filled>
+					<v-button-filled id="update-password">Save</v-button-filled>
 				</div>
 			</validate-form>
 		</div>
@@ -67,8 +67,13 @@
 					.oneOf([ref('password')], 'Passwords do not match')
 			});
 
+			function onSubmit() {
+				//
+			}
+
 			return {
 				activeUser,
+				onSubmit,
 				schema
 			};
 		}

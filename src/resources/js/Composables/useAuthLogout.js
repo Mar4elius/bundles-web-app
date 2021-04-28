@@ -7,6 +7,7 @@ import { useStore } from 'vuex';
  */
 export function useAuthLogout(routeParameter = 'bundles.index') {
 	const store = useStore();
+
 	async function logout() {
 		await store.dispatch('auth/logout');
 		window.location.href = route(routeParameter);

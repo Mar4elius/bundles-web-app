@@ -22,25 +22,39 @@
 						aria-modal="true"
 						aria-labelledby="modal-headline"
 					>
-						<v-button-icon class="absolute top-4 right-4" @btnOnClickEvent="closeModal">
-							<svg
-								xmlns="http://www.w3.org/2000/svg"
-								class="h-6 w-6 text-indigo-500"
-								fill="none"
-								viewBox="0 0 24 24"
-								stroke="currentColor"
-							>
-								<path
-									stroke-linecap="round"
-									stroke-linejoin="round"
-									stroke-width="2"
-									d="M6 18L18 6M6 6l12 12"
-								/>
-							</svg>
-						</v-button-icon>
-						<slot>
-							<p>Provide modal content</p>
-						</slot>
+						<div class="flex flex-col">
+							<div class="flex justify-between items-center mb-2 md:mb-4 lg:mb-6">
+								<slot name="header"> Provide Header </slot>
+
+								<v-button-icon @btnOnClickEvent="closeModal">
+									<svg
+										xmlns="http://www.w3.org/2000/svg"
+										class="h-10 w-10 text-indigo-500"
+										fill="none"
+										viewBox="0 0 24 24"
+										stroke="currentColor"
+									>
+										<path
+											stroke-linecap="round"
+											stroke-linejoin="round"
+											stroke-width="2"
+											d="M6 18L18 6M6 6l12 12"
+										/>
+									</svg>
+								</v-button-icon>
+							</div>
+							<div class="mb-2 md:mb-4 lg:mb-6">
+								<slot name="content">
+									<p>Provide modal content</p>
+								</slot>
+							</div>
+							<div class="flex justify-center">
+								<slot name="footer"></slot>
+								<v-button-filled id="close-modal-btn" @btnOnClickEvent="closeModal"
+									>Cancel</v-button-filled
+								>
+							</div>
+						</div>
 					</div>
 				</div>
 			</div>
@@ -56,9 +70,11 @@
 	import useClickOutside from '@/Composables/useClickOutside';
 	// Comoponents
 	import VButtonIcon from '@/Components/Forms/VButtonIcon';
+	import VButtonFilled from '@/Components/Forms/VButtonFilled';
 	export default {
 		components: {
-			VButtonIcon
+			VButtonIcon,
+			VButtonFilled
 		},
 
 		props: {

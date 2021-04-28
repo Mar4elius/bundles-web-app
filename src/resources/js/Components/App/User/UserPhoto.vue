@@ -11,11 +11,16 @@
 				Select A New Photo
 			</v-button-filled>
 		</div>
+
+		<modal-dialog :show="showModal" @btnOnClickEvent="showModal = !showModal">
+			<template v-slot:header>
+				<h4>Upload New Photo</h4>
+			</template>
+			<template v-slot:content>
+				<upload-files />
+			</template>
+		</modal-dialog>
 	</div>
-	<modal-dialog :show="showModal" @btnOnClickEvent="showModal = !showModal">
-		<p class="mb-4">Gokuu is...</p>
-		<img src="https://i.gifer.com/QjMQ.gif" />
-	</modal-dialog>
 </template>
 <script>
 	// Vue
@@ -24,13 +29,15 @@
 	// Components
 	import VButtonFilled from '@/Components/Forms/VButtonFilled';
 	import ModalDialog from '@/Components/Support/ModalDialog';
+	import UploadFiles from '@/Components/Forms/UploadFiles';
 	// Helpers
 	import { getUserInitials } from '@/helpers';
 
 	export default {
 		components: {
 			ModalDialog,
-			VButtonFilled
+			VButtonFilled,
+			UploadFiles
 		},
 
 		setup() {
