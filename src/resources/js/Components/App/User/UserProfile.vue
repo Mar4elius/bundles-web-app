@@ -83,6 +83,8 @@
 					formData: formData
 				};
 				// https://stackoverflow.com/questions/47676134/laravel-request-all-is-empty-using-multipart-form-data
+				// append form method to PUT or PATCH so to overcome PHP mulitp form bug (which works only with POST request)
+				// this way we will make use of correct route (PUT) and overcome php bug (POST)
 				formData.append('_method', 'PUT');
 				await store.dispatch('users/update', data);
 			}
