@@ -6,17 +6,26 @@
 			class="outline-black border-dashed ring-offset-2 bg-indigo-400 p-3 relative cursor-pointer hover:bg-indigo-300 h-52 text-gray-300"
 		>
 			<input
+				v-if="isMultiple"
 				class="opacity-0 w-full h-52 absolute cursor-pointer"
 				type="file"
 				multiple
 				:name="uploadFieldName"
 				:disabled="isSaving"
-				@change="
-					filesChange($event.target.name, $event.target.files);
-					fileCount = $event.target.files.length;
-				"
+				@change="filesChange($event)"
 				accept="image/*"
 			/>
+
+			<input
+				v-else
+				class="opacity-0 w-full h-52 absolute cursor-pointer"
+				type="file"
+				:name="uploadFieldName"
+				:disabled="isSaving"
+				@change="filesChange($event)"
+				accept="image/*"
+			/>
+
 			<p v-if="isInitial" class="text-base text-center py-12 text-gray-600">
 				Drag your file(s) here to begin<br />
 				or click to browse
@@ -29,7 +38,13 @@
 	import { reactive } from '@vue/reactivity';
 	import { computed, onMounted } from '@vue/runtime-core';
 	export default {
-		setup(props) {
+		props: {
+			isMultiple: {
+				type: Boolean,
+				default: false
+			}
+		},
+		setup(props, { emit }) {
 			const upload = reactive({
 				files: [],
 				error: null,
@@ -44,11 +59,38 @@
 			const isFailed = computed(() => upload.currentStatus === uploadStatuses.failed);
 
 			function reset() {
-				console.log(upload);
-				console.log(uploadStatuses);
 				upload.currentStatus = uploadStatuses.initial;
 				upload.files = [];
 				upload.error = null;
+			}
+
+			async function filesChange(event) {
+				console.log('go');
+				if (props.isMultiple) {
+					//TODO: add functionality for saving multiple files
+				} else {
+					// const data = new FormData();
+					// data.append('photo', event.target.files[0], event.target.files[0].name);
+					// data.append('description', 'hello');
+					// data.append('productId', 1);
+					// data.append('_method', 'PUT');
+					// await store.dispatch('users/update', data);
+					emit('onImageChange', event.target.files[0]);
+				}
+				// console.log(fileList);
+				// const formData = new FormData();
+
+				// if (!fileList.length) return;
+
+				// // append the files to FormData
+				// Array.from(Array(fileList.length).keys()).map((x) => {
+				// 	formData.append(fieldName, fileList[x], fileList[x].name);
+				// });
+
+				// console.log(formData);
+
+				// // save it
+				// save(formData);
 			}
 
 			onMounted(() => {
@@ -57,7 +99,8 @@
 
 			return {
 				isInitial,
-				isSaving
+				isSaving,
+				filesChange
 			};
 		}
 	};

@@ -27,12 +27,35 @@ const actions = {
 			}
 			return error.response.data;
 		}
+	},
+
+	/**
+	 * Update user personal data
+	 *
+	 * @param {Object} data
+	 *
+	 * @return JSON Response
+	 */
+	async update({ commit }, data) {
+		try {
+			return await usersApi.update(data);
+		} catch (error) {
+			if (process.env.NODE_ENV !== 'production') {
+				console.error(error);
+			}
+			return error.response.data;
+		}
 	}
 };
 
 const mutations = {
 	setActiveUser(state, data) {
 		state.active = JSON.parse(data);
+	},
+
+	updateActiveUser(state, data) {
+		console.log(data);
+		state.active = { ...data };
 	}
 };
 

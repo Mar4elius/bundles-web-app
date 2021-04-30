@@ -9,7 +9,7 @@
 				<!-- user photo -->
 				<div>
 					<h6>Photo</h6>
-					<user-photo />
+					<user-photo @onImageChange="updateUserData" />
 				</div>
 				<div class="flex">
 					<v-text-input
@@ -37,7 +37,7 @@
 					:value="activeUser.email"
 				/>
 				<div class="text-right">
-					<v-button-filled id="update-user-data" @btnOnClickEvent="updateUserData">Save</v-button-filled>
+					<v-button-filled id="update-user-data">Save</v-button-filled>
 				</div>
 			</validate-form>
 		</div>
@@ -65,13 +65,30 @@
 		setup(props) {
 			const store = useStore();
 			const activeUser = computed(() => store.state.users.active);
+			const formData = new FormData();
 			const schema = object().shape();
-			function onSubmit() {
-				//
+
+			async function onSubmit(values, actions) {
+				// update use profile fiels that have been changed
+				let updatedActiveUser = {
+					...activeUser.value,
+					...values
+				};
+
+				// https://dev.to/diogoko/file-upload-using-laravel-and-vue-js-the-right-way-1775
+				// When using FormData, for complex data structure we have to convert data to JSON format
+				formData.append('data', JSON.stringify(updatedActiveUser));
+				let data = {
+					activeUser: updatedActiveUser,
+					formData: formData
+				};
+				// https://stackoverflow.com/questions/47676134/laravel-request-all-is-empty-using-multipart-form-data
+				formData.append('_method', 'PUT');
+				await store.dispatch('users/update', data);
 			}
 
-			function updateUserData() {
-				//
+			function updateUserData(image) {
+				formData.append('image', image, image.name);
 			}
 
 			return {

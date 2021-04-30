@@ -7,6 +7,7 @@ use App\Http\Controllers\Api\BundleController;
 use App\Http\Controllers\Api\CartBundleController;
 use App\Http\Controllers\Api\CartController;
 use App\Http\Controllers\Api\ProductController;
+use App\Http\Controllers\Api\UserController;
 
 /*
 |--------------------------------------------------------------------------
@@ -44,4 +45,7 @@ Route::prefix('v1')->group(function () {
     Route::resource('carts', CartController::class);
     // Cart Bundles
     Route::resource('cart-bundles', CartBundleController::class);
+
+    // User
+    Route::resource('user', UserController::class);
 });
