@@ -53,7 +53,7 @@
 	import { string, required, email, object, shape } from 'yup';
 	// Vue
 	import { useStore } from 'vuex';
-	import { computed } from '@vue/runtime-core';
+	import { computed, ref } from '@vue/runtime-core';
 	export default {
 		components: {
 			ValidateForm,
@@ -67,6 +67,7 @@
 			const activeUser = computed(() => store.state.users.active);
 			const formData = new FormData();
 			const schema = object().shape();
+			const tempImage = ref(null);
 
 			async function onSubmit(values, actions) {
 				// update use profile fiels that have been changed
@@ -87,10 +88,13 @@
 				// this way we will make use of correct route (PUT) and overcome php bug (POST)
 				formData.append('_method', 'PUT');
 				await store.dispatch('users/update', data);
+				// delete locally saved image
+				URL.revokeObjectURL(tempImage.value);
 			}
 
-			function updateUserData(image) {
-				formData.append('image', image, image.name);
+			function updateUserData(data) {
+				tempImage.value = data.tempImage;
+				formData.append('image', data.imageToSave, data.imageToSave.name);
 			}
 
 			return {

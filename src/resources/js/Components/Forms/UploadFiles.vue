@@ -69,12 +69,6 @@
 				if (props.isMultiple) {
 					//TODO: add functionality for saving multiple files
 				} else {
-					// const data = new FormData();
-					// data.append('photo', event.target.files[0], event.target.files[0].name);
-					// data.append('description', 'hello');
-					// data.append('productId', 1);
-					// data.append('_method', 'PUT');
-					// await store.dispatch('users/update', data);
 					emit('onImageChange', event.target.files[0]);
 				}
 				// console.log(fileList);

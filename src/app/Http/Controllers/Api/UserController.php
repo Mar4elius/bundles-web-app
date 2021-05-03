@@ -1,9 +1,14 @@
 <?php
 
 namespace App\Http\Controllers\Api;
-
+// Support
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+// Models
+use App\Models\User;
+// Storage
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\File;
 
 class UserController extends Controller
 {
@@ -43,12 +48,39 @@ class UserController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param  \App\Models\User $user
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, User $user)
     {
-        dd($request->all());
+        $data = json_decode($request->data);
+        // update user data
+        $user->first_name = $data->first_name;
+        $user->last_name = $data->last_name;
+        $user->email = $data->email;
+
+        // if ($request->hasFile('image')) {
+        //     $image = $request->file('image');
+        //     $file_name = time() . '_' . $image->getFilename() . '.' . $image->getClientOriginalExtension();
+
+        //     Storage::disk('local')->put($file_name, File::get($image));
+
+        //     $img = Image::make($image->getRealPath());
+        //     $img->resize(120, 120, function ($constraint) {
+        //         $constraint->aspectRatio();
+        //     });
+        //     $user->profile_photo_path = 
+        // }
+        if ($request->hasFile('image')) {
+            //TODO: find and delete the existing file;
+
+            $path = $request->file('image')->store('avatars', [
+                'disk' => 'public'
+            ]);
+            $user->profile_photo_path = $path;
+        }
+
+        $user->save();
     }
 
     /**

@@ -3,8 +3,9 @@
 		<div class="my-4 md:my-6 lg:my-8 flex">
 			<div v-if="activeUser.profile_photo_path">
 				<img
-					:src="activeUser.profile_photo_path"
+					:src="[tempImage ? `${activeUser.profile_photo_path}` : `storage/${activeUser.profile_photo_path}`]"
 					class="rounded-full flex justify-center items-center bg-indigo-600 w-20 h-20"
+					alt="avatar"
 				/>
 			</div>
 			<div v-else class="rounded-full flex justify-center items-center bg-indigo-600 w-20 h-20">
@@ -48,25 +49,27 @@
 		setup(props, { emit }) {
 			const store = useStore();
 			const showModal = ref(false);
-
+			const tempImage = ref(null); // temporary image untill it is saved
 			const activeUser = computed(() => store.state.users.active);
 
 			function updateProfileImage(image) {
-				console.log('incoming', image);
 				//update active user image
 				// if image has been uploaded already and user changes it - delete it from memory
-				// if (newImage) {
-				// 	URL.revokeObjectURL(newImage);
-				// }
+				if (tempImage.value) {
+					URL.revokeObjectURL(tempImage);
+				}
 
-				// let newImage = URL.createObjectURL(image);
-				// const data = {
-				// 	...activeUser.value,
-				// 	profile_photo_path: newImage
-				// };
-				console.log('emit', image);
-				// store.commit('users/updateActiveUser', data);
-				emit('onImageChange', image);
+				tempImage.value = URL.createObjectURL(image);
+				console.log('tempImage', tempImage.value);
+				const data = {
+					...activeUser.value,
+					profile_photo_path: tempImage.value
+				};
+				store.commit('users/updateActiveUser', data);
+				emit('onImageChange', {
+					imageToSave: image,
+					tempImage: tempImage
+				});
 				showModal.value = false;
 			}
 
@@ -74,6 +77,7 @@
 				activeUser,
 				getUserInitials,
 				showModal,
+				tempImage,
 				updateProfileImage
 			};
 		}
