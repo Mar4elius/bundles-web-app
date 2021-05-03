@@ -60,6 +60,7 @@
 			const activeUser = computed(() => store.state.users.active);
 
 			const schema = object().shape({
+				current_password: string().required(),
 				password_confirmation: string().required(),
 				password: string().min(8).required(),
 				password_confirmation: string()
@@ -67,8 +68,14 @@
 					.oneOf([ref('password')], 'Passwords do not match')
 			});
 
-			function onSubmit() {
-				//
+			async function onSubmit(values, actions) {
+				const response = await store.dispatch('users/updatePassword', values);
+
+				if (!response.errors) {
+					window.location.href = route('verification.notice');
+				} else {
+					actions.setErrors(response.errors);
+				}
 			}
 
 			return {

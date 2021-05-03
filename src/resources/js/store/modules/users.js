@@ -30,6 +30,24 @@ const actions = {
 	},
 
 	/**
+	 * Update user password
+	 *
+	 * @param {Object} data
+	 *
+	 * @return JSON Response
+	 */
+	async updatePassword({ commit }, data) {
+		try {
+			return await usersApi.updatePassword(data);
+		} catch (error) {
+			if (process.env.NODE_ENV !== 'production') {
+				console.error(error);
+			}
+			return error.response.data;
+		}
+	},
+
+	/**
 	 * Update user personal data
 	 *
 	 * @param {Object} data
