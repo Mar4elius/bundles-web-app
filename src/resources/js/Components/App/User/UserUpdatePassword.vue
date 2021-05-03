@@ -45,7 +45,7 @@
 	import VButtonFilled from '@/Components/Forms/VButtonFilled';
 	// Vee-validation and Yup
 	import { Form as ValidateForm } from 'vee-validate';
-	import { string, required, email, min, oneOf, object, shape, ref } from 'yup';
+	import { string, required, min, oneOf, object, shape, ref } from 'yup';
 
 	export default {
 		components: {

@@ -7,10 +7,8 @@
 		<div class="w-full md:w-3/5 rounded-md bg-white p-4 md:p-6 lg:p-8">
 			<validate-form @submit="onSubmit" :validation-schema="schema">
 				<!-- user photo -->
-				<div>
-					<h6>Photo</h6>
-					<user-photo @onImageChange="updateUserData" :show-button="true" />
-				</div>
+				<h6>Photo</h6>
+				<user-photo @onImageChange="updateUserData" :show-button="true" />
 				<div class="flex">
 					<v-text-input
 						name="first_name"
@@ -69,9 +67,14 @@
 			const store = useStore();
 			const activeUser = computed(() => store.state.users.active);
 			const formData = new FormData();
-			const schema = object().shape();
 			const tempImage = ref(null);
 			const toast = useToast();
+
+			const schema = object().shape({
+				first_name: string().required(),
+				last_name: string().required(),
+				email: string().email().required()
+			});
 
 			async function onSubmit(values, actions) {
 				// update use profile fiels that have been changed

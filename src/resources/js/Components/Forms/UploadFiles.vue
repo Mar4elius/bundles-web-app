@@ -65,7 +65,6 @@
 			}
 
 			async function filesChange(event) {
-				console.log('go');
 				if (props.isMultiple) {
 					//TODO: add functionality for saving multiple files
 				} else {
