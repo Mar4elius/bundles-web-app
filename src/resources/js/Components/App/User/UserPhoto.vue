@@ -1,19 +1,18 @@
 <template>
 	<div class="flex justify-between items-center">
-		<div class="my-4 md:my-6 lg:my-8 flex">
-			<div v-if="activeUser.profile_photo_path">
-				<img
-					:src="[tempImage ? `${activeUser.profile_photo_path}` : `storage/${activeUser.profile_photo_path}`]"
-					class="rounded-full flex justify-center items-center bg-indigo-600 w-20 h-20"
-					alt="avatar"
-				/>
-			</div>
-			<div v-else class="rounded-full flex justify-center items-center bg-indigo-600 w-20 h-20">
-				<span class="text-xl text-white">{{ getUserInitials(activeUser) }}</span>
-			</div>
+		<div v-if="activeUser.profile_photo_path">
+			<img
+				:src="[tempImage ? `${activeUser.profile_photo_path}` : `storage/${activeUser.profile_photo_path}`]"
+				:class="classes"
+				alt="avatar"
+			/>
 		</div>
-		<div>
-			<v-button-filled classes="w-" id="select-new-photo" @btnOnClickEvent="showModal = !showModal">
+		<div v-else class="rounded-full flex justify-center items-center bg-indigo-600 w-20 h-20 my-4 md:my-6 lg:my-8">
+			<span class="text-xl text-white">{{ getUserInitials(activeUser) }}</span>
+		</div>
+		<!-- This component is used on Top Navigation component as well, where we don't want to display button -->
+		<div v-if="showButton">
+			<v-button-filled id="select-new-photo" @btnOnClickEvent="showModal = !showModal">
 				Select A New Photo
 			</v-button-filled>
 		</div>
@@ -44,6 +43,18 @@
 			ModalDialog,
 			VButtonFilled,
 			UploadFiles
+		},
+
+		props: {
+			showButton: {
+				type: Boolean,
+				default: false
+			},
+
+			classes: {
+				type: String,
+				default: 'rounded-full flex justify-center items-center bg-indigo-600 w-20 h-20 my-4 md:my-6 lg:my-8'
+			}
 		},
 
 		setup(props, { emit }) {

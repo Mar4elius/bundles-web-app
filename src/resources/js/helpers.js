@@ -66,4 +66,15 @@ function getUserInitials(user) {
 	return `${firstNameFirstLetter}${lastNameFirstLetter}`;
 }
 
-export { capitalizeFirstLetter, calculatePrice, getCookie, randomAlphaNumericString, getUserInitials };
+/**
+ * Get user full name
+ *
+ * @param {Object} user
+ *
+ * @return String
+ */
+function getUserFullName(user) {
+	return `${user.first_name} ${user.last_name}`;
+}
+
+export { capitalizeFirstLetter, calculatePrice, getCookie, randomAlphaNumericString, getUserInitials, getUserFullName };

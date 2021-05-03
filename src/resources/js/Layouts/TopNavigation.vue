@@ -137,11 +137,7 @@
 								@click="displayProfileMenu"
 							>
 								<span class="sr-only">Open user menu</span>
-								<img
-									class="h-8 w-8 rounded-full"
-									src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
-									alt=""
-								/>
+								<user-photo classes="h-10 w-10 rounded-full" />
 							</button>
 						</div>
 						<div v-else>
@@ -199,16 +195,19 @@
 				</nav-link>
 				<hr class="py-3" />
 				<div class="flex items-center">
-					<img
-						class="h-10 w-10 rounded-full mx-3"
-						src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
-						alt=""
-					/>
-					<p class="text-white">Sam Green</p>
+					<user-photo classes="h-10 w-10 rounded-full" />
+					<p class="text-white ml-2">{{ getUserFullName(activeUser) }}</p>
 				</div>
 				<nav-link v-for="link in userProfileLinks" :href="route(link.route)" :key="link.name">
 					{{ link.name }}
 				</nav-link>
+				<button
+					id="logout"
+					@click="logout"
+					class="w-full text-left text-white block px-3 py-2 rounded-md text-base font-medium hover:bg-gray-700"
+				>
+					Sign out
+				</button>
 			</div>
 		</div>
 	</nav>
@@ -222,16 +221,20 @@
 	// Components
 	import NavLink from '@/Components/Forms/NavLink';
 	import ProfileLink from '@/Components/Forms/ProfileLink';
+	import UserPhoto from '@/Components/App/User/UserPhoto';
 	// Data
 	import { topNavigationLinks } from '@/Data/TopNavigationLinks';
 	import { userProfileLinks } from '@/Data/UserProfileLinks';
 	// Functions
 	import { useAuthLogout } from '@/Composables/useAuthLogout';
+	// Helpers
+	import { getUserFullName } from '@/helpers';
 
 	export default {
 		components: {
 			NavLink,
-			ProfileLink
+			ProfileLink,
+			UserPhoto
 		},
 
 		setup() {
@@ -264,6 +267,7 @@
 				isProfileMenuOpen,
 				displayMobileMenu,
 				displayProfileMenu,
+				getUserFullName,
 				logout,
 				showShoppingCart,
 				topNavigationLinks,

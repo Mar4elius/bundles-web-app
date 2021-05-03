@@ -9,7 +9,7 @@
 				<!-- user photo -->
 				<div>
 					<h6>Photo</h6>
-					<user-photo @onImageChange="updateUserData" />
+					<user-photo @onImageChange="updateUserData" :show-button="true" />
 				</div>
 				<div class="flex">
 					<v-text-input
