@@ -60,16 +60,17 @@
 				}
 
 				tempImage.value = URL.createObjectURL(image);
-				console.log('tempImage', tempImage.value);
 				const data = {
 					...activeUser.value,
 					profile_photo_path: tempImage.value
 				};
 				store.commit('users/updateActiveUser', data);
+
 				emit('onImageChange', {
 					imageToSave: image,
 					tempImage: tempImage
 				});
+
 				showModal.value = false;
 			}
 

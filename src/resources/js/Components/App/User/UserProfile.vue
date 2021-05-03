@@ -54,6 +54,9 @@
 	// Vue
 	import { useStore } from 'vuex';
 	import { computed, ref } from '@vue/runtime-core';
+	// Toast
+	import { useToast } from 'vue-toastification';
+
 	export default {
 		components: {
 			ValidateForm,
@@ -68,6 +71,7 @@
 			const formData = new FormData();
 			const schema = object().shape();
 			const tempImage = ref(null);
+			const toast = useToast();
 
 			async function onSubmit(values, actions) {
 				// update use profile fiels that have been changed
@@ -87,9 +91,18 @@
 				// append form method to PUT or PATCH so to overcome PHP mulitp form bug (which works only with POST request)
 				// this way we will make use of correct route (PUT) and overcome php bug (POST)
 				formData.append('_method', 'PUT');
-				await store.dispatch('users/update', data);
+
+				const response = await store.dispatch('users/update', data);
+
+				if (!response.errors) {
+					toast.success(response.data.message);
+				} else {
+					toast.danger(response.data);
+				}
+
 				// delete locally saved image
 				URL.revokeObjectURL(tempImage.value);
+				tempImage.value = null;
 			}
 
 			function updateUserData(data) {

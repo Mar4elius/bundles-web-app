@@ -38,7 +38,9 @@ const actions = {
 	 */
 	async update({ commit }, data) {
 		try {
-			return await usersApi.update(data);
+			const response = await usersApi.update(data);
+			commit('updateActiveUser', response.data.user);
+			return response;
 		} catch (error) {
 			if (process.env.NODE_ENV !== 'production') {
 				console.error(error);

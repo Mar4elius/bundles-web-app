@@ -2,13 +2,14 @@
 
 namespace App\Http\Controllers\Api;
 // Support
+use Exception;
+use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 // Models
 use App\Models\User;
 // Storage
 use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Facades\File;
 
 class UserController extends Controller
 {
@@ -53,34 +54,39 @@ class UserController extends Controller
      */
     public function update(Request $request, User $user)
     {
-        $data = json_decode($request->data);
-        // update user data
-        $user->first_name = $data->first_name;
-        $user->last_name = $data->last_name;
-        $user->email = $data->email;
+        try {
+            $data = json_decode($request->data);
+            // update user data
+            $user->first_name = $data->first_name;
+            $user->last_name = $data->last_name;
+            $user->email = $data->email;
 
-        // if ($request->hasFile('image')) {
-        //     $image = $request->file('image');
-        //     $file_name = time() . '_' . $image->getFilename() . '.' . $image->getClientOriginalExtension();
+            if ($request->hasFile('image')) {
+                if (Storage::disk('public')->exists($user->profile_photo_path)) {
+                    Storage::disk('public')->delete($user->profile_photo_path);
+                }
 
-        //     Storage::disk('local')->put($file_name, File::get($image));
+                $path = $request->file('image')->store('avatars', [
+                    'disk' => 'public'
+                ]);
+                $user->profile_photo_path = $path;
+            }
 
-        //     $img = Image::make($image->getRealPath());
-        //     $img->resize(120, 120, function ($constraint) {
-        //         $constraint->aspectRatio();
-        //     });
-        //     $user->profile_photo_path = 
-        // }
-        if ($request->hasFile('image')) {
-            //TODO: find and delete the existing file;
-
-            $path = $request->file('image')->store('avatars', [
-                'disk' => 'public'
+            $user->save();
+            return response()->json([
+                'user'      => $user,
+                'message'   => 'Profile information has been updated.'
             ]);
-            $user->profile_photo_path = $path;
+        } catch (Exception $e) {
+            if (config('app.env') !== 'production') {
+                return $e->getMessage();
+            } else {
+                Log::error($e->getMessage());
+                return response()->json([
+                    'error' => 'This request failed successfully in user update.'
+                ]);
+            }
         }
-
-        $user->save();
     }
 
     /**
