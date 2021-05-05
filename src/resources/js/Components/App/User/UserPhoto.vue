@@ -7,7 +7,7 @@
 				alt="avatar"
 			/>
 		</div>
-		<div v-else class="rounded-full flex justify-center items-center bg-indigo-600 w-20 h-20 my-4 md:my-6 lg:my-8">
+		<div v-else :class="classes" class="rounded-full bg-indigo-600 flex justify-center items-center">
 			<span class="text-xl text-white">{{ getUserInitials(activeUser) }}</span>
 		</div>
 		<!-- This component is used on Top Navigation component as well, where we don't want to display button -->
