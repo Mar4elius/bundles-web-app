@@ -39,6 +39,7 @@
 					:value="activeUser.city"
 					class="w-full md:w-1/2"
 				/> -->
+				<multiselect v-model="value" :options="['Batman', 'Robin', 'Joker']" label="Country" />
 				<v-text-input
 					name="city"
 					type="text"
@@ -77,13 +78,15 @@
 	// Components
 	import VTextInput from '@/Components/Forms/VTextInput';
 	import VButtonFilled from '@/Components/Forms/VButtonFilled';
+	import Multiselect from '@vueform/multiselect';
 	export default {
 		components: {
+			Multiselect,
 			VButtonFilled,
 			VTextInput
 		},
 
-		setup() {
+		setup(props) {
 			const store = useStore();
 			const activeUser = computed(() => store.state.users.active);
 			return {
