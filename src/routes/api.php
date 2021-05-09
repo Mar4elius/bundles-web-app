@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\BundleController;
 use App\Http\Controllers\Api\CartBundleController;
 use App\Http\Controllers\Api\CartController;
+use App\Http\Controllers\Api\OptionController;
 use App\Http\Controllers\Api\ProductController;
 use App\Http\Controllers\Api\UserController;
 
@@ -43,9 +44,16 @@ Route::prefix('v1')->group(function () {
 
     // Carts
     Route::resource('carts', CartController::class);
+
     // Cart Bundles
     Route::resource('cart-bundles', CartBundleController::class);
 
     // User
     Route::resource('user', UserController::class);
+
+    // Options
+    Route::prefix('options')->group(function () {
+        Route::get('/countries', [OptionController::class, 'getCountries']);
+        Route::get('/countries/{country}/provinces', [OptionController::class, 'getProvinces']);
+    });
 });

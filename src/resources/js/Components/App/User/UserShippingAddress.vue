@@ -23,23 +23,29 @@
 					:value="activeUser.address"
 					class="w-full md:w-1/2 mr-2 md:mr-4 lg:mr-6"
 				/>
-				<!-- <v-text-input
-					name="country"
-					type="text"
-					label="Country"
-					placeholder="Country"
-					:value="activeUser.city"
-					class="w-full md:w-1/2"
+
+				<!-- Countries -->
+				<label class="block mb-2 md:mb-3 w-full text-md font-medium text-gray-700" for="countries"
+					>Country</label
+				>
+
+				<multiselect
+					id="countries"
+					v-model="selectedCountry"
+					:options="countries"
+					@open="getCountries"
+					class="w-1/2"
 				/>
-				<v-text-input
-					name="province"
-					type="text"
-					label="Province"
-					placeholder="Province"
-					:value="activeUser.city"
-					class="w-full md:w-1/2"
-				/> -->
-				<multiselect v-model="value" :options="['Batman', 'Robin', 'Joker']" label="Country" />
+				<!-- // countries -->
+
+				<!-- Provinces -->
+				<label class="block mb-2 md:mb-3 w-full text-md font-medium text-gray-700" for="provinces"
+					>Province</label
+				>
+
+				<multiselect id="provinces" v-model="value" :options="provinces" @open="getProvinces" class="w-1/2" />
+				<!-- // provinces -->
+
 				<v-text-input
 					name="city"
 					type="text"
@@ -74,7 +80,7 @@
 <script>
 	// Vue
 	import { useStore } from 'vuex';
-	import { computed } from '@vue/runtime-core';
+	import { computed, ref } from '@vue/runtime-core';
 	// Components
 	import VTextInput from '@/Components/Forms/VTextInput';
 	import VButtonFilled from '@/Components/Forms/VButtonFilled';
@@ -88,9 +94,57 @@
 
 		setup(props) {
 			const store = useStore();
+			const countries = ref([]);
+			const provinces = ref([]);
+			const activeCountry = ref(null);
+
 			const activeUser = computed(() => store.state.users.active);
+			const selectedCountry = computed({
+				get() {
+					return;
+				},
+				set(value) {
+					activeCountry.value = countries.value.find((c) => c.value === value);
+				}
+			});
+
+			async function getCountries() {
+				if (!countries.value.length) {
+					const response = await store.dispatch('options/getCountries');
+					if (response.status === 200) {
+						countries.value = response.data.countries.map((item) => {
+							return {
+								value: item.id,
+								label: item.name
+							};
+						});
+					}
+				}
+			}
+
+			async function getProvinces() {
+				if (!provinces.value.length) {
+					const response = await store.dispatch('options/getProvinces', activeCountry.value);
+					console.log(response);
+					if (response.status === 200) {
+						provinces.value = response.data.provinces.map((item) => {
+							return {
+								value: item.id,
+								label: item.name
+							};
+						});
+					}
+				}
+			}
+
 			return {
-				activeUser
+				activeUser,
+				activeCountry,
+				countries,
+				getCountries,
+				getProvinces,
+				provinces,
+				selectedCountry
 			};
 		}
 	};

@@ -5,6 +5,7 @@ import auth from './modules/auth';
 import bundles from './modules/bundles';
 import cart from './modules/cart';
 import loader from './modules/loader';
+import options from './modules/options';
 import products from './modules/products';
 import users from './modules/users';
 
@@ -16,6 +17,7 @@ export default createStore({
 		bundles,
 		cart,
 		loader,
+		options,
 		products,
 		users
 	},
