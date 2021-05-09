@@ -34,7 +34,7 @@
 					v-model="selectedCountry"
 					:options="countries"
 					@open="getCountries"
-					class="w-1/2"
+					class="w-1/2 mb-6"
 				/>
 				<!-- // countries -->
 
@@ -43,7 +43,14 @@
 					>Province</label
 				>
 
-				<multiselect id="provinces" v-model="value" :options="provinces" @open="getProvinces" class="w-1/2" />
+				<multiselect
+					id="provinces"
+					v-model="selectedProvince"
+					:options="provinces"
+					@open="getProvinces"
+					class="w-1/2 mb-6"
+					:disabled="countries.length === 0"
+				/>
 				<!-- // provinces -->
 
 				<v-text-input
@@ -97,14 +104,25 @@
 			const countries = ref([]);
 			const provinces = ref([]);
 			const activeCountry = ref(null);
+			const activeProvince = ref(null);
 
 			const activeUser = computed(() => store.state.users.active);
+
 			const selectedCountry = computed({
 				get() {
 					return;
 				},
 				set(value) {
 					activeCountry.value = countries.value.find((c) => c.value === value);
+				}
+			});
+
+			const selectedProvince = computed({
+				get() {
+					return;
+				},
+				set(value) {
+					activeProvince.value = provinces.value.find((c) => c.value === value);
 				}
 			});
 
@@ -125,7 +143,7 @@
 			async function getProvinces() {
 				if (!provinces.value.length) {
 					const response = await store.dispatch('options/getProvinces', activeCountry.value);
-					console.log(response);
+
 					if (response.status === 200) {
 						provinces.value = response.data.provinces.map((item) => {
 							return {
@@ -144,7 +162,8 @@
 				getCountries,
 				getProvinces,
 				provinces,
-				selectedCountry
+				selectedCountry,
+				selectedProvince
 			};
 		}
 	};
