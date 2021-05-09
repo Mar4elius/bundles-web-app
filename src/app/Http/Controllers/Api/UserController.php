@@ -64,8 +64,8 @@ class UserController extends Controller
             $user->address = $data->address;
             $user->apartment = $data->apartment;
             $user->city = $data->city;
-            if ($data->active_province) {
-                $province = Province::find($data->active_province->value);
+            if ($data->active_province_id) {
+                $province = Province::find($data->active_province_id);
                 $user->province()->associate($province);
             }
             $user->postal_code = $data->postal_code;

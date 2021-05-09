@@ -32,14 +32,11 @@
 				<multiselect
 					name="country"
 					id="countries"
-					:value-prop="value"
-					label="label"
-					v-model="activeCountry"
+					v-model="activeCountry.value"
 					:options="countries"
 					:loading="countries.length === 0"
 					class="w-1/2 mb-6"
-					@change="getProvinces"
-					:object="true"
+					@select="getProvinces()"
 				/>
 				<!-- // countries -->
 
@@ -51,11 +48,11 @@
 				<multiselect
 					name="province"
 					id="provinces"
-					v-model="activeProvince"
+					v-model="activeProvince.value"
 					:options="provinces"
 					:loading="provinces.length === 0 && activeUser.province_id"
 					class="w-1/2 mb-6"
-					:disabled="!activeCountry.value"
+					:disabled="activeCountry && !activeCountry.value"
 				/>
 				<!-- // provinces -->
 
@@ -103,6 +100,7 @@
 	import { string, required, email, object, shape } from 'yup';
 	// Toast
 	import { useToast } from 'vue-toastification';
+	import Condition from 'yup/lib/Condition';
 
 	export default {
 		components: {
@@ -116,36 +114,17 @@
 			const store = useStore();
 			const countries = ref([]);
 			const provinces = ref([]);
-			const activeCountry = reactive({
+			let activeCountry = reactive({
 				value: '',
 				label: ''
 			});
-			const activeProvince = reactive({
+			let activeProvince = reactive({
 				value: '',
 				label: ''
 			});
 			const toast = useToast();
 
 			const activeUser = computed(() => store.state.users.active);
-
-			const selectedCountry = computed({
-				get() {
-					return countries?.value.find((c) => c.value === activeUser.value?.province?.country?.id) || {};
-				},
-				set(value) {
-					console.log(value);
-					activeCountry.value = countries.value.find((c) => c.value === value);
-				}
-			});
-
-			const selectedProvince = computed({
-				get() {
-					return provinces?.value.find((p) => p.value === activeUser.value?.province?.id) || {};
-				},
-				set(value) {
-					activeProvince.value = provinces.value.find((c) => c.value === value);
-				}
-			});
 
 			async function getCountries() {
 				if (!countries.value.length) {
@@ -162,9 +141,10 @@
 			}
 
 			async function getProvinces() {
-				if (activeCountry.value !== '') {
-					console.log('if');
-					const response = await store.dispatch('options/getProvinces', activeCountry.value);
+				// reset provinces before getting a new list
+				activeProvince.value = '';
+				if (activeCountry.value) {
+					const response = await store.dispatch('options/getProvinces', activeCountry);
 					if (response.status === 200) {
 						provinces.value = response.data.provinces.map((item) => {
 							return {
@@ -180,8 +160,7 @@
 				const updatedActiveUser = {
 					...activeUser.value,
 					...values,
-					active_country: activeCountry.value,
-					active_province: activeProvince.value
+					active_province_id: activeProvince.value
 				};
 
 				const formData = new FormData();
@@ -206,27 +185,28 @@
 			onMounted(() => {
 				getCountries().then((_) => {
 					const country = countries?.value.find((c) => c.value === activeUser.value?.province?.country?.id);
-					if (country) {
-						activeCountry.value = country;
+					if (country?.value) {
+						activeCountry.value = country.value;
 					}
-					console.log(activeCountry);
-					getProvinces();
-					if (activeUser.value.province_id) {
-						activeProvince.value = provinces.value.find((c) => c.value === value);
-					}
+					getProvinces().then((_) => {
+						if (activeUser.value.province_id) {
+							activeProvince.value = provinces.value.find(
+								(c) => c.value === activeUser.value.province_id
+							).value;
+						}
+					});
 				});
 			});
 
 			return {
 				activeUser,
 				activeCountry,
+				activeProvince,
 				countries,
 				getCountries,
 				getProvinces,
 				onSubmit,
-				provinces,
-				selectedCountry,
-				selectedProvince
+				provinces
 			};
 		}
 	};
