@@ -5,7 +5,7 @@
 			<p>Update your shipping information.</p>
 		</div>
 		<div class="w-full md:w-3/5 rounded-md bg-white p-4 md:p-6 lg:p-8">
-			<validate-form @submit="onSubmit" :validation-schema="schema">
+			<validate-form @submit="onSubmit">
 				<v-text-input
 					name="address"
 					type="text"
@@ -16,11 +16,11 @@
 				/>
 
 				<v-text-input
-					name="address"
+					name="apartment"
 					type="text"
 					label="Aparetents, Suit, etc. (optional)"
 					placeholder="Address"
-					:value="activeUser.address"
+					:value="activeUser.apartment"
 					class="w-full md:w-1/2 mr-2 md:mr-4 lg:mr-6"
 				/>
 
@@ -30,11 +30,16 @@
 				>
 
 				<multiselect
+					name="country"
 					id="countries"
-					v-model="selectedCountry"
+					:value-prop="value"
+					label="label"
+					v-model="activeCountry"
 					:options="countries"
-					@open="getCountries"
+					:loading="countries.length === 0"
 					class="w-1/2 mb-6"
+					@change="getProvinces"
+					:object="true"
 				/>
 				<!-- // countries -->
 
@@ -44,12 +49,13 @@
 				>
 
 				<multiselect
+					name="province"
 					id="provinces"
-					v-model="selectedProvince"
+					v-model="activeProvince"
 					:options="provinces"
-					@open="getProvinces"
+					:loading="provinces.length === 0 && activeUser.province_id"
 					class="w-1/2 mb-6"
-					:disabled="countries.length === 0"
+					:disabled="!activeCountry.value"
 				/>
 				<!-- // provinces -->
 
@@ -87,14 +93,21 @@
 <script>
 	// Vue
 	import { useStore } from 'vuex';
-	import { computed, ref } from '@vue/runtime-core';
+	import { computed, onMounted, reactive, ref } from '@vue/runtime-core';
 	// Components
 	import VTextInput from '@/Components/Forms/VTextInput';
 	import VButtonFilled from '@/Components/Forms/VButtonFilled';
 	import Multiselect from '@vueform/multiselect';
+	// Vee-validation and Yup
+	import { Form as ValidateForm } from 'vee-validate';
+	import { string, required, email, object, shape } from 'yup';
+	// Toast
+	import { useToast } from 'vue-toastification';
+
 	export default {
 		components: {
 			Multiselect,
+			ValidateForm,
 			VButtonFilled,
 			VTextInput
 		},
@@ -103,23 +116,31 @@
 			const store = useStore();
 			const countries = ref([]);
 			const provinces = ref([]);
-			const activeCountry = ref(null);
-			const activeProvince = ref(null);
+			const activeCountry = reactive({
+				value: '',
+				label: ''
+			});
+			const activeProvince = reactive({
+				value: '',
+				label: ''
+			});
+			const toast = useToast();
 
 			const activeUser = computed(() => store.state.users.active);
 
 			const selectedCountry = computed({
 				get() {
-					return;
+					return countries?.value.find((c) => c.value === activeUser.value?.province?.country?.id) || {};
 				},
 				set(value) {
+					console.log(value);
 					activeCountry.value = countries.value.find((c) => c.value === value);
 				}
 			});
 
 			const selectedProvince = computed({
 				get() {
-					return;
+					return provinces?.value.find((p) => p.value === activeUser.value?.province?.id) || {};
 				},
 				set(value) {
 					activeProvince.value = provinces.value.find((c) => c.value === value);
@@ -141,9 +162,9 @@
 			}
 
 			async function getProvinces() {
-				if (!provinces.value.length) {
+				if (activeCountry.value !== '') {
+					console.log('if');
 					const response = await store.dispatch('options/getProvinces', activeCountry.value);
-
 					if (response.status === 200) {
 						provinces.value = response.data.provinces.map((item) => {
 							return {
@@ -155,12 +176,54 @@
 				}
 			}
 
+			async function onSubmit(values, action) {
+				const updatedActiveUser = {
+					...activeUser.value,
+					...values,
+					active_country: activeCountry.value,
+					active_province: activeProvince.value
+				};
+
+				const formData = new FormData();
+				formData.append('data', JSON.stringify(updatedActiveUser));
+
+				const data = {
+					activeUser: updatedActiveUser,
+					formData: formData
+				};
+
+				formData.append('_method', 'PUT');
+
+				const response = await store.dispatch('users/update', data);
+
+				if (!response.errors) {
+					toast.success(response.data.message);
+				} else {
+					toast.danger(response.data);
+				}
+			}
+
+			onMounted(() => {
+				getCountries().then((_) => {
+					const country = countries?.value.find((c) => c.value === activeUser.value?.province?.country?.id);
+					if (country) {
+						activeCountry.value = country;
+					}
+					console.log(activeCountry);
+					getProvinces();
+					if (activeUser.value.province_id) {
+						activeProvince.value = provinces.value.find((c) => c.value === value);
+					}
+				});
+			});
+
 			return {
 				activeUser,
 				activeCountry,
 				countries,
 				getCountries,
 				getProvinces,
+				onSubmit,
 				provinces,
 				selectedCountry,
 				selectedProvince

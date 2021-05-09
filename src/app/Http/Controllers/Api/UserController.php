@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use Exception;
 use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
+use App\Models\Province;
 use Illuminate\Http\Request;
 // Models
 use App\Models\User;
@@ -60,6 +61,15 @@ class UserController extends Controller
             $user->first_name = $data->first_name;
             $user->last_name = $data->last_name;
             $user->email = $data->email;
+            $user->address = $data->address;
+            $user->apartment = $data->apartment;
+            $user->city = $data->city;
+            if ($data->active_province) {
+                $province = Province::find($data->active_province->value);
+                $user->province()->associate($province);
+            }
+            $user->postal_code = $data->postal_code;
+            $user->phone = $data->phone;
 
             if ($request->hasFile('image')) {
                 if (Storage::disk('public')->exists($user->profile_photo_path)) {

@@ -6,6 +6,8 @@ use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+// Models
+use App\Models\Province;
 
 class User extends Authenticatable implements MustVerifyEmail
 {
@@ -41,4 +43,12 @@ class User extends Authenticatable implements MustVerifyEmail
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    /**
+     * Get user province
+     */
+    public function province()
+    {
+        return $this->belongsTo(Province::class);
+    }
 }
