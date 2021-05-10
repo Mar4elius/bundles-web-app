@@ -6,79 +6,89 @@
 		</div>
 		<div class="w-full md:w-3/5 rounded-md bg-white p-4 md:p-6 lg:p-8">
 			<validate-form @submit="onSubmit">
-				<v-text-input
-					name="address"
-					type="text"
-					label="Address"
-					placeholder="Address"
-					:value="activeUser.address"
-					class="w-full md:w-1/2 mr-2 md:mr-4 lg:mr-6"
-				/>
+				<div class="lg:flex">
+					<v-text-input
+						name="address"
+						type="text"
+						label="Address"
+						placeholder="Address"
+						:value="activeUser.address"
+						class="w-full mr-2 md:mr-4 lg:mr-6"
+					/>
 
-				<v-text-input
-					name="apartment"
-					type="text"
-					label="Aparetents, Suit, etc. (optional)"
-					placeholder="Address"
-					:value="activeUser.apartment"
-					class="w-full md:w-1/2 mr-2 md:mr-4 lg:mr-6"
-				/>
+					<v-text-input
+						name="apartment"
+						type="text"
+						label="Aparetents, Suit, etc. (optional)"
+						placeholder="Address"
+						:value="activeUser.apartment"
+						class="w-full mr-2 md:mr-4 lg:mr-6"
+					/>
+				</div>
 
-				<!-- Countries -->
-				<label class="block mb-2 md:mb-3 w-full text-md font-medium text-gray-700" for="countries"
-					>Country</label
-				>
+				<div class="lg:flex">
+					<!-- Countries -->
+					<div class="w-full lg:mr-6">
+						<label class="block mb-2 md:mb-3 w-full text-md font-medium text-gray-700" for="countries"
+							>Country</label
+						>
 
-				<multiselect
-					name="country"
-					id="countries"
-					v-model="activeCountry.value"
-					:options="countries"
-					:loading="countries.length === 0"
-					class="w-1/2 mb-6"
-					@select="getProvinces()"
-				/>
-				<!-- // countries -->
+						<multiselect
+							name="country"
+							id="countries"
+							v-model="activeCountry.value"
+							:options="countries"
+							:loading="countries.length === 0"
+							class="mb-6"
+							@select="getProvinces()"
+						/>
+					</div>
+					<!-- // countries -->
 
-				<!-- Provinces -->
-				<label class="block mb-2 md:mb-3 w-full text-md font-medium text-gray-700" for="provinces"
-					>Province</label
-				>
+					<!-- Provinces -->
+					<div class="w-full lg:mr-6">
+						<label class="block mb-2 md:mb-3 w-full text-md font-medium text-gray-700" for="provinces"
+							>Province</label
+						>
 
-				<multiselect
-					name="province"
-					id="provinces"
-					v-model="activeProvince.value"
-					:options="provinces"
-					:loading="provinces.length === 0 && activeUser.province_id"
-					class="w-1/2 mb-6"
-					:disabled="activeCountry && !activeCountry.value"
-				/>
-				<!-- // provinces -->
+						<multiselect
+							name="province"
+							id="provinces"
+							v-model="activeProvince.value"
+							:options="provinces"
+							:loading="provinces.length === 0 && activeUser.province_id"
+							class="w-full mb-6"
+							:disabled="activeCountry && !activeCountry.value"
+						/>
+					</div>
+					<!-- // provinces -->
+				</div>
 
-				<v-text-input
-					name="city"
-					type="text"
-					label="City"
-					placeholder="City"
-					:value="activeUser.city"
-					class="w-full md:w-1/2"
-				/>
-				<v-text-input
-					name="postal_code"
-					type="text"
-					label="Postal Code"
-					placeholder="Postal Code"
-					:value="activeUser.postal_code"
-					class="w-full md:w-1/2"
-				/>
+				<div class="lg:flex">
+					<v-text-input
+						name="city"
+						type="text"
+						label="City"
+						placeholder="City"
+						:value="activeUser.city"
+						class="w-full lg:mr-6"
+					/>
+					<v-text-input
+						name="postal_code"
+						type="text"
+						label="Postal Code"
+						placeholder="Postal Code"
+						:value="activeUser.postal_code"
+						class="w-full lg:mr-6"
+					/>
+				</div>
 				<v-text-input
 					name="phone"
 					type="text"
 					label="Phone Number"
 					placeholder="Phone Number"
 					:value="activeUser.phone"
-					class="w-full md:w-1/2 mr-2 md:mr-4 lg:mr-6"
+					class="w-full lg:w-1/2 lg:mr-6"
 				/>
 				<div class="text-right">
 					<v-button-filled id="update-user-data">Save</v-button-filled>
