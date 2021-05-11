@@ -5,7 +5,7 @@
 			<p>Update your shipping information.</p>
 		</div>
 		<div class="w-full md:w-3/5 rounded-md bg-white p-4 md:p-6 lg:p-8">
-			<validate-form @submit="onSubmit">
+			<validate-form @submit="onSubmit" :validation-schema="schema">
 				<div class="lg:flex">
 					<v-text-input
 						name="address"
@@ -32,7 +32,6 @@
 						<label class="block mb-2 md:mb-3 w-full text-md font-medium text-gray-700" for="countries"
 							>Country</label
 						>
-
 						<multiselect
 							name="country"
 							id="countries"
@@ -59,6 +58,7 @@
 							:loading="provinces.length === 0 && activeUser.province_id"
 							class="w-full mb-6"
 							:disabled="activeCountry && !activeCountry.value"
+							ref="province_ddl"
 						/>
 					</div>
 					<!-- // provinces -->
@@ -134,12 +134,26 @@
 			});
 			const toast = useToast();
 
+			const schema = object().shape({
+				address: string().required(),
+				province: string().required(),
+				city: string().required(),
+				postal_code: string().required(),
+				phone: string().required()
+			});
+
 			const activeUser = computed(() => store.state.users.active);
 
 			async function getCountries() {
 				if (!countries.value.length) {
 					const response = await store.dispatch('options/getCountries');
 					if (response.status === 200) {
+						countries.value = response.data.countries.map((item) => {
+							return {
+								value: item.id,
+								label: item.name
+							};
+						});
 						countries.value = response.data.countries.map((item) => {
 							return {
 								value: item.id,
@@ -167,6 +181,7 @@
 			}
 
 			async function onSubmit(values, action) {
+				console.log('values', values);
 				const updatedActiveUser = {
 					...activeUser.value,
 					...values,
@@ -216,7 +231,8 @@
 				getCountries,
 				getProvinces,
 				onSubmit,
-				provinces
+				provinces,
+				schema
 			};
 		}
 	};
