@@ -41,7 +41,7 @@
 						name="country"
 						label="Country"
 						:value="activeCountry.value"
-						@update:value="test"
+						@update:value="setValue"
 						@handle-select="getProvinces()"
 						:options="countries"
 						:loading="countries.length === 0"
@@ -52,7 +52,7 @@
 						name="province"
 						label="Province"
 						:value="activeProvince.value"
-						@update:value="activeProvince.value = $event"
+						@update:value="setValue"
 						:options="provinces"
 						:loading="provinces.length === 0 && activeUser.province_id"
 						:disabled="activeCountry && !activeCountry.value"
@@ -102,7 +102,7 @@
 	import VDropDownList from '@/Components/Forms/VDropDownList';
 	import Multiselect from '@vueform/multiselect';
 	// Composable functions
-	import useMultiselectDropDown from '@/Components/Composables';
+	import useMultiselectDropDown from '@/Composables/useMultiselectDropDown';
 	// Vee-validation
 	import { useForm } from 'vee-validate';
 	// Yup
@@ -134,8 +134,8 @@
 
 			const schema = object().shape({
 				address: string().required(),
-				// country: string().required(),
-				// province: string().required(),
+				country: string().required(),
+				province: string().required(),
 				city: string().required(),
 				postal_code: string().required(),
 				phone: string().required()
@@ -153,44 +153,40 @@
 
 			const onSubmit = handleSubmit((values) => {
 				console.log('values', values);
-				// const updatedActiveUser = {
-				// 	...activeUser.value,
-				// 	...values,
-				// 	active_province_id: activeProvince.value
-				// };
+				const updatedActiveUser = {
+					...activeUser.value,
+					...values,
+					active_province_id: activeProvince.value
+				};
 
-				// const formData = new FormData();
-				// formData.append('data', JSON.stringify(updatedActiveUser));
+				const formData = new FormData();
+				formData.append('data', JSON.stringify(updatedActiveUser));
 
-				// const data = {
-				// 	activeUser: updatedActiveUser,
-				// 	formData: formData
-				// };
+				const data = {
+					activeUser: updatedActiveUser,
+					formData: formData
+				};
 
-				// formData.append('_method', 'PUT');
+				formData.append('_method', 'PUT');
 
-				// const response = store.dispatch('users/update', data);
-
-				// if (!response.errors) {
-				// 	toast.success(response.data.message);
-				// } else {
-				// 	toast.danger(response.data);
-				// }
+				store.dispatch('users/update', data).then((response) => {
+					if (!response.errors) {
+						toast.success(response.data.message);
+					} else {
+						toast.danger(response.data);
+					}
+				});
 			});
 
 			// const { value: country, errorMessage: countryError } = useField('country');
 			// const { value: province, errorMessage: provinceError } = useField('country');
 
+			const { createMultiselectDdlObject, setDdlValue } = useMultiselectDropDown();
 			async function getCountries() {
 				if (!countries.value.length) {
 					const response = await store.dispatch('options/getCountries');
 					if (response.status === 200) {
-						countries.value = response.data.countries.map((item) => {
-							return {
-								value: item.id,
-								label: item.name
-							};
-						});
+						countries.value = createMultiselectDdlObject(response.data.countries);
 					}
 				}
 			}
@@ -201,62 +197,37 @@
 				if (activeCountry.value) {
 					const response = await store.dispatch('options/getProvinces', activeCountry);
 					if (response.status === 200) {
-						provinces.value = response.data.provinces.map((item) => {
-							return {
-								value: item.id,
-								label: item.name
-							};
-						});
+						provinces.value = createMultiselectDdlObject(response.data.provinces);
 					}
 				}
 			}
-
-			// async function onSubmit(values, action) {
-			// 	console.log('values', values);
-			// 	const updatedActiveUser = {
-			// 		...activeUser.value,
-			// 		...values,
-			// 		active_province_id: activeProvince.value
-			// 	};
-
-			// 	const formData = new FormData();
-			// 	formData.append('data', JSON.stringify(updatedActiveUser));
-
-			// 	const data = {
-			// 		activeUser: updatedActiveUser,
-			// 		formData: formData
-			// 	};
-
-			// 	formData.append('_method', 'PUT');
-
-			// 	const response = await store.dispatch('users/update', data);
-
-			// 	if (!response.errors) {
-			// 		toast.success(response.data.message);
-			// 	} else {
-			// 		toast.danger(response.data);
-			// 	}
-			// }
 
 			onMounted(() => {
 				getCountries().then((_) => {
 					const country = countries?.value.find((c) => c.value === activeUser.value?.province?.country?.id);
 					if (country?.value) {
 						activeCountry.value = country.value;
+						setFieldValue('country', activeCountry.value);
 					}
 					getProvinces().then((_) => {
 						if (activeUser.value.province_id) {
 							activeProvince.value = provinces.value.find(
 								(c) => c.value === activeUser.value.province_id
 							).value;
+							setFieldValue('province', activeProvince.value);
 						}
 					});
 				});
 			});
 
-			function test(data) {
-				activeCountry.value = data.value;
-				// setFieldValue(data.field, data.value);
+			function setValue(data) {
+				if (data.field === 'country') {
+					activeCountry.value = data.value;
+				} else if (data.field === 'province') {
+					activeProvince.value = data.value;
+				}
+				// sets vee-validate field so the validation works
+				setFieldValue(data.field, data.value);
 			}
 
 			return {
@@ -269,7 +240,7 @@
 				onSubmit,
 				provinces,
 				schema,
-				test
+				setValue
 			};
 		}
 	};
