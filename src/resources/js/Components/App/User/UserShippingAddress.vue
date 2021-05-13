@@ -5,7 +5,7 @@
 			<p>Update your shipping information.</p>
 		</div>
 		<div class="w-full md:w-3/5 rounded-md bg-white p-4 md:p-6 lg:p-8">
-			<validate-form @submit="onSubmit" :validation-schema="schema">
+			<form @submit="onSubmit" :validation-schema="schema">
 				<div class="lg:flex">
 					<v-text-input
 						name="address"
@@ -27,41 +27,36 @@
 				</div>
 
 				<div class="lg:flex">
-					<!-- Countries -->
-					<div class="w-full lg:mr-6">
-						<label class="block mb-2 md:mb-3 w-full text-md font-medium text-gray-700" for="countries"
-							>Country</label
-						>
-						<multiselect
-							name="country"
-							id="countries"
-							v-model="activeCountry.value"
-							:options="countries"
-							:loading="countries.length === 0"
-							class="mb-6"
-							@select="getProvinces()"
-						/>
-					</div>
-					<!-- // countries -->
+					<!-- <v-drop-down-list
+						name="country"
+						label="Country"
+						:value="activeCountry.value"
+						@update:value="activeCountry.value = $event"
+						@handle-select="getProvinces()"
+						:options="countries"
+						:loading="countries.length === 0"
+						:required="true"
+					/> -->
+					<v-drop-down-list
+						name="country"
+						label="Country"
+						:value="activeCountry.value"
+						@update:value="test"
+						@handle-select="getProvinces()"
+						:options="countries"
+						:loading="countries.length === 0"
+						:required="true"
+					/>
 
-					<!-- Provinces -->
-					<div class="w-full lg:mr-6">
-						<label class="block mb-2 md:mb-3 w-full text-md font-medium text-gray-700" for="provinces"
-							>Province</label
-						>
-
-						<multiselect
-							name="province"
-							id="provinces"
-							v-model="activeProvince.value"
-							:options="provinces"
-							:loading="provinces.length === 0 && activeUser.province_id"
-							class="w-full mb-6"
-							:disabled="activeCountry && !activeCountry.value"
-							ref="province_ddl"
-						/>
-					</div>
-					<!-- // provinces -->
+					<v-drop-down-list
+						name="province"
+						label="Province"
+						:value="activeProvince.value"
+						@update:value="activeProvince.value = $event"
+						:options="provinces"
+						:loading="provinces.length === 0 && activeUser.province_id"
+						:disabled="activeCountry && !activeCountry.value"
+					/>
 				</div>
 
 				<div class="lg:flex">
@@ -91,9 +86,9 @@
 					class="w-full lg:w-1/2 lg:mr-6"
 				/>
 				<div class="text-right">
-					<v-button-filled id="update-user-data">Save</v-button-filled>
+					<v-button-filled id="update-shipping-address">Save</v-button-filled>
 				</div>
-			</validate-form>
+			</form>
 		</div>
 	</div>
 </template>
@@ -104,19 +99,22 @@
 	// Components
 	import VTextInput from '@/Components/Forms/VTextInput';
 	import VButtonFilled from '@/Components/Forms/VButtonFilled';
+	import VDropDownList from '@/Components/Forms/VDropDownList';
 	import Multiselect from '@vueform/multiselect';
-	// Vee-validation and Yup
-	import { Form as ValidateForm } from 'vee-validate';
-	import { string, required, email, object, shape } from 'yup';
+	// Composable functions
+	import useMultiselectDropDown from '@/Components/Composables';
+	// Vee-validation
+	import { useForm } from 'vee-validate';
+	// Yup
+	import { string, required, object, shape } from 'yup';
 	// Toast
 	import { useToast } from 'vue-toastification';
-	import Condition from 'yup/lib/Condition';
 
 	export default {
 		components: {
 			Multiselect,
-			ValidateForm,
 			VButtonFilled,
+			VDropDownList,
 			VTextInput
 		},
 
@@ -136,7 +134,8 @@
 
 			const schema = object().shape({
 				address: string().required(),
-				province: string().required(),
+				// country: string().required(),
+				// province: string().required(),
 				city: string().required(),
 				postal_code: string().required(),
 				phone: string().required()
@@ -144,16 +143,48 @@
 
 			const activeUser = computed(() => store.state.users.active);
 
+			const { handleSubmit, setFieldValue } = useForm({
+				initialValues: {
+					country: activeCountry.value,
+					province: activeProvince.value
+				},
+				validationSchema: schema
+			});
+
+			const onSubmit = handleSubmit((values) => {
+				console.log('values', values);
+				// const updatedActiveUser = {
+				// 	...activeUser.value,
+				// 	...values,
+				// 	active_province_id: activeProvince.value
+				// };
+
+				// const formData = new FormData();
+				// formData.append('data', JSON.stringify(updatedActiveUser));
+
+				// const data = {
+				// 	activeUser: updatedActiveUser,
+				// 	formData: formData
+				// };
+
+				// formData.append('_method', 'PUT');
+
+				// const response = store.dispatch('users/update', data);
+
+				// if (!response.errors) {
+				// 	toast.success(response.data.message);
+				// } else {
+				// 	toast.danger(response.data);
+				// }
+			});
+
+			// const { value: country, errorMessage: countryError } = useField('country');
+			// const { value: province, errorMessage: provinceError } = useField('country');
+
 			async function getCountries() {
 				if (!countries.value.length) {
 					const response = await store.dispatch('options/getCountries');
 					if (response.status === 200) {
-						countries.value = response.data.countries.map((item) => {
-							return {
-								value: item.id,
-								label: item.name
-							};
-						});
 						countries.value = response.data.countries.map((item) => {
 							return {
 								value: item.id,
@@ -180,32 +211,32 @@
 				}
 			}
 
-			async function onSubmit(values, action) {
-				console.log('values', values);
-				const updatedActiveUser = {
-					...activeUser.value,
-					...values,
-					active_province_id: activeProvince.value
-				};
+			// async function onSubmit(values, action) {
+			// 	console.log('values', values);
+			// 	const updatedActiveUser = {
+			// 		...activeUser.value,
+			// 		...values,
+			// 		active_province_id: activeProvince.value
+			// 	};
 
-				const formData = new FormData();
-				formData.append('data', JSON.stringify(updatedActiveUser));
+			// 	const formData = new FormData();
+			// 	formData.append('data', JSON.stringify(updatedActiveUser));
 
-				const data = {
-					activeUser: updatedActiveUser,
-					formData: formData
-				};
+			// 	const data = {
+			// 		activeUser: updatedActiveUser,
+			// 		formData: formData
+			// 	};
 
-				formData.append('_method', 'PUT');
+			// 	formData.append('_method', 'PUT');
 
-				const response = await store.dispatch('users/update', data);
+			// 	const response = await store.dispatch('users/update', data);
 
-				if (!response.errors) {
-					toast.success(response.data.message);
-				} else {
-					toast.danger(response.data);
-				}
-			}
+			// 	if (!response.errors) {
+			// 		toast.success(response.data.message);
+			// 	} else {
+			// 		toast.danger(response.data);
+			// 	}
+			// }
 
 			onMounted(() => {
 				getCountries().then((_) => {
@@ -223,6 +254,11 @@
 				});
 			});
 
+			function test(data) {
+				activeCountry.value = data.value;
+				// setFieldValue(data.field, data.value);
+			}
+
 			return {
 				activeUser,
 				activeCountry,
@@ -232,7 +268,8 @@
 				getProvinces,
 				onSubmit,
 				provinces,
-				schema
+				schema,
+				test
 			};
 		}
 	};
