@@ -27,16 +27,6 @@
 				</div>
 
 				<div class="lg:flex">
-					<!-- <v-drop-down-list
-						name="country"
-						label="Country"
-						:value="activeCountry.value"
-						@update:value="activeCountry.value = $event"
-						@handle-select="getProvinces()"
-						:options="countries"
-						:loading="countries.length === 0"
-						:required="true"
-					/> -->
 					<v-drop-down-list
 						name="country"
 						label="Country"
@@ -222,6 +212,11 @@
 
 			function setValue(data) {
 				if (data.field === 'country') {
+					// if country ddl is empty we have to reset value of province ddl
+					if (data.value === '') {
+						activeProvince.value = '';
+						setFieldValue('province', data.value);
+					}
 					activeCountry.value = data.value;
 				} else if (data.field === 'province') {
 					activeProvince.value = data.value;

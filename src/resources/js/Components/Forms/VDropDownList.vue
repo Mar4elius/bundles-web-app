@@ -27,7 +27,7 @@
 
 <script>
 	import Multiselect from '@vueform/multiselect';
-	import { useField, useForm } from 'vee-validate';
+	import { useField } from 'vee-validate';
 	export default {
 		components: {
 			Multiselect
@@ -76,11 +76,11 @@
 			const { value: inputValue, errorMessage, handleBlur, meta } = useField(props.name, undefined, {
 				initialValue: props.value
 			});
-
+			// change for v-model binding
 			function handleChange(event) {
 				emit('update:value', {
 					field: props.name,
-					value: event
+					value: event || ''
 				});
 			}
 
