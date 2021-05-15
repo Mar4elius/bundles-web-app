@@ -13,6 +13,7 @@
 			:loading="loading"
 			:disabled="disabled"
 			class="mb-2"
+			:class="{ 'bg-red-200 rounded': !!errorMessage }"
 			@select="handleSelect"
 		/>
 		<p
