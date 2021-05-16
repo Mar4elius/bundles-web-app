@@ -29,7 +29,7 @@ class UpdateUserProfileInformation implements UpdatesUserProfileInformation
                 Rule::unique('users')->ignore($user->id),
             ],
             // ])->validateWithBag('updateProfileInformation');
-        ])->validate('updateProfileInformation');
+        ])->validate();
 
         if (
             $input['email'] !== $user->email &&

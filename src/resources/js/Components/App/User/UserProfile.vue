@@ -99,6 +99,11 @@
 
 				if (!response.errors) {
 					toast.success(response.data.message);
+					if (!response.data?.email_verified_at) {
+						setTimeout(() => {
+							window.location.href = route('verification.notice');
+						}, 5000);
+					}
 				} else {
 					toast.danger(response.data);
 				}

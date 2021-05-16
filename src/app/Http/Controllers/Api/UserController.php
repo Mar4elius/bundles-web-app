@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
 use App\Models\Province;
 use Illuminate\Http\Request;
+use Illuminate\Contracts\Auth\MustVerifyEmail;
 // Models
 use App\Models\User;
 // Storage
@@ -60,11 +61,11 @@ class UserController extends Controller
             // update user data
             $user->first_name = $data->first_name;
             $user->last_name = $data->last_name;
-            $user->email = $data->email;
+
             $user->address = $data->address;
             $user->apartment = $data->apartment;
             $user->city = $data->city;
-            if ($data->active_province_id) {
+            if (isset($data->active_province_id)) {
                 $province = Province::find($data->active_province_id);
                 $user->province()->associate($province);
             }
@@ -82,10 +83,26 @@ class UserController extends Controller
                 $user->profile_photo_path = $path;
             }
 
+            // If user update current email we have to send verification email
+            $is_email_changed = $data->email !== $user->email && $user instanceof MustVerifyEmail;
+            if ($is_email_changed) {
+                $user->forceFill([
+                    'email' => $data->email,
+                    'email_verified_at' => null,
+                ]);
+
+                $user->sendEmailVerificationNotification();
+
+                $user->save();
+            } else {
+                $user->email = $data->email;
+            }
+
             $user->save();
             return response()->json([
-                'user'      => $user,
-                'message'   => 'Profile information has been updated.'
+                'user'              => $user,
+                'is_email_changed'  => $is_email_changed,
+                'message'           => $is_email_changed ? 'Profile information has been updated. Please, verify your new email.' : 'Profile information has been updated.'
             ]);
         } catch (Exception $e) {
             if (config('app.env') !== 'production') {
@@ -108,5 +125,23 @@ class UserController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+    /**
+     * Update the given verified user's profile information.
+     *
+     * @param  mixed  $user
+     * @param  array  $input
+     *
+     * @return Illuminate\Routing\Redirector
+     */
+    protected function updateVerifiedUser($user, array $input)
+    {
+        $user->forceFill([
+            'email' => $input['email'],
+            'email_verified_at' => null,
+        ])->save();
+
+        $user->sendEmailVerificationNotification();
     }
 }
