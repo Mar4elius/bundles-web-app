@@ -162,7 +162,7 @@
 							<profile-link
 								v-for="link in userProfileLinks"
 								:href="route(link.route)"
-								classes="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+								classes="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 cursor-pointer"
 								:key="link.name"
 								:method="link.method"
 							>
