@@ -96,7 +96,7 @@
 	// Vee-validation
 	import { useForm } from 'vee-validate';
 	// Yup
-	import { string, required, object, shape } from 'yup';
+	import { string, required, object, shape, max } from 'yup';
 	// Toast
 	import { useToast } from 'vue-toastification';
 
@@ -127,8 +127,8 @@
 				country: string().required(),
 				province: string().required(),
 				city: string().required(),
-				postal_code: string().required(),
-				phone: string().required()
+				postal_code: string().required().max(7),
+				phone: string().required().max(12)
 			});
 
 			const activeUser = computed(() => store.state.users.active);
@@ -142,7 +142,6 @@
 			});
 
 			const onSubmit = handleSubmit((values) => {
-				console.log('values', values);
 				const updatedActiveUser = {
 					...activeUser.value,
 					...values,
@@ -150,7 +149,10 @@
 				};
 
 				const formData = new FormData();
-				formData.append('data', JSON.stringify(updatedActiveUser));
+
+				Object.keys(updatedActiveUser).forEach((key) => {
+					formData.append(key, updatedActiveUser[key]);
+				});
 
 				const data = {
 					activeUser: updatedActiveUser,

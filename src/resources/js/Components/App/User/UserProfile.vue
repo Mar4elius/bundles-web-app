@@ -5,10 +5,10 @@
 			<p>Update your account's profile information and email address.</p>
 		</div>
 		<div class="w-full md:w-3/5 rounded-md bg-white p-4 md:p-6 lg:p-8">
+			<!-- user photo -->
+			<h6>Photo</h6>
+			<user-photo @onImageChange="updateUserData" :show-button="true" />
 			<validate-form @submit="onSubmit" :validation-schema="schema">
-				<!-- user photo -->
-				<h6>Photo</h6>
-				<user-photo @onImageChange="updateUserData" :show-button="true" />
 				<div class="flex">
 					<v-text-input
 						name="first_name"
@@ -80,12 +80,16 @@
 				// update use profile fiels that have been changed
 				let updatedActiveUser = {
 					...activeUser.value,
-					...values
+					...values,
+					is_user_profile_update: true
 				};
 
 				// https://dev.to/diogoko/file-upload-using-laravel-and-vue-js-the-right-way-1775
 				// When using FormData, for complex data structure we have to convert data to JSON format
-				formData.append('data', JSON.stringify(updatedActiveUser));
+				Object.keys(updatedActiveUser).forEach((key) => {
+					formData.append(key, updatedActiveUser[key]);
+				});
+
 				let data = {
 					activeUser: updatedActiveUser,
 					formData: formData
@@ -99,6 +103,7 @@
 
 				if (!response.errors) {
 					toast.success(response.data.message);
+					console.log('response', response.data?.email_verified_at);
 					if (!response.data?.email_verified_at) {
 						setTimeout(() => {
 							window.location.href = route('verification.notice');

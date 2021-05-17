@@ -62,4 +62,16 @@ class User extends Authenticatable implements MustVerifyEmail
     {
         return "{$this->first_name} {$this->last_name}";
     }
+
+    /**
+     * Get the user's first name.
+     *
+     * @param  string  $value
+     *
+     * @return string
+     */
+    public function getPhoneAttribute($value)
+    {
+        return substr($value, -10, -7) . '-' . substr($value, -7, -4) . '-' . substr($value, -4);
+    }
 }
