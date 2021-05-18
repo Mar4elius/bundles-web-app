@@ -74,7 +74,7 @@
 					label="Phone Number"
 					placeholder="Phone Number"
 					:value="activeUser.phone"
-					class="w-full lg:w-1/2 lg:mr-6"
+					class="w-full md:w-1/2 lg:mr-6"
 					maska="+1(###)-###-####"
 				/>
 				<div class="text-right">

@@ -27,13 +27,17 @@
 						class="w-full md:w-1/2"
 					/>
 				</div>
-				<v-text-input
-					name="email"
-					type="email"
-					label="E-mail"
-					placeholder="Your email address"
-					:value="activeUser.email"
-				/>
+				<div class="flex">
+					<v-text-input
+						name="email"
+						type="email"
+						label="E-mail"
+						placeholder="Your email address"
+						:value="activeUser.email"
+						class="w-full md:w-1/2 mr-2 md:mr-4 lg:mr-6"
+					/>
+					<div class="w-full md:w-1/2" />
+				</div>
 				<div class="text-right">
 					<v-button-filled id="update-user-data">Save</v-button-filled>
 				</div>
