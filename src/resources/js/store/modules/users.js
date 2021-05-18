@@ -74,7 +74,6 @@ const mutations = {
 	},
 
 	updateActiveUser(state, data) {
-		console.log(data);
 		state.active = { ...data };
 	}
 };

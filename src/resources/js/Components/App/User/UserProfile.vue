@@ -51,7 +51,7 @@
 	import { string, required, email, object, shape } from 'yup';
 	// Vue
 	import { useStore } from 'vuex';
-	import { computed, ref } from '@vue/runtime-core';
+	import { computed, onUnmounted, ref } from '@vue/runtime-core';
 	// Toast
 	import { useToast } from 'vue-toastification';
 
@@ -64,6 +64,8 @@
 		},
 
 		setup(props) {
+			onUnmounted(() => URL.revokeObjectURL(tempImage.value));
+
 			const store = useStore();
 			const activeUser = computed(() => store.state.users.active);
 			const formData = new FormData();

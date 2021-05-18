@@ -70,20 +70,6 @@
 				} else {
 					emit('onImageChange', event.target.files[0]);
 				}
-				// console.log(fileList);
-				// const formData = new FormData();
-
-				// if (!fileList.length) return;
-
-				// // append the files to FormData
-				// Array.from(Array(fileList.length).keys()).map((x) => {
-				// 	formData.append(fieldName, fileList[x], fileList[x].name);
-				// });
-
-				// console.log(formData);
-
-				// // save it
-				// save(formData);
 			}
 
 			onMounted(() => {

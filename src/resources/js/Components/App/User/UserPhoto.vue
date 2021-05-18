@@ -2,7 +2,9 @@
 	<div class="flex justify-between items-center">
 		<div v-if="activeUser.profile_photo_path">
 			<img
-				:src="[tempImage ? `${activeUser.profile_photo_path}` : `storage/${activeUser.profile_photo_path}`]"
+				:src="[
+					isUserImageLocal ? `${activeUser.profile_photo_path}` : `storage/${activeUser.profile_photo_path}`
+				]"
 				:class="classes"
 				alt="avatar"
 			/>
@@ -62,6 +64,7 @@
 			const showModal = ref(false);
 			const tempImage = ref(null); // temporary image untill it is saved
 			const activeUser = computed(() => store.state.users.active);
+			const isUserImageLocal = computed(() => activeUser.value?.profile_photo_path?.includes('blob', 0));
 
 			function updateProfileImage(image) {
 				//update active user image
@@ -88,6 +91,7 @@
 			return {
 				activeUser,
 				getUserInitials,
+				isUserImageLocal,
 				showModal,
 				tempImage,
 				updateProfileImage
