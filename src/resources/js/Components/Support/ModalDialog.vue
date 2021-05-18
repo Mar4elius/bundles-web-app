@@ -108,8 +108,9 @@
 			);
 
 			return {
-				showModal,
-				closeModal
+				closeModal,
+				modal,
+				showModal
 			};
 		}
 	};

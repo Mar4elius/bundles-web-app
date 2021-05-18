@@ -103,8 +103,7 @@
 
 				if (!response.errors) {
 					toast.success(response.data.message);
-					console.log('response', response.data?.email_verified_at);
-					if (!response.data?.email_verified_at) {
+					if (response.data?.is_email_changed) {
 						setTimeout(() => {
 							window.location.href = route('verification.notice');
 						}, 5000);
