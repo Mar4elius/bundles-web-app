@@ -29,10 +29,10 @@ class CreateUsersTable extends Migration
                 ->nullable()
                 ->references('id')
                 ->on('provinces');
-            $table->string('postal_code')
+            $table->string('postal_code', 7)
                 ->nullable();
             //FIXME: add location column
-            $table->string('phone', 13)
+            $table->string('phone', 16)
                 ->nullable();
             $table->string('password');
             $table->rememberToken();

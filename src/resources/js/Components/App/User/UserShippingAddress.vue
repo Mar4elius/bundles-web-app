@@ -65,6 +65,7 @@
 						placeholder="Postal Code"
 						:value="activeUser.postal_code"
 						class="w-full lg:mr-6"
+						maska="A#A-#A#"
 					/>
 				</div>
 				<v-text-input
@@ -74,6 +75,7 @@
 					placeholder="Phone Number"
 					:value="activeUser.phone"
 					class="w-full lg:w-1/2 lg:mr-6"
+					maska="+1(###)-###-####"
 				/>
 				<div class="text-right">
 					<v-button-filled id="update-shipping-address" :disabled="isSubmitting">Save</v-button-filled>
@@ -127,8 +129,8 @@
 				country: string().required().nullable(),
 				province: string().required().nullable(),
 				city: string().required().nullable(),
-				postal_code: string().required().max(7).nullable(),
-				phone: string().required().max(12).nullable()
+				postal_code: string().required().min(7).nullable(),
+				phone: string().required().min(16).nullable()
 			});
 
 			const activeUser = computed(() => store.state.users.active);

@@ -11,6 +11,7 @@
 			:disabled="isDisabled"
 			class="appearance-none border border-gray-300 placeholder-gray-500 text-gray-900 w-full px-3 py-2 rounded mb-2 focus:outline-none focus:ring-indigo-500 focus:border-indigo-300 focus:z-10 sm:text-sm transition-colors duration-300 ease-in-out"
 			:class="{ 'bg-red-200': !!errorMessage }"
+			v-maska="maska"
 		/>
 
 		<p
@@ -24,9 +25,16 @@
 </template>
 
 <script>
+	// vee-validate
 	import { useField } from 'vee-validate';
+	// v-maska
+	import { maska } from 'maska';
 
 	export default {
+		directives: {
+			maska
+		},
+
 		props: {
 			type: {
 				type: String,
@@ -51,6 +59,10 @@
 			isDisabled: {
 				type: Boolean,
 				default: false
+			},
+			maska: {
+				type: String,
+				default: null
 			}
 		},
 		setup(props) {

@@ -33,7 +33,7 @@ class UpdateUserProfileRequest extends FormRequest
             'active_province_id' => 'exclude_if:is_user_profile,true|numeric',
             'city' => 'exclude_if:is_user_profile,true|string',
             'postal_code' => 'exclude_if:is_user_profile,true|string|max:7',
-            'phone' => 'exclude_if:is_user_profile,true|string|max:12'
+            'phone' => 'exclude_if:is_user_profile,true|string|max:16'
         ];
     }
 }

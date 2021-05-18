@@ -73,7 +73,7 @@ class UserController extends Controller
                 $user->province()->associate($province);
             }
             $user->postal_code = $data['postal_code'] === 'null' ? null : $data['postal_code'];
-            $user->phone = $data['phone'] === 'null' ? null : $data['phone'];;
+            $user->phone = $data['phone'] === 'null' ? null : $data['phone'];
 
             if ($request->hasFile('image')) {
                 if (Storage::disk('public')->exists($user->profile_photo_path)) {
