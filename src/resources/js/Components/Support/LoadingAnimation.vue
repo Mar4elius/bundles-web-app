@@ -1,6 +1,6 @@
 <template>
 	<div v-if="isLoading">
-		<font-awesome-icon class="text-indigo-600 w-8 h-8 animate-spin" prefix="fas" icon="circle-notch" />
+		<font-awesome-icon class="text-indigo-600 animate-spin" :class="classes" prefix="fas" icon="circle-notch" />
 	</div>
 </template>
 <script>
@@ -12,6 +12,13 @@
 	export default {
 		components: {
 			FontAwesomeIcon
+		},
+
+		props: {
+			classes: {
+				type: String,
+				default: 'w-8 h-8'
+			}
 		},
 
 		setup() {

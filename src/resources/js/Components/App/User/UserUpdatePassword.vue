@@ -1,7 +1,10 @@
 <template>
 	<div class="md:flex md:justify-between w-full my-6 md:my-8">
 		<div class="w-full md:w-2/5 mb-4 md:mb-6">
-			<h3>Update Password</h3>
+			<div class="flex justify-between items-center">
+				<h3>Update Password</h3>
+				<loading-animation classes="w-6 h-6 mr-2 md:mr-4" />
+			</div>
 			<p>Ensure your account is using a long, random password to stay secure.</p>
 		</div>
 		<div class="w-full md:w-3/5 rounded-md bg-white p-4 md:p-6 lg:p-8">
@@ -41,6 +44,7 @@
 	import { useStore } from 'vuex';
 	import { computed } from '@vue/runtime-core';
 	// Components
+	import LoadingAnimation from '@/Components/Support/LoadingAnimation';
 	import VTextInput from '@/Components/Forms/VTextInput';
 	import VButtonFilled from '@/Components/Forms/VButtonFilled';
 	// Vee-validation and Yup
@@ -49,6 +53,7 @@
 
 	export default {
 		components: {
+			LoadingAnimation,
 			ValidateForm,
 			VButtonFilled,
 			VTextInput

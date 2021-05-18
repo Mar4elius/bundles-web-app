@@ -1,7 +1,10 @@
 <template>
 	<div class="md:flex md:justify-between w-full my-6 md:my-8">
 		<div class="w-full md:w-2/5 mb-4 md:mb-6">
-			<h3>Shipping Address</h3>
+			<div class="flex justify-between items-center">
+				<h3>Shipping Address</h3>
+				<loading-animation classes="w-6 h-6 mr-2 md:mr-4" />
+			</div>
 			<p>Update your shipping information.</p>
 		</div>
 		<div class="w-full md:w-3/5 rounded-md bg-white p-4 md:p-6 lg:p-8">
@@ -78,7 +81,13 @@
 					maska="+1(###)-###-####"
 				/>
 				<div class="text-right">
-					<v-button-filled id="update-shipping-address" :disabled="isSubmitting">Save</v-button-filled>
+					<v-button-filled
+						id="update-shipping-address"
+						:disabled="isSubmitting"
+						:is-disabled="isSubmitting"
+						:type="isSubmitting ? 'disabled' : 'primary'"
+						>Save</v-button-filled
+					>
 				</div>
 			</form>
 		</div>
@@ -92,7 +101,8 @@
 	import VTextInput from '@/Components/Forms/VTextInput';
 	import VButtonFilled from '@/Components/Forms/VButtonFilled';
 	import VDropDownList from '@/Components/Forms/VDropDownList';
-	import Multiselect from '@vueform/multiselect';
+
+	import LoadingAnimation from '@/Components/Support/LoadingAnimation';
 	// Composable functions
 	import useMultiselectDropDown from '@/Composables/useMultiselectDropDown';
 	// Vee-validation
@@ -104,7 +114,7 @@
 
 	export default {
 		components: {
-			Multiselect,
+			LoadingAnimation,
 			VButtonFilled,
 			VDropDownList,
 			VTextInput
