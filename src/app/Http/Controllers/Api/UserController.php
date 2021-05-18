@@ -64,15 +64,16 @@ class UserController extends Controller
             $user->first_name = $data['first_name'];
             $user->last_name = $data['last_name'];
 
-            $user->address = $data['address'];
-            $user->apartment = $data['apartment'];
-            $user->city = $data['city'];
+            // because request is coming as form-data object it sees null as string
+            $user->address = $data['address'] === 'null' ? null : $data['address'];
+            $user->apartment = $data['apartment'] === 'null' ? null : $data['apartment'];
+            $user->city = $data['city'] === 'null' ? null : $data['city'];
             if (isset($data['active_province_id'])) {
                 $province = Province::find($data['active_province_id']);
                 $user->province()->associate($province);
             }
-            $user->postal_code = $data['postal_code'];
-            $user->phone = $data['phone'];
+            $user->postal_code = $data['postal_code'] === 'null' ? null : $data['postal_code'];
+            $user->phone = $data['phone'] === 'null' ? null : $data['phone'];;
 
             if ($request->hasFile('image')) {
                 if (Storage::disk('public')->exists($user->profile_photo_path)) {

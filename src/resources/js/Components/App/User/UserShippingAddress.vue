@@ -76,7 +76,7 @@
 					class="w-full lg:w-1/2 lg:mr-6"
 				/>
 				<div class="text-right">
-					<v-button-filled id="update-shipping-address">Save</v-button-filled>
+					<v-button-filled id="update-shipping-address" :disabled="isSubmitting">Save</v-button-filled>
 				</div>
 			</form>
 		</div>
@@ -96,7 +96,7 @@
 	// Vee-validation
 	import { useForm } from 'vee-validate';
 	// Yup
-	import { string, required, object, shape, max } from 'yup';
+	import { string, required, object, shape, max, nullable } from 'yup';
 	// Toast
 	import { useToast } from 'vue-toastification';
 
@@ -123,17 +123,17 @@
 			const toast = useToast();
 
 			const schema = object().shape({
-				address: string().required(),
-				country: string().required(),
-				province: string().required(),
-				city: string().required(),
-				postal_code: string().required().max(7),
-				phone: string().required().max(12)
+				address: string().required().nullable(),
+				country: string().required().nullable(),
+				province: string().required().nullable(),
+				city: string().required().nullable(),
+				postal_code: string().required().max(7).nullable(),
+				phone: string().required().max(12).nullable()
 			});
 
 			const activeUser = computed(() => store.state.users.active);
 
-			const { handleSubmit, setFieldValue } = useForm({
+			const { handleSubmit, setFieldValue, isSubmitting } = useForm({
 				initialValues: {
 					country: activeCountry.value,
 					province: activeProvince.value
@@ -160,7 +160,6 @@
 				};
 
 				formData.append('_method', 'PUT');
-
 				store.dispatch('users/update', data).then((response) => {
 					if (!response.errors) {
 						toast.success(response.data.message);
@@ -234,6 +233,7 @@
 				countries,
 				getCountries,
 				getProvinces,
+				isSubmitting,
 				onSubmit,
 				provinces,
 				schema,
