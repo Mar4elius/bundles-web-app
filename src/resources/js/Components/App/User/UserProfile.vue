@@ -91,7 +91,7 @@
 
 			const store = useStore();
 			let activeUser = reactive({ ...store.state.users.active });
-			let test = computed(() => store.state.users.active);
+			let vuexStoreActiveUser = computed(() => store.state.users.active);
 			const formData = new FormData();
 			const tempImage = ref(null);
 			const toast = useToast();
@@ -102,7 +102,10 @@
 				email: string().email().required()
 			});
 
-			let { hasDataChanged, updateData } = useHasDataChanged(test.value, activeUser);
+			let { hasDataChanged, updateInitialData, updateMutableData } = useHasDataChanged(
+				vuexStoreActiveUser.value,
+				activeUser
+			);
 			async function onSubmit(values, actions) {
 				// update use profile fiels that have been changed
 				let updatedActiveUser = {
@@ -130,10 +133,12 @@
 
 				if (!response.errors) {
 					toast.success(response.data.message);
-					// update active user data after request
+					// update active user data after request wiht new data;
 					activeUser = { ...store.state.users.active };
-					updateData(test.value, activeUser);
-					console.log('hasDataChanged', hasDataChanged.value);
+					// update initial data for change detection functionality
+					updateInitialData(vuexStoreActiveUser.value);
+					// update mutable data for change detection functionality
+					updateMutableData(activeUser);
 
 					if (response.data?.is_email_changed) {
 						setTimeout(() => {
@@ -156,6 +161,9 @@
 
 			function setValue(data) {
 				activeUser[data.key] = data.value;
+				// update mutable data so to disable/enable button
+				// if data has changed
+				updateMutableData(activeUser);
 			}
 
 			return {
