@@ -68,8 +68,8 @@ class UserController extends Controller
             $user->address = $data['address'] === 'null' ? null : $data['address'];
             $user->apartment = $data['apartment'] === 'null' ? null : $data['apartment'];
             $user->city = $data['city'] === 'null' ? null : $data['city'];
-            if (isset($data['active_province_id'])) {
-                $province = Province::find($data['active_province_id']);
+            if (isset($data['province_id'])) {
+                $province = Province::find($data['province_id']);
                 $user->province()->associate($province);
             }
             $user->postal_code = $data['postal_code'] === 'null' ? null : $data['postal_code'];

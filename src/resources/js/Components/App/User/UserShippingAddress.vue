@@ -33,7 +33,7 @@
 
 				<div class="lg:flex">
 					<v-drop-down-list
-						name="country"
+						name="country_id"
 						label="Country"
 						:value="activeCountry.value"
 						@update:value="setValue"
@@ -44,7 +44,7 @@
 					/>
 
 					<v-drop-down-list
-						name="province"
+						name="province_id"
 						label="Province"
 						:value="activeProvince.value"
 						@update:value="setValue"
@@ -88,7 +88,6 @@
 				<div class="text-right">
 					<v-button-filled
 						id="update-shipping-address"
-						:disabled="isSubmitting"
 						:is-disabled="isSubmitting || !hasDataChanged"
 						:type="isSubmitting || !hasDataChanged ? 'disabled' : 'primary'"
 						>Save</v-button-filled
@@ -143,8 +142,8 @@
 			const toast = useToast();
 			const schema = object().shape({
 				address: string().required().nullable(),
-				country: string().required().nullable(),
-				province: string().required().nullable(),
+				country_id: string().required().nullable(),
+				province_id: string().required().nullable(),
 				city: string().required().nullable(),
 				postal_code: string().required().min(7).nullable(),
 				phone: string().required().min(16).nullable()
@@ -152,8 +151,8 @@
 
 			const { handleSubmit, setFieldValue, isSubmitting } = useForm({
 				initialValues: {
-					country: activeCountry.value,
-					province: activeProvince.value
+					country_id: activeCountry.value,
+					province_id: activeProvince.value
 				},
 				validationSchema: schema
 			});
@@ -168,14 +167,14 @@
 					const country = countries?.value.find((c) => c.value === activeUser?.province?.country?.id);
 					if (country?.value) {
 						activeCountry.value = country.value;
-						setFieldValue('country', activeCountry.value);
+						setFieldValue('country_id', activeCountry.value);
 					}
 					getProvinces().then((_) => {
 						if (activeUser.province_id) {
 							activeProvince.value = provinces.value.find(
 								(c) => c.value === activeUser.province_id
 							).value;
-							setFieldValue('province', activeProvince.value);
+							setFieldValue('province_id', activeProvince.value);
 						}
 					});
 				});
@@ -184,8 +183,7 @@
 			const onSubmit = handleSubmit((values) => {
 				const updatedActiveUser = {
 					...activeUser,
-					...values,
-					active_province_id: activeProvince.value
+					...values
 				};
 
 				const formData = new FormData();
@@ -209,9 +207,6 @@
 				});
 			});
 
-			// const { value: country, errorMessage: countryError } = useField('country');
-			// const { value: province, errorMessage: provinceError } = useField('country');
-
 			const { createMultiselectDdlObject, setDdlValue } = useMultiselectDropDown();
 			async function getCountries() {
 				if (!countries.value.length) {
@@ -234,21 +229,25 @@
 			}
 
 			function setValue(data) {
-				if (data.key === 'country') {
+				if (data.key === 'country_id') {
 					// if country ddl is empty we have to reset value of province ddl
 					if (data.value === '') {
 						activeProvince.value = '';
-						setFieldValue('province', data.value);
+						setFieldValue('province_id', data.value);
 					}
 					activeCountry.value = data.value;
-				} else if (data.key === 'province') {
+				} else if (data.key === 'province_id') {
 					activeProvince.value = data.value;
+					activeUser[data.key] = data.value;
+					// update mutable data
+					updateMutableData(activeUser);
+				} else {
+					activeUser[data.key] = data.value;
+					// update mutable data
+					updateMutableData(activeUser);
 				}
-				activeUser[data.key] = data.value;
 				// sets vee-validate field so the validation works
 				setFieldValue(data.key, data.value);
-				// update mutable data
-				updateMutableData(activeUser);
 			}
 
 			// User data can be updated from 2 components:
