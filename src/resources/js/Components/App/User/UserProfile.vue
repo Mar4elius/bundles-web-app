@@ -62,7 +62,7 @@
 <script>
 	// Vue
 	import { useStore } from 'vuex';
-	import { computed, onUnmounted, reactive, ref } from '@vue/runtime-core';
+	import { computed, onUnmounted, reactive, ref, watch } from '@vue/runtime-core';
 	// Components
 	import LoadingAnimation from '@/Components/Support/LoadingAnimation';
 	import VTextInput from '@/Components/Forms/VTextInput';
@@ -133,12 +133,6 @@
 
 				if (!response.errors) {
 					toast.success(response.data.message);
-					// update active user data after request wiht new data;
-					activeUser = { ...store.state.users.active };
-					// update initial data for change detection functionality
-					updateInitialData(vuexStoreActiveUser.value);
-					// update mutable data for change detection functionality
-					updateMutableData(activeUser);
 
 					if (response.data?.is_email_changed) {
 						setTimeout(() => {
@@ -165,6 +159,18 @@
 				// if data has changed
 				updateMutableData(activeUser);
 			}
+
+			// User data can be updated from 2 components:
+			// - UserProfile
+			// - UserShippingAddress
+			// When data is changes in one of the components, it will update the vuex
+			// state. With watcher we making sure that activeUser will have the same
+			// data in both components
+			watch(vuexStoreActiveUser, (newValue, oldValue) => {
+				updateInitialData(newValue);
+				activeUser = { ...newValue };
+				updateMutableData(activeUser);
+			});
 
 			return {
 				activeUser,

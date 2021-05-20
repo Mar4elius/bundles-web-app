@@ -5,10 +5,9 @@ import { computed, reactive } from '@vue/runtime-core';
 export default function useHasDataChanged(initial, mutable) {
 	let initialData = reactive(initial);
 	let mutableData = reactive(mutable);
-	console.log('start');
-	console.log(mutableData);
 
 	const hasDataChanged = computed(() => {
+		console.log('computed');
 		return JSON.stringify(initialData) !== JSON.stringify(mutable);
 	});
 
