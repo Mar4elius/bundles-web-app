@@ -10,7 +10,6 @@
 				class="opacity-0 w-full h-52 absolute cursor-pointer"
 				type="file"
 				multiple
-				:name="uploadFieldName"
 				:disabled="isSaving"
 				@change="filesChange($event)"
 				accept="image/*"
@@ -20,7 +19,6 @@
 				v-else
 				class="opacity-0 w-full h-52 absolute cursor-pointer"
 				type="file"
-				:name="uploadFieldName"
 				:disabled="isSaving"
 				@change="filesChange($event)"
 				accept="image/*"

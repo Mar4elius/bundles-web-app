@@ -102,7 +102,7 @@
 				email: string().email().required()
 			});
 
-			let { hasDataChanged, updateInitialData, updateMutableData } = useHasDataChanged(
+			const { hasDataChanged, updateInitialData, updateMutableData } = useHasDataChanged(
 				vuexStoreActiveUser.value,
 				activeUser
 			);

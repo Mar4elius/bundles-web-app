@@ -80,7 +80,7 @@
 			// change for v-model binding
 			function handleChange(event) {
 				emit('update:value', {
-					field: props.name,
+					key: props.name,
 					value: event || ''
 				});
 			}

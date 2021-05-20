@@ -16,6 +16,7 @@
 						label="Address"
 						placeholder="Address"
 						:value="activeUser.address"
+						@update:value="setValue"
 						class="w-full mr-2 md:mr-4 lg:mr-6"
 					/>
 
@@ -25,6 +26,7 @@
 						label="Aparetents, Suit, etc. (optional)"
 						placeholder="Address"
 						:value="activeUser.apartment"
+						@update:value="setValue"
 						class="w-full mr-2 md:mr-4 lg:mr-6"
 					/>
 				</div>
@@ -59,6 +61,7 @@
 						label="City"
 						placeholder="City"
 						:value="activeUser.city"
+						@update:value="setValue"
 						class="w-full lg:mr-6"
 					/>
 					<v-text-input
@@ -67,6 +70,7 @@
 						label="Postal Code"
 						placeholder="Postal Code"
 						:value="activeUser.postal_code"
+						@update:value="setValue"
 						class="w-full lg:mr-6"
 						maska="A#A-#A#"
 					/>
@@ -77,6 +81,7 @@
 					label="Phone Number"
 					placeholder="Phone Number"
 					:value="activeUser.phone"
+					@update:value="setValue"
 					class="w-full md:w-1/2 lg:mr-6"
 					maska="+1(###)-###-####"
 				/>
@@ -84,8 +89,8 @@
 					<v-button-filled
 						id="update-shipping-address"
 						:disabled="isSubmitting"
-						:is-disabled="isSubmitting"
-						:type="isSubmitting ? 'disabled' : 'primary'"
+						:is-disabled="isSubmitting || !hasDataChanged"
+						:type="isSubmitting || !hasDataChanged ? 'disabled' : 'primary'"
 						>Save</v-button-filled
 					>
 				</div>
@@ -101,10 +106,10 @@
 	import VTextInput from '@/Components/Forms/VTextInput';
 	import VButtonFilled from '@/Components/Forms/VButtonFilled';
 	import VDropDownList from '@/Components/Forms/VDropDownList';
-
 	import LoadingAnimation from '@/Components/Support/LoadingAnimation';
 	// Composable functions
 	import useMultiselectDropDown from '@/Composables/useMultiselectDropDown';
+	import useHasDataChanged from '@/Composables/useHasDataChanged';
 	// Vee-validation
 	import { useForm } from 'vee-validate';
 	// Yup
@@ -132,8 +137,10 @@
 				value: '',
 				label: ''
 			});
-			const toast = useToast();
+			let activeUser = reactive({ ...store.state.users.active });
+			let vuexStoreActiveUser = computed(() => store.state.users.active);
 
+			const toast = useToast();
 			const schema = object().shape({
 				address: string().required().nullable(),
 				country: string().required().nullable(),
@@ -143,8 +150,6 @@
 				phone: string().required().min(16).nullable()
 			});
 
-			const activeUser = computed(() => store.state.users.active);
-
 			const { handleSubmit, setFieldValue, isSubmitting } = useForm({
 				initialValues: {
 					country: activeCountry.value,
@@ -153,9 +158,32 @@
 				validationSchema: schema
 			});
 
+			const { hasDataChanged, updateInitialData, updateMutableData } = useHasDataChanged(
+				vuexStoreActiveUser.value,
+				activeUser
+			);
+
+			onMounted(() => {
+				getCountries().then((_) => {
+					const country = countries?.value.find((c) => c.value === activeUser?.province?.country?.id);
+					if (country?.value) {
+						activeCountry.value = country.value;
+						setFieldValue('country', activeCountry.value);
+					}
+					getProvinces().then((_) => {
+						if (activeUser.province_id) {
+							activeProvince.value = provinces.value.find(
+								(c) => c.value === activeUser.province_id
+							).value;
+							setFieldValue('province', activeProvince.value);
+						}
+					});
+				});
+			});
+
 			const onSubmit = handleSubmit((values) => {
 				const updatedActiveUser = {
-					...activeUser.value,
+					...activeUser,
 					...values,
 					active_province_id: activeProvince.value
 				};
@@ -175,6 +203,11 @@
 				store.dispatch('users/update', data).then((response) => {
 					if (!response.errors) {
 						toast.success(response.data.message);
+						// update active user data after request wiht new data;
+						activeUser = { ...store.state.users.active };
+						// update initial data for change detection functionality
+						updateInitialData(vuexStoreActiveUser.value);
+						updateMutableData(activeUser);
 					} else {
 						toast.danger(response.data);
 					}
@@ -205,37 +238,22 @@
 				}
 			}
 
-			onMounted(() => {
-				getCountries().then((_) => {
-					const country = countries?.value.find((c) => c.value === activeUser.value?.province?.country?.id);
-					if (country?.value) {
-						activeCountry.value = country.value;
-						setFieldValue('country', activeCountry.value);
-					}
-					getProvinces().then((_) => {
-						if (activeUser.value.province_id) {
-							activeProvince.value = provinces.value.find(
-								(c) => c.value === activeUser.value.province_id
-							).value;
-							setFieldValue('province', activeProvince.value);
-						}
-					});
-				});
-			});
-
 			function setValue(data) {
-				if (data.field === 'country') {
+				if (data.key === 'country') {
 					// if country ddl is empty we have to reset value of province ddl
 					if (data.value === '') {
 						activeProvince.value = '';
 						setFieldValue('province', data.value);
 					}
 					activeCountry.value = data.value;
-				} else if (data.field === 'province') {
+				} else if (data.key === 'province') {
 					activeProvince.value = data.value;
 				}
+				activeUser[data.key] = data.value;
 				// sets vee-validate field so the validation works
-				setFieldValue(data.field, data.value);
+				setFieldValue(data.key, data.value);
+				// update mutable data
+				updateMutableData(activeUser);
 			}
 
 			return {
@@ -249,7 +267,8 @@
 				onSubmit,
 				provinces,
 				schema,
-				setValue
+				setValue,
+				hasDataChanged
 			};
 		}
 	};
