@@ -6,7 +6,7 @@
 			:id="name"
 			:type="type"
 			:value="inputValue"
-			@input="handleChange"
+			@input="handleInput"
 			@blur="handleBlur"
 			:disabled="isDisabled"
 			class="appearance-none border border-gray-300 placeholder-gray-500 text-gray-900 w-full px-3 py-2 rounded mb-2 focus:outline-none focus:ring-indigo-500 focus:border-indigo-300 focus:z-10 sm:text-sm transition-colors duration-300 ease-in-out"
@@ -34,6 +34,8 @@
 		directives: {
 			maska
 		},
+
+		emits: ['update:value'],
 
 		props: {
 			type: {
@@ -65,7 +67,7 @@
 				default: null
 			}
 		},
-		setup(props) {
+		setup(props, { emit }) {
 			// we don't provide any rules here because we are using form-level validation
 			// https://vee-validate.logaretm.com/v4/guide/validation#form-level-validation
 			const { value: inputValue, errorMessage, handleBlur, handleChange, meta } = useField(
@@ -76,12 +78,23 @@
 				}
 			);
 
+			function handleInput(event) {
+				// vee-validate method that update field value
+				handleChange(event);
+				// updates parent component value
+				emit('update:value', {
+					key: props.name,
+					value: event.target.value
+				});
+			}
+
 			return {
+				errorMessage,
 				handleChange,
 				handleBlur,
-				errorMessage,
 				inputValue,
-				meta
+				meta,
+				handleInput
 			};
 		}
 	};

@@ -18,15 +18,18 @@
 						label="First Name"
 						placeholder="Firt Name"
 						:value="activeUser.first_name"
+						@update:value="setValue"
 						class="w-full md:w-1/2 mr-2 md:mr-4 lg:mr-6"
 						:is-disabled="isSubmitting"
 					/>
+
 					<v-text-input
 						name="last_name"
 						type="text"
 						label="Last Name"
 						placeholder="Last Name"
 						:value="activeUser.last_name"
+						@update:value="setValue"
 						class="w-full md:w-1/2"
 						:is-disabled="isSubmitting"
 					/>
@@ -38,6 +41,7 @@
 						label="E-mail"
 						placeholder="Your email address"
 						:value="activeUser.email"
+						@update:value="setValue"
 						class="w-full md:w-1/2 mr-2 md:mr-4 lg:mr-6"
 						:is-disabled="isSubmitting"
 					/>
@@ -46,8 +50,8 @@
 				<div class="text-right">
 					<v-button-filled
 						id="update-user-data"
-						:is-disabled="isSubmitting"
-						:type="isSubmitting ? 'disabled' : 'primary'"
+						:is-disabled="isSubmitting || !hasDataChanged"
+						:type="isSubmitting || !hasDataChanged ? 'disabled' : 'primary'"
 						>Save</v-button-filled
 					>
 				</div>
@@ -56,17 +60,19 @@
 	</div>
 </template>
 <script>
+	// Vue
+	import { useStore } from 'vuex';
+	import { computed, onUnmounted, reactive, ref } from '@vue/runtime-core';
 	// Components
 	import LoadingAnimation from '@/Components/Support/LoadingAnimation';
 	import VTextInput from '@/Components/Forms/VTextInput';
 	import VButtonFilled from '@/Components/Forms/VButtonFilled';
 	import UserPhoto from '@/Components/App/User/UserPhoto';
+	// Composables
+	import useHasDataChanged from '@/Composables/useHasDataChanged';
 	// Vee-validation and Yup
 	import { Form as ValidateForm } from 'vee-validate';
 	import { string, required, email, object, shape } from 'yup';
-	// Vue
-	import { useStore } from 'vuex';
-	import { computed, onUnmounted, ref } from '@vue/runtime-core';
 	// Toast
 	import { useToast } from 'vue-toastification';
 
@@ -80,10 +86,12 @@
 		},
 
 		setup(props) {
+			// remove image from local storage. Useful when user uploaded the image but didn't save it to the server
 			onUnmounted(() => URL.revokeObjectURL(tempImage.value));
 
 			const store = useStore();
-			const activeUser = computed(() => store.state.users.active);
+			let activeUser = reactive({ ...store.state.users.active });
+			let test = computed(() => store.state.users.active);
 			const formData = new FormData();
 			const tempImage = ref(null);
 			const toast = useToast();
@@ -94,10 +102,11 @@
 				email: string().email().required()
 			});
 
+			let { hasDataChanged, updateData } = useHasDataChanged(test.value, activeUser);
 			async function onSubmit(values, actions) {
 				// update use profile fiels that have been changed
 				let updatedActiveUser = {
-					...activeUser.value,
+					...activeUser,
 					...values,
 					is_user_profile_update: true
 				};
@@ -121,6 +130,11 @@
 
 				if (!response.errors) {
 					toast.success(response.data.message);
+					// update active user data after request
+					activeUser = { ...store.state.users.active };
+					updateData(test.value, activeUser);
+					console.log('hasDataChanged', hasDataChanged.value);
+
 					if (response.data?.is_email_changed) {
 						setTimeout(() => {
 							window.location.href = route('verification.notice');
@@ -140,11 +154,17 @@
 				formData.append('image', data.imageToSave, data.imageToSave.name);
 			}
 
+			function setValue(data) {
+				activeUser[data.key] = data.value;
+			}
+
 			return {
 				activeUser,
+				hasDataChanged,
 				onSubmit,
 				updateUserData,
-				schema
+				schema,
+				setValue
 			};
 		}
 	};
