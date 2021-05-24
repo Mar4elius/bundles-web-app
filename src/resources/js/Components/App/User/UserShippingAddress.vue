@@ -3,7 +3,6 @@
 		<div class="w-full md:w-2/5 mb-4 md:mb-6">
 			<div class="flex justify-between items-center">
 				<h3>Shipping Address</h3>
-				<loading-animation classes="w-6 h-6 mr-2 md:mr-4" />
 			</div>
 			<p>Update your shipping information.</p>
 		</div>
@@ -85,7 +84,8 @@
 					class="w-full md:w-1/2 lg:mr-6"
 					maska="+1(###)-###-####"
 				/>
-				<div class="text-right">
+				<div class="flex justify-end items-center">
+					<loading-animation classes="w-6 h-6 mr-2 md:mr-4" />
 					<v-button-filled
 						id="update-shipping-address"
 						:is-disabled="isSubmitting || !hasDataChanged"
