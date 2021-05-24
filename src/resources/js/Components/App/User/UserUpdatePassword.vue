@@ -3,7 +3,6 @@
 		<div class="w-full md:w-2/5 mb-4 md:mb-6">
 			<div class="flex justify-between items-center">
 				<h3>Update Password</h3>
-				<loading-animation classes="w-6 h-6 mr-2 md:mr-4" />
 			</div>
 			<p>Ensure your account is using a long, random password to stay secure.</p>
 		</div>
@@ -32,7 +31,8 @@
 					success-message="Glad you remembered it!"
 				/>
 
-				<div class="text-right">
+				<div class="flex justify-end items-center">
+					<loading-animation classes="w-6 h-6 mr-2 md:mr-4" v-if="loading" />
 					<v-button-filled id="update-password">Save</v-button-filled>
 				</div>
 			</validate-form>
@@ -47,9 +47,13 @@
 	import LoadingAnimation from '@/Components/Support/LoadingAnimation';
 	import VTextInput from '@/Components/Forms/VTextInput';
 	import VButtonFilled from '@/Components/Forms/VButtonFilled';
+	// Composables
+	import useLocalLoadingFlag from '@/Composables/useLocalLoadingFlag';
 	// Vee-validation and Yup
 	import { Form as ValidateForm } from 'vee-validate';
 	import { string, required, min, oneOf, object, shape, ref } from 'yup';
+	// Toast
+	import { useToast } from 'vue-toastification';
 
 	export default {
 		components: {
@@ -61,6 +65,7 @@
 
 		setup(props) {
 			const store = useStore();
+			const toast = useToast();
 
 			const activeUser = computed(() => store.state.users.active);
 
@@ -73,18 +78,24 @@
 					.oneOf([ref('password')], 'Passwords do not match')
 			});
 
-			async function onSubmit(values, actions) {
-				const response = await store.dispatch('users/updatePassword', values);
+			const { loading, setLocalLoadingFlag } = useLocalLoadingFlag();
 
+			async function onSubmit(values, actions) {
+				setLocalLoadingFlag(true);
+				const response = await store.dispatch('users/updatePassword', values);
+				console.log(response);
 				if (!response.errors) {
-					window.location.href = route('verification.notice');
+					toast.success = response.data.message;
 				} else {
 					actions.setErrors(response.errors);
 				}
+
+				setLocalLoadingFlag(false);
 			}
 
 			return {
 				activeUser,
+				loading,
 				onSubmit,
 				schema
 			};

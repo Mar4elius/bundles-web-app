@@ -47,7 +47,8 @@
 					<div class="w-full md:w-1/2" />
 				</div>
 				<div class="flex justify-end items-center">
-					<loading-animation classes="w-6 h-6 mr-2 md:mr-4" />
+					<!-- need to add loading flag so to distinquish between different requests on the page -->
+					<loading-animation classes="w-6 h-6 mr-2 md:mr-4" v-if="loading" />
 					<v-button-filled
 						id="update-user-data"
 						:is-disabled="isSubmitting || !hasDataChanged"
@@ -70,6 +71,7 @@
 	import UserPhoto from '@/Components/App/User/UserPhoto';
 	// Composables
 	import useHasDataChanged from '@/Composables/useHasDataChanged';
+	import useLocalLoadingFlag from '@/Composables/useLocalLoadingFlag';
 	// Vee-validation and Yup
 	import { Form as ValidateForm } from 'vee-validate';
 	import { string, required, email, object, shape } from 'yup';
@@ -106,7 +108,11 @@
 				vuexStoreActiveUser.value,
 				activeUser
 			);
+
+			const { loading, setLocalLoadingFlag } = useLocalLoadingFlag();
+
 			async function onSubmit(values, actions) {
+				setLocalLoadingFlag(true);
 				// update use profile fiels that have been changed
 				let updatedActiveUser = {
 					...activeUser,
@@ -146,6 +152,7 @@
 				// delete locally saved image
 				URL.revokeObjectURL(tempImage.value);
 				tempImage.value = null;
+				setLocalLoadingFlag(false);
 			}
 
 			function updateUserData(data) {
@@ -178,7 +185,8 @@
 				onSubmit,
 				updateUserData,
 				schema,
-				setValue
+				setValue,
+				loading
 			};
 		}
 	};

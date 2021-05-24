@@ -85,7 +85,7 @@
 					maska="+1(###)-###-####"
 				/>
 				<div class="flex justify-end items-center">
-					<loading-animation classes="w-6 h-6 mr-2 md:mr-4" />
+					<loading-animation classes="w-6 h-6 mr-2 md:mr-4" v-if="loading" />
 					<v-button-filled
 						id="update-shipping-address"
 						:is-disabled="isSubmitting || !hasDataChanged"
@@ -109,6 +109,7 @@
 	// Composable functions
 	import useMultiselectDropDown from '@/Composables/useMultiselectDropDown';
 	import useHasDataChanged from '@/Composables/useHasDataChanged';
+	import useLocalLoadingFlag from '@/Composables/useLocalLoadingFlag';
 	// Vee-validation
 	import { useForm } from 'vee-validate';
 	// Yup
@@ -162,6 +163,8 @@
 				activeUser
 			);
 
+			const { loading, setLocalLoadingFlag } = useLocalLoadingFlag();
+
 			onMounted(() => {
 				getCountries().then((_) => {
 					const country = countries?.value.find((c) => c.value === activeUser?.province?.country?.id);
@@ -181,6 +184,7 @@
 			});
 
 			const onSubmit = handleSubmit((values) => {
+				setLocalLoadingFlag(true);
 				const updatedActiveUser = {
 					...activeUser,
 					...values
@@ -205,6 +209,7 @@
 						toast.danger(response.data);
 					}
 				});
+				setLocalLoadingFlag(false);
 			});
 
 			const { createMultiselectDdlObject, setDdlValue } = useMultiselectDropDown();
@@ -269,12 +274,13 @@
 				countries,
 				getCountries,
 				getProvinces,
+				hasDataChanged,
 				isSubmitting,
+				loading,
 				onSubmit,
 				provinces,
 				schema,
-				setValue,
-				hasDataChanged
+				setValue
 			};
 		}
 	};

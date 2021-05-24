@@ -7,7 +7,6 @@ export default function useHasDataChanged(initial, mutable) {
 	let mutableData = reactive(mutable);
 
 	const hasDataChanged = computed(() => {
-		console.log('computed');
 		return JSON.stringify(initialData) !== JSON.stringify(mutable);
 	});
 
@@ -16,12 +15,10 @@ export default function useHasDataChanged(initial, mutable) {
 		// have to use Object.assign because Object.assign() modifies an object in place, and so it can trigger ES6 setters.
 		//https://thecodebarbarian.com/object-assign-vs-object-spread.html
 		initialData = Object.assign(initialData, data);
-		console.log('initial', initialData);
 	}
 
 	function updateMutableData(data) {
 		mutableData = Object.assign(mutableData, data);
-		console.log('mutable', mutableData);
 	}
 	return {
 		hasDataChanged,
