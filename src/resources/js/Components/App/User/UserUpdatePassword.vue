@@ -7,12 +7,13 @@
 			<p>Ensure your account is using a long, random password to stay secure.</p>
 		</div>
 		<div class="w-full md:w-3/5 rounded-md bg-white p-4 md:p-6 lg:p-8">
-			<validate-form @submit="onSubmit" :validation-schema="schema">
+			<validate-form @submit="onSubmit" :validation-schema="schema" v-slot="{ isSubmitting }">
 				<v-text-input
 					name="current_password"
 					type="password"
 					label="Current Password"
 					placeholder="Current password"
+					:is-disabled="isSubmitting"
 				/>
 
 				<v-text-input
@@ -20,7 +21,7 @@
 					type="password"
 					label="Password"
 					placeholder="New password"
-					success-message="Nice and secure!"
+					:is-disabled="isSubmitting"
 				/>
 
 				<v-text-input
@@ -28,12 +29,12 @@
 					type="password"
 					label="Confirm Password"
 					placeholder="Type it again"
-					success-message="Glad you remembered it!"
+					:is-disabled="isSubmitting"
 				/>
 
 				<div class="flex justify-end items-center">
 					<loading-animation classes="w-6 h-6 mr-2 md:mr-4" v-if="loading" />
-					<v-button-filled id="update-password">Save</v-button-filled>
+					<v-button-filled id="update-password" :is-disabled="isSubmitting">Save</v-button-filled>
 				</div>
 			</validate-form>
 		</div>
@@ -51,7 +52,7 @@
 	import useLocalLoadingFlag from '@/Composables/useLocalLoadingFlag';
 	// Vee-validation and Yup
 	import { Form as ValidateForm } from 'vee-validate';
-	import { string, required, min, oneOf, object, shape, ref } from 'yup';
+	import { string, required, min, oneOf, object, shape, ref, nullable } from 'yup';
 	// Toast
 	import { useToast } from 'vue-toastification';
 
@@ -70,12 +71,13 @@
 			const activeUser = computed(() => store.state.users.active);
 
 			const schema = object().shape({
-				current_password: string().required(),
-				password_confirmation: string().required(),
-				password: string().min(8).required(),
+				current_password: string().required().nullable(),
+				password_confirmation: string().required().nullable(),
+				password: string().min(8).required().nullable(),
 				password_confirmation: string()
 					.required()
 					.oneOf([ref('password')], 'Passwords do not match')
+					.nullable()
 			});
 
 			const { loading, setLocalLoadingFlag } = useLocalLoadingFlag();
@@ -83,9 +85,14 @@
 			async function onSubmit(values, actions) {
 				setLocalLoadingFlag(true);
 				const response = await store.dispatch('users/updatePassword', values);
-				console.log(response);
 				if (!response.errors) {
-					toast.success = response.data.message;
+					toast.success('Password has been updated.');
+					actions.setValues({
+						current_password: '',
+						password: '',
+						password_confirmation: ''
+					});
+					actions.resetForm();
 				} else {
 					actions.setErrors(response.errors);
 				}
