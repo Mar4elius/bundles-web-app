@@ -202,14 +202,15 @@
 				};
 
 				formData.append('_method', 'PUT');
-				store.dispatch('users/update', data).then((response) => {
+				// need to return a Promise so vee validate form works
+				return store.dispatch('users/update', data).then((response) => {
 					if (!response.errors) {
 						toast.success(response.data.message);
 					} else {
 						toast.danger(response.data);
 					}
+					setLocalLoadingFlag(false);
 				});
-				setLocalLoadingFlag(false);
 			});
 
 			const { createMultiselectDdlObject, setDdlValue } = useMultiselectDropDown();
