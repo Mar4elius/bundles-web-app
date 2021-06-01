@@ -86,10 +86,7 @@
 				/>
 				<div class="flex justify-end items-center">
 					<loading-animation classes="w-6 h-6 mr-2 md:mr-4" v-if="loading" />
-					<v-button-filled
-						id="update-shipping-address"
-						:is-disabled="isSubmitting || !hasDataChanged"
-						:type="isSubmitting || !hasDataChanged ? 'disabled' : 'primary'"
+					<v-button-filled id="update-shipping-address" :is-disabled="isSubmitting || !hasDataChanged"
 						>Save</v-button-filled
 					>
 				</div>

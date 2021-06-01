@@ -256,9 +256,7 @@
 			}
 
 			function showShoppingCart() {
-				cartOpen.value = cartOpen.value
-					? store.commit('cart/setIsOpen', false)
-					: store.commit('cart/setIsOpen', true);
+				cartOpen.value ? store.commit('cart/setIsOpen', false) : store.commit('cart/setIsOpen', true);
 			}
 
 			return {

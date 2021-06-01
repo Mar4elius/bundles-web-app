@@ -49,10 +49,7 @@
 				<div class="flex justify-end items-center">
 					<!-- need to add loading flag so to distinquish between different requests on the page -->
 					<loading-animation classes="w-6 h-6 mr-2 md:mr-4" v-if="loading" />
-					<v-button-filled
-						id="update-user-data"
-						:is-disabled="isSubmitting || !hasDataChanged"
-						:type="isSubmitting || !hasDataChanged ? 'disabled' : 'primary'"
+					<v-button-filled id="update-user-data" :is-disabled="isSubmitting || !hasDataChanged"
 						>Save</v-button-filled
 					>
 				</div>

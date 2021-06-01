@@ -38,7 +38,7 @@
 		</div>
 		<v-button-filled
 			id="checkout-button"
-			:is-disabled="!!cartBundles.length"
+			:is-disabled="cartBundles.length === 0"
 			classes="flex items-center justify-center mt-4 w-full"
 			@btnOnClickEvent="goToCheckoutPage"
 		>
@@ -95,7 +95,7 @@
 
 			function goToCheckoutPage() {
 				console.log('go');
-				// window.location.href = route('checkout.index');
+				window.location.href = route('checkout.index');
 			}
 
 			function closeCart() {
