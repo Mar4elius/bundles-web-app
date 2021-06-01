@@ -49,8 +49,11 @@
 			let defaultClasses = ref(
 				`text-white font-bold uppercase shadow hover:shadow-md transition-all duration-150 focus:outline-none focus:ring-2`
 			);
+
+			const type = computed(() => (props.isDisabled ? 'disabled' : props.type));
+
 			// set button color
-			switch (props.type) {
+			switch (type.value) {
 				case 'disabled':
 					defaultClasses.value += ' bg-gray-600 hover:bg-gray-700 focus:border-gray-600 cursor-not-allowed ';
 					break;
@@ -95,7 +98,7 @@
 			}
 
 			watch(
-				() => props.type,
+				() => type.value,
 				(curr, prev) => {
 					// set button color
 					defaultClasses.value = `text-white font-bold uppercase shadow hover:shadow-md transition-all duration-150 focus:outline-none focus:ring-2`;
