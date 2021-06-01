@@ -19,6 +19,8 @@
         <!-- Scripts -->
         @routes
         <script src="{{ mix('js/app.js') }}" defer></script>
+        {{-- Stripe script should be inlcuded on every page of the app for security reasons --}}
+        <script src="https://js.stripe.com/v3/"></script>
     </head>
     <body class="font-sans antialiased">
         @inertia

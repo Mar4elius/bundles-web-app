@@ -37,9 +37,10 @@
 			<p class="text-right"><span class="font-bold">Total:</span> {{ calculatePrice(cartTotalPrice) }}</p>
 		</div>
 		<v-button-filled
-			id="checkout"
+			id="checkout-button"
 			:is-disabled="!!cartBundles.length"
 			classes="flex items-center justify-center mt-4 w-full"
+			@btnOnClickEvent="goToCheckoutPage"
 		>
 			<span>Checkout</span>
 			<svg
@@ -92,6 +93,11 @@
 				}
 			});
 
+			function goToCheckoutPage() {
+				console.log('go');
+				// window.location.href = route('checkout.index');
+			}
+
 			function closeCart() {
 				store.commit('cart/setIsOpen', false);
 			}
@@ -101,7 +107,8 @@
 				cartOpen,
 				cartBundles,
 				cartTotalPrice,
-				closeCart
+				closeCart,
+				goToCheckoutPage
 			};
 		}
 	};
