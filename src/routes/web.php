@@ -2,7 +2,7 @@
 
 use App\Http\Controllers\Web\BundleController;
 use App\Http\Controllers\Web\UserController;
-use App\Http\Controllers\Web\CheckoutController;
+use App\Http\Controllers\Web\StripeController;
 
 use Illuminate\Support\Facades\Route;
 
@@ -22,7 +22,7 @@ Route::prefix('bundles')->group(function () {
     Route::get('/search', [BundleController::class, 'search'])->name('bundles.search');
 });
 Route::resource('bundles', BundleController::class);
-Route::resource('checkout', CheckoutController::class);
+Route::resource('payment', StripeController::class);
 
 // User Profile routes
 Route::middleware(['auth', 'verified'])->prefix('profile')->group(function () {
