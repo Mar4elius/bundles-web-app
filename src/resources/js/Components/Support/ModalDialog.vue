@@ -43,6 +43,9 @@
 									</svg>
 								</v-button-icon>
 							</div>
+
+							<hr class="border-indigo-600 border-1 rounded-md md:mb-4 lg:mb-6" />
+
 							<div class="mb-2 md:mb-4 lg:mb-6">
 								<slot name="content">
 									<p>Provide modal content</p>
@@ -50,9 +53,6 @@
 							</div>
 							<div class="flex justify-center">
 								<slot name="footer"></slot>
-								<v-button-filled id="close-modal-btn" @btnOnClickEvent="closeModal"
-									>Cancel</v-button-filled
-								>
 							</div>
 						</div>
 					</div>

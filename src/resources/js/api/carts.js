@@ -56,6 +56,18 @@ const cartsApi = {
 	updateCartBundle: ({ cart_bundle_id, ...payload }) =>
 		axios.patch(`/api/v1/cart-bundles/${cart_bundle_id}`, payload, {
 			showLoader: !payload.hasOwnProperty('increment_qnt') // disable loader if user increments or decrements quantity
+		}),
+
+	/**
+	 * Update cart bundle PRODUCT that belongs to cart
+	 *
+	 * @param {Object} payload
+	 *
+	 * #returns
+	 */
+	updateCartBundleProduct: ({ cart_bundle_id, cart_bundle_product_id, ...payload }) =>
+		axios.patch(`/api/v1/cart-bundles/${cart_bundle_id}/products/${cart_bundle_product_id}`, payload, {
+			showLoader: !payload.hasOwnProperty('increment_qnt') // disable loader if user increments or decrements quantity
 		})
 };
 

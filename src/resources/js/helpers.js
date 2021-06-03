@@ -18,7 +18,11 @@ function capitalizeFirstLetter(str) {
  */
 function calculatePrice(price) {
 	price = price / 100;
-	return price.toLocaleString('en-CA', { style: 'currency', currency: 'CAD' });
+	// return price.toLocaleString('en-CA', { style: 'currency', currency: 'CAD' });
+	return new Intl.NumberFormat('en-CA', {
+		style: 'currency',
+		currency: 'CAD'
+	}).format(price);
 }
 
 /**

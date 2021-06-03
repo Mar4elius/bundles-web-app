@@ -210,6 +210,8 @@
 				</button>
 			</div>
 		</div>
+
+		<shopping-cart-details-modal :cart-bundles="cartBundles" :showModal="showModal" />
 	</nav>
 </template>
 
@@ -221,6 +223,7 @@
 	// Components
 	import NavLink from '@/Components/Forms/NavLink';
 	import ProfileLink from '@/Components/Forms/ProfileLink';
+	import ShoppingCartDetailsModal from '@/Components/App/Cart/ShoppingCartDetailsModal';
 	import UserPhoto from '@/Components/App/User/UserPhoto';
 	// Data
 	import { topNavigationLinks } from '@/Data/TopNavigationLinks';
@@ -234,6 +237,7 @@
 		components: {
 			NavLink,
 			ProfileLink,
+			ShoppingCartDetailsModal,
 			UserPhoto
 		},
 
@@ -244,6 +248,8 @@
 
 			let cartOpen = computed(() => store.state.cart.isOpen);
 			const activeUser = computed(() => store.state.users.active);
+			let cartBundles = computed(() => store.state.cart.items);
+			const showModal = ref(false);
 
 			// functions
 			const { logout } = useAuthLogout();
@@ -255,18 +261,23 @@
 				isProfileMenuOpen.value = !isProfileMenuOpen.value;
 			}
 
+			// function showShoppingCart() {
+			// 	cartOpen.value ? store.commit('cart/setIsOpen', false) : store.commit('cart/setIsOpen', true);
+			// }
 			function showShoppingCart() {
-				cartOpen.value ? store.commit('cart/setIsOpen', false) : store.commit('cart/setIsOpen', true);
+				showModal.value = !showModal.value;
 			}
 
 			return {
 				activeUser,
+				cartBundles,
 				isMobileMenuOpen,
 				isProfileMenuOpen,
 				displayMobileMenu,
 				displayProfileMenu,
 				getUserFullName,
 				logout,
+				showModal,
 				showShoppingCart,
 				topNavigationLinks,
 				userProfileLinks

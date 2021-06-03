@@ -163,6 +163,23 @@ const actions = {
 		} catch (error) {
 			console.error(error);
 		}
+	},
+
+	/**
+	 * Update cart bundle PRODUCT that belongs to cart
+	 *
+	 * @param {Number} cartBundleProductId
+	 *
+	 * @returns JSON Response
+	 */
+	async updateCartBundleProduct({ state, commit }, cartBundleProductId) {
+		try {
+			const response = await cartsApi.updateCartBundleProduct(cartBundleProductId);
+			commit('updateCartItems', response.data.cart_bundle);
+			return response;
+		} catch (error) {
+			console.error(error);
+		}
 	}
 };
 

@@ -6,11 +6,12 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\DB;
 use Exception;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Http\Request;
 // Models
 use App\Models\Cart;
 use App\Models\CartBundle;
+use App\Models\Product;
 // Requests
+use Illuminate\Http\Request;
 use App\Http\Requests\Api\Carts\StoreCartBundleRequest;
 use App\Http\Requests\Api\Carts\UpdateCartBundleRequest;
 
@@ -89,7 +90,7 @@ class CartBundleController extends Controller
     }
 
     /**
-     * Update the specified resource in storage.
+     * Update cart bundle
      *
      * @param  App\Http\Requests\Api\Carts\UpdateCartBundleRequest  $request
      * @param  App\Models\CartBundle $cart_bundle
@@ -107,7 +108,9 @@ class CartBundleController extends Controller
 
         $cart_bundle->save();
 
-        $cart_bundle->load('products');
+        $cart_bundle->load(['products' => function ($q) {
+            return $q->withPivot('quantity');
+        }]);
 
         return response()->json([
             'message'       => 'Bundle has been updated.',
@@ -142,5 +145,36 @@ class CartBundleController extends Controller
                 ]);
             }
         }
+    }
+
+    /**
+     * Update cart bundle PRODUCT
+     *
+     * @param  App\Http\Requests\Api\Carts\UpdateCartBundleRequest  $request
+     * @param  App\Models\CartBundle $cart_bundle
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function updateCartBundleProduct(Request $request, CartBundle $cart_bundle)
+    {
+        http_response_code(501);
+        dd($request->all());
+        // // increment_qnt not always in the request. Need to check if it exist
+        // $increment_qnt = $request->increment_qnt ?? null;
+
+        // if (!is_null($increment_qnt)) {
+        //     $cart_bundle->quantity = $increment_qnt ? $cart_bundle->quantity + 1 : $cart_bundle->quantity - 1;
+        // }
+
+        // $cart_bundle->save();
+
+        // $cart_bundle->load(['products' => function ($q) {
+        //     return $q->withPivot('quantity');
+        // }]);
+
+        // return response()->json([
+        //     'message'       => 'Bundle has been updated.',
+        //     'cart_bundle'   => $cart_bundle
+        // ]);
     }
 }

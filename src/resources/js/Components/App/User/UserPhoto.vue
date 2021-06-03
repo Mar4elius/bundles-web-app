@@ -26,6 +26,9 @@
 			<template v-slot:content>
 				<upload-files @onImageChange="updateProfileImage" />
 			</template>
+			<template v-slot:footer>
+				<v-button-filled id="close-modal-btn" @btnOnClickEvent="showModal = !showModal">Cancel</v-button-filled>
+			</template>
 		</modal-dialog>
 	</div>
 </template>
