@@ -14,7 +14,12 @@
 			</svg>
 		</v-button-icon>
 		<!-- quantity props not always avaialable, so use default that is always there -->
-		<span class="mx-2">{{ product.quantity || product.pivot.quantity || product.pivot.default_quantity }}</span>
+		<span class="mx-2" v-if="product.quantity && product.quantity >= 0">
+			{{ product.quantity }}
+		</span>
+		<span class="mx-2" v-else>
+			{{ product.pivot.quantity }}
+		</span>
 		<v-button-icon @btnOnClickEvent="decrementQuantity(product)" :is-disabled="isDecrementDisabled">
 			<svg
 				:class="classes"
@@ -59,8 +64,15 @@
 		},
 
 		setup(props, { emit }) {
+			console.log(props.product);
 			const isDecrementDisabled = computed(() => {
-				return props.disabled || props.product.quantity === 1 || props.product.pivot.quantity === 1;
+				return (
+					props.disabled ||
+					// product from bundle
+					(props.product.quantity && props.product.quantity === 0) ||
+					// product from cart bundle
+					(props.product.pivot && props.product.pivot.quantity === 0)
+				);
 			});
 
 			function incrementQuantity({ id }) {

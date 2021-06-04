@@ -103,6 +103,7 @@
 	import SvgHeroIcon from '@/Components/Support/SvgHeroIcon';
 	// Helpers
 	import { calculatePrice, randomAlphaNumericString } from '@/helpers.js';
+	import { useToast } from 'vue-toastification';
 	export default {
 		props: {
 			bundleSlug: {
@@ -120,6 +121,7 @@
 
 		setup(props) {
 			const store = useStore();
+			const toast = useToast();
 			const data = reactive({ bundle: {} });
 			const quantity = ref(1);
 			const totalBundlePrice = computed(() => {
@@ -152,14 +154,12 @@
 
 			function incrementProductCount(product) {
 				const index = data.bundle.products.findIndex((p) => p.id === product.id);
-				if (data.bundle.products[index].is_active) {
-					data.bundle.products[index].quantity++;
-				}
+				data.bundle.products[index].quantity++;
 			}
 
 			function decrementProductCount(product) {
 				const index = data.bundle.products.findIndex((p) => p.id === product.id);
-				if (data.bundle.products[index].quantity > 1 && data.bundle.products[index].is_active) {
+				if (data.bundle.products[index].quantity > 0) {
 					data.bundle.products[index].quantity--;
 				}
 			}
@@ -171,6 +171,13 @@
 			}
 
 			async function pushProductToCart() {
+				// check if at all cart bundle product are 0. If yes return error
+				const areAllBundleItems0 = data.bundle.products.every((p) => p.quantity === 0);
+				console.log(areAllBundleItems0);
+				if (areAllBundleItems0) {
+					toast.error('At least one of the bundle items should have quantity more then 0.');
+					return;
+				}
 				// break vue reactivity
 				let bundle = JSON.parse(
 					JSON.stringify({

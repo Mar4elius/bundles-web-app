@@ -33,8 +33,6 @@
 			<table class="mb-5 w-full">
 				<thead>
 					<tr>
-						<!-- checkbox -->
-						<th />
 						<!-- image -->
 						<th />
 						<th class="text-left">Item</th>
@@ -45,9 +43,6 @@
 				</thead>
 				<tbody>
 					<tr v-for="product in cartBundle.products" :key="product.slug">
-						<td class="w-1/12">
-							<v-checkbox :is-checked="product.is_active" @update:checked="product.is_active = $event" />
-						</td>
 						<td class="w-1/12 text-center">
 							<img class="h-10 w-10 rounded" :src="cartBundle.image_path" :alt="cartBundle.name" />
 						</td>
@@ -89,7 +84,6 @@
 	// Components
 	import BundleProductQuantityChanger from '@/Components/App/Bundle/BundleProductQuantityChanger';
 	import VButtonIcon from '@/Components/Forms/VButtonIcon';
-	import VCheckbox from '@/Components/Forms/VCheckbox';
 	// Helpers
 	import { calculatePrice } from '@/helpers.js';
 
@@ -103,8 +97,7 @@
 
 		components: {
 			BundleProductQuantityChanger,
-			VButtonIcon,
-			VCheckbox
+			VButtonIcon
 		},
 
 		setup(props) {
