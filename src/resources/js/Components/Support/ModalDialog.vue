@@ -44,8 +44,6 @@
 								</v-button-icon>
 							</div>
 
-							<hr class="border-indigo-600 border-1 rounded-md md:mb-4 lg:mb-6" />
-
 							<div class="mb-2 md:mb-4 lg:mb-6">
 								<slot name="content">
 									<p>Provide modal content</p>

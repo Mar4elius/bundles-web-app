@@ -9,6 +9,7 @@
 		<template v-slot:content>
 			<div v-for="bundle in cartBundles" :key="bundle.slug">
 				<cart-bundle-details :cart-bundle="bundle" />
+				<hr class="border-indigo-600 border-1 rounded-md md:mb-4 lg:mb-6" />
 			</div>
 			<div class="flex justify-end items-center">
 				<h5 class="mr-5 text-indigo-600">Subtotal:</h5>

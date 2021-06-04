@@ -4,6 +4,7 @@
 			<tr>
 				<th v-if="isEditable" />
 				<th class="text-left">Item</th>
+				<th class="text-left">$/Item</th>
 				<th class="text-right">Quantity</th>
 			</tr>
 		</thead>
@@ -12,8 +13,11 @@
 				<td class="w-1/12" v-if="isEditable">
 					<v-checkbox :is-checked="product.is_active" @update:checked="product.is_active = $event" />
 				</td>
-				<td class="w-3/5" :class="[product.is_active ? '' : 'bg-gray-300']">
+				<td class="w-5/12" :class="[product.is_active ? '' : 'bg-gray-300']">
 					{{ product.name }}
+				</td>
+				<td class="w-3/12">
+					{{ calculatePrice(product.price) }}
 				</td>
 				<td class="flex align-baseline justify-end" :class="[product.is_active ? '' : 'bg-gray-300']">
 					<v-button-icon
@@ -61,6 +65,8 @@
 	// Components
 	import VButtonIcon from '@/Components/Forms/VButtonIcon';
 	import VCheckbox from '@/Components/Forms/VCheckbox';
+	// Helpers
+	import { calculatePrice } from '@/helpers.js';
 
 	export default {
 		components: {
@@ -96,8 +102,9 @@
 			}
 
 			return {
-				incrementQuantity,
-				decrementQuantity
+				calculatePrice,
+				decrementQuantity,
+				incrementQuantity
 			};
 		}
 	};

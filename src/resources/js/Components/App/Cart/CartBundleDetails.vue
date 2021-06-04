@@ -1,15 +1,32 @@
 <template>
 	<div>
 		<template v-if="cartBundle">
-			<div class="flex justify-center">
-				<img class="h-20 w-20 rounded mr-5" :src="cartBundle.image_path" :alt="cartBundle.name" />
-				<div class="flex flex-col content-between">
-					<h6>{{ cartBundle.name }}</h6>
-					<bundle-product-quantity-changer
-						:product="cartBundle"
-						@incrementQuantityBtnClick="incrementBundleCount"
-						@decrementQuantityBtnClick="decrementBundleCount"
-					/>
+			<div class="flex justify-between">
+				<div class="w-1/2 flex justify-start">
+					<img class="h-20 w-20 rounded mr-5" :src="cartBundle.image_path" :alt="cartBundle.name" />
+					<div class="flex flex-col content-between">
+						<h6>{{ cartBundle.name }}</h6>
+						<bundle-product-quantity-changer
+							:product="cartBundle"
+							@incrementQuantityBtnClick="incrementBundleCount"
+							@decrementQuantityBtnClick="decrementBundleCount"
+						/>
+					</div>
+				</div>
+				<div class="w-1/2 flex justify-end align-bottom">
+					<v-button-icon @btnOnClickEvent="removeBundleFromCart">
+						<svg
+							class="w-6 md:w-8 text-red-600"
+							fill="none"
+							stroke-linecap="round"
+							stroke-linejoin="round"
+							stroke-width="2"
+							viewBox="0 0 24 24"
+							stroke="currentColor"
+						>
+							<path d="M6 18L18 6M6 6l12 12"></path>
+						</svg>
+					</v-button-icon>
 				</div>
 			</div>
 
@@ -66,12 +83,15 @@
 </template>
 
 <script>
+	// Vue
+	import { useStore } from 'vuex';
+	import { computed } from '@vue/runtime-core';
 	// Components
 	import BundleProductQuantityChanger from '@/Components/App/Bundle/BundleProductQuantityChanger';
+	import VButtonIcon from '@/Components/Forms/VButtonIcon';
 	import VCheckbox from '@/Components/Forms/VCheckbox';
 	// Helpers
 	import { calculatePrice } from '@/helpers.js';
-	import { useStore } from 'vuex';
 
 	export default {
 		props: {
@@ -83,11 +103,13 @@
 
 		components: {
 			BundleProductQuantityChanger,
+			VButtonIcon,
 			VCheckbox
 		},
 
 		setup(props) {
 			const store = useStore();
+			let cartBundles = computed(() => store.state.cart.items);
 
 			function calculateItemTotalPrice(item) {
 				const totalPrice = item.pivot.quantity * item.price;
@@ -133,13 +155,26 @@
 			}
 			// \\ bundle product qnt change
 
+			async function removeBundleFromCart() {
+				// remove cart bundle from cart
+				if (cartBundles.value.length > 1) {
+					await store.dispatch('cart/destroyCartBundle', props.cartBundle.id);
+				} else {
+					// if there is 1 bundle left remove it
+					await store.dispatch('cart/destroyCartBundle', props.cartBundle.id);
+					// then delete cart
+					await store.dispatch('cart/destroy', props.cartBundle.cart_id);
+				}
+			}
+
 			return {
 				calculatePrice,
 				calculateItemTotalPrice,
 				incrementBundleCount,
 				incrementProductCount,
 				decrementBundleCount,
-				decrementProductCount
+				decrementProductCount,
+				removeBundleFromCart
 			};
 		}
 	};

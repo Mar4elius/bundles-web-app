@@ -59,7 +59,9 @@ class CartBundleController extends Controller
 
             // get all cart bundles that belong to cart
             $cart_bundles = CartBundle::whereCartId($cart->id)
-                ->with('products')
+                ->with(['products' => function ($q) {
+                    return $q->withPivot('quantity');
+                }])
                 ->get();
 
             return response()->json([
