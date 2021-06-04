@@ -13,7 +13,6 @@
 			const requests = ['POST', 'PUT', 'PATCH', 'DELETE'];
 
 			let button = computed(() => (requests.includes(props.method) ? 'button' : 'link'));
-			console.log(button.value);
 			return {
 				button
 			};

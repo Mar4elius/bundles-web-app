@@ -79,6 +79,11 @@
 			show: {
 				type: Boolean,
 				default: false
+			},
+
+			isClickOutside: {
+				type: Boolean,
+				default: true
 			}
 		},
 
@@ -93,7 +98,7 @@
 			const { onClickOutside } = useClickOutside();
 
 			onClickOutside(modal, () => {
-				if (showModal.value === true) {
+				if (showModal.value === true && props.isClickOutside) {
 					closeModal();
 				}
 			});

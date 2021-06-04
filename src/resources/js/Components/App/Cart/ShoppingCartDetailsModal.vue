@@ -1,5 +1,5 @@
 <template>
-	<modal-dialog :show="showModal" @btnOnClickEvent="showModal = !showModal">
+	<modal-dialog :show="showModal" :is-click-outside="false" @btnOnClickEvent="showModal = !showModal">
 		<template v-slot:header>
 			<div class="flex flex-col">
 				<h4>Your Shopping Cart</h4>
@@ -7,14 +7,19 @@
 			</div>
 		</template>
 		<template v-slot:content>
-			<div v-for="bundle in cartBundles" :key="bundle.slug">
-				<cart-bundle-details :cart-bundle="bundle" />
-				<hr class="border-indigo-600 border-1 rounded-md md:mb-4 lg:mb-6" />
-			</div>
-			<div class="flex justify-end items-center">
-				<h5 class="mr-5 text-indigo-600">Subtotal:</h5>
-				<p class="text-lg font-bold">{{ cartTotalPrice }}</p>
-			</div>
+			<template v-if="cartBundles.length > 0">
+				<div v-for="bundle in cartBundles" :key="bundle.slug">
+					<cart-bundle-details :cart-bundle="bundle" />
+					<hr class="border-indigo-600 border-1 rounded-md md:mb-4 lg:mb-6" />
+				</div>
+				<div class="flex justify-end items-center">
+					<h5 class="mr-5 text-indigo-600">Subtotal:</h5>
+					<p class="text-lg font-bold">{{ cartTotalPrice }}</p>
+				</div>
+			</template>
+			<template v-else>
+				<p class="text-small text-gray-600 text-center">You cart is empty at the moment.</p>
+			</template>
 		</template>
 		<template v-slot:footer>
 			<div class="w-full flex justify-center">
@@ -26,7 +31,7 @@
 				>
 				<v-button-filled
 					id="checkout-button"
-					:is-disabled="cartBundles.length === 0"
+					:is-disabled="cartBundles.length === 0 || bundleHasAllProducts0"
 					classes="flex items-center justify-center mt-4"
 					@btnOnClickEvent="goToCheckoutPage"
 				>
@@ -77,6 +82,12 @@
 		},
 
 		setup(props) {
+			const bundleHasAllProducts0 = computed(() => {
+				return props.cartBundles.every((cart) => {
+					return cart.products.every((product) => product.pivot.quantity === 0);
+				});
+			});
+
 			const cartTotalPrice = computed(() => {
 				const price = props.cartBundles.reduce((curr, acc) => {
 					return curr + acc.price_per_bundle * acc.quantity;
@@ -95,6 +106,7 @@
 			}
 
 			return {
+				bundleHasAllProducts0,
 				cartTotalBundles,
 				cartTotalPrice,
 				goToCheckoutPage

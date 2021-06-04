@@ -173,7 +173,6 @@
 			async function pushProductToCart() {
 				// check if at all cart bundle product are 0. If yes return error
 				const areAllBundleItems0 = data.bundle.products.every((p) => p.quantity === 0);
-				console.log(areAllBundleItems0);
 				if (areAllBundleItems0) {
 					toast.error('At least one of the bundle items should have quantity more then 0.');
 					return;

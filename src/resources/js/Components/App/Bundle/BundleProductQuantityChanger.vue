@@ -64,7 +64,6 @@
 		},
 
 		setup(props, { emit }) {
-			console.log(props.product);
 			const isDecrementDisabled = computed(() => {
 				return (
 					props.disabled ||
