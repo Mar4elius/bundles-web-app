@@ -1,6 +1,6 @@
 <template>
 	<div class="flex items-center justify-center">
-		<v-button-icon @btnOnClickEvent="incrementQuantity(product)">
+		<v-button-icon @btnOnClickEvent="incrementQuantity(product)" :is-disabled="disabled">
 			<svg
 				:class="classes"
 				fill="none"
@@ -15,7 +15,7 @@
 		</v-button-icon>
 		<!-- quantity props not always avaialable, so use default that is always there -->
 		<span class="mx-2">{{ product.quantity || product.pivot.quantity || product.pivot.default_quantity }}</span>
-		<v-button-icon @btnOnClickEvent="decrementQuantity(product)">
+		<v-button-icon @btnOnClickEvent="decrementQuantity(product)" :is-disabled="disabled">
 			<svg
 				:class="classes"
 				fill="none"
@@ -45,6 +45,11 @@
 			classes: {
 				type: String,
 				default: 'w-6 md:w-8'
+			},
+
+			disabled: {
+				type: Boolean,
+				default: false
 			}
 		},
 

@@ -20,42 +20,13 @@
 					{{ calculatePrice(product.price) }}
 				</td>
 				<td class="flex align-baseline justify-end" :class="[product.is_active ? '' : 'bg-gray-300']">
-					<v-button-icon
-						@btnOnClickEvent="incrementQuantity(product)"
-						:is-disabled="!product.is_active"
-						v-if="isEditable"
-					>
-						<svg
-							class="w-5"
-							fill="none"
-							stroke-linecap="round"
-							stroke-linejoin="round"
-							stroke-width="2"
-							viewBox="0 0 24 24"
-							stroke="currentColor"
-						>
-							<path d="M12 9v3m0 0v3m0-3h3m-3 0H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-						</svg>
-					</v-button-icon>
-					<!-- quantity props not always avaialable, so use default that is always there -->
-					<span class="mx-2">{{ product.quantity || product.pivot.default_quantity }}</span>
-					<v-button-icon
-						@btnOnClickEvent="decrementQuantity(product)"
-						:is-disabled="!product.is_active"
-						v-if="isEditable"
-					>
-						<svg
-							class="w-5"
-							fill="none"
-							stroke-linecap="round"
-							stroke-linejoin="round"
-							stroke-width="2"
-							viewBox="0 0 24 24"
-							stroke="currentColor"
-						>
-							<path d="M15 12H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-						</svg>
-					</v-button-icon>
+					<bundle-product-quantity-changer
+						classes="w-5"
+						:product="product"
+						@incrementQuantityBtnClick="incrementProductCount"
+						@decrementQuantityBtnClick="decrementProductCount"
+						:disabled="isEditable"
+					/>
 				</td>
 			</tr>
 		</tbody>
@@ -63,6 +34,7 @@
 </template>
 <script>
 	// Components
+	import BundleProductQuantityChanger from '@/Components/App/Bundle/BundleProductQuantityChanger';
 	import VButtonIcon from '@/Components/Forms/VButtonIcon';
 	import VCheckbox from '@/Components/Forms/VCheckbox';
 	// Helpers
@@ -70,6 +42,7 @@
 
 	export default {
 		components: {
+			BundleProductQuantityChanger,
 			VButtonIcon,
 			VCheckbox
 		},
@@ -87,14 +60,14 @@
 		},
 
 		setup(props, { emit }) {
-			function incrementQuantity({ id }) {
+			function incrementProductCount({ id }) {
 				emit('incrementQuantityBtnClick', {
 					id: id,
 					quantity: 1
 				});
 			}
 
-			function decrementQuantity({ id }) {
+			function decrementProductCount({ id }) {
 				emit('decrementQuantityBtnClick', {
 					id: id,
 					quantity: 1
@@ -103,8 +76,8 @@
 
 			return {
 				calculatePrice,
-				decrementQuantity,
-				incrementQuantity
+				decrementProductCount,
+				incrementProductCount
 			};
 		}
 	};
