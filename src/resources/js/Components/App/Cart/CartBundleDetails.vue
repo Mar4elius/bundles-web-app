@@ -166,7 +166,7 @@
 				(newValue, oldValue) => {
 					if (newValue.products.every((b) => b.pivot.quantity === 0)) {
 						toast.warning(
-							`All items that are in ${newValue.name} seems to have quantity of 0. Do you want to remove this bundle from your cart?`,
+							`All items that are in ${newValue.name} seem to have quantity of 0. Do you want to remove this bundle from your cart?`,
 							{ timeout: false, hideProgressBar: true }
 						);
 					}

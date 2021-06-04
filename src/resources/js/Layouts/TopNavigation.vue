@@ -210,7 +210,6 @@
 				</button>
 			</div>
 		</div>
-
 		<shopping-cart-details-modal :cart-bundles="cartBundles" :showModal="showModal" />
 	</nav>
 </template>
@@ -228,10 +227,11 @@
 	// Data
 	import { topNavigationLinks } from '@/Data/TopNavigationLinks';
 	import { userProfileLinks } from '@/Data/UserProfileLinks';
-	// Functions
-	import { useAuthLogout } from '@/Composables/useAuthLogout';
-	// Helpers
+	// Helper Functions
 	import { getUserFullName } from '@/helpers';
+	// Composables
+	import { useAuthLogout } from '@/Composables/useAuthLogout';
+	import useBreakpoints from '@/Composables/useBreakpoints';
 
 	export default {
 		components: {
@@ -251,6 +251,8 @@
 			let cartBundles = computed(() => store.state.cart.items);
 			const showModal = ref(false);
 
+			const { width, type } = useBreakpoints();
+
 			// functions
 			const { logout } = useAuthLogout();
 			function displayMobileMenu() {
@@ -265,7 +267,9 @@
 			// 	cartOpen.value ? store.commit('cart/setIsOpen', false) : store.commit('cart/setIsOpen', true);
 			// }
 			function showShoppingCart() {
-				showModal.value = !showModal.value;
+				if (type.value === 'lg' || type.value === 'xl' || type.value === '2xl') {
+					showModal.value = !showModal.value;
+				}
 			}
 
 			return {
@@ -280,6 +284,7 @@
 				showModal,
 				showShoppingCart,
 				topNavigationLinks,
+				type,
 				userProfileLinks
 			};
 		}
