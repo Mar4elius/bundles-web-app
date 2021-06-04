@@ -34,6 +34,13 @@ class Cart extends Model
     ];
 
     /**
+     * All of the relationships to be touched.
+     *
+     * @var array
+     */
+    protected $touches = ['cart'];
+
+    /**
      * Get cart bundles
      */
     public function cartBundles()

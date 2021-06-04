@@ -152,29 +152,44 @@ class CartBundleController extends Controller
      *
      * @param  App\Http\Requests\Api\Carts\UpdateCartBundleRequest  $request
      * @param  App\Models\CartBundle $cart_bundle
+     * @param  App\Models\Product $product
      *
      * @return \Illuminate\Http\Response
      */
-    public function updateCartBundleProduct(Request $request, CartBundle $cart_bundle)
+    public function updateCartBundleProduct(Request $request, CartBundle $cart_bundle, Product $product)
     {
-        http_response_code(501);
-        dd($request->all());
-        // // increment_qnt not always in the request. Need to check if it exist
-        // $increment_qnt = $request->increment_qnt ?? null;
+        // increment_qnt not always in the request. Need to check if it exist
+        $increment_qnt = $request->increment_qnt ?? null;
 
-        // if (!is_null($increment_qnt)) {
-        //     $cart_bundle->quantity = $increment_qnt ? $cart_bundle->quantity + 1 : $cart_bundle->quantity - 1;
-        // }
+        if (!is_null($increment_qnt)) {
+            $cart_product = $cart_bundle->products()
+                ->wherePivot('product_id', $product->id)
+                ->withPivot('quantity')
+                ->first();
+            // update product that belong to cart
+            $cart_bundle->products()->updateExistingPivot($product->id, [
+                'quantity' => $increment_qnt ? $cart_product->pivot->quantity + 1 : $cart_product->pivot->quantity - 1
+            ]);
+        }
+        // update price per bundle
+        $bundle_total_price = $cart_bundle->products()
+            ->withPivot('quantity')
+            ->get()
+            ->reduce(function ($acc, $curr) {
+                return $acc + ($curr->price * $curr->pivot->quantity);
+            }, 0);
 
-        // $cart_bundle->save();
+        $cart_bundle->price_per_bundle = $bundle_total_price;
 
-        // $cart_bundle->load(['products' => function ($q) {
-        //     return $q->withPivot('quantity');
-        // }]);
+        $cart_bundle->save();
 
-        // return response()->json([
-        //     'message'       => 'Bundle has been updated.',
-        //     'cart_bundle'   => $cart_bundle
-        // ]);
+        $cart_bundle->load(['products' => function ($q) {
+            return $q->withPivot('quantity');
+        }]);
+
+        return response()->json([
+            'message'       => 'Bundle has been updated.',
+            'cart_bundle'   => $cart_bundle
+        ]);
     }
 }

@@ -47,8 +47,7 @@ Route::prefix('v1')->group(function () {
 
     // Cart Bundles
     Route::prefix('cart-bundles')->group(function () {
-        // Route::patch('/{cart-bundle}/products/{product}', [CartBundleController::class, 'updateCartBundleProduct'])->name('cart-bundles.product.update');
-        Route::patch('/{cart-bundle}/products', [CartBundleController::class, 'updateCartBundleProduct'])->name('cart-bundles.product.update');
+        Route::patch('/{cart_bundle}/products/{product}', [CartBundleController::class, 'updateCartBundleProduct'])->name('cart-bundles.product.update');
     });
     Route::resource('cart-bundles', CartBundleController::class);
 
