@@ -24,7 +24,7 @@
 		<hr class="my-3" />
 
 		<template v-if="cartBundles.length">
-			<div class="flex justify-between mt-6" v-for="bundle in cartBundles" :key="bundle.id">
+			<div class="mt-6" v-for="bundle in cartBundles" :key="bundle.id">
 				<cart-tile :cart-bundle="bundle" />
 			</div>
 		</template>
@@ -33,12 +33,14 @@
 		</template>
 
 		<hr class="my-3" />
-		<div>
-			<p class="text-right"><span class="font-bold">Total:</span> {{ calculatePrice(cartTotalPrice) }}</p>
+		<div class="flex justify-end items-center">
+			<p class="text-lg font-bold text-indigo-600">
+				Subtotal: <span>{{ calculatePrice(cartTotalPrice) }}</span>
+			</p>
 		</div>
 		<v-button-filled
 			id="checkout-button"
-			:is-disabled="cartBundles.length === 0"
+			:is-disabled="cartBundles.length === 0 || bundleHasAllProducts0"
 			classes="flex items-center justify-center mt-4 w-full"
 			@btnOnClickEvent="goToCheckoutPage"
 		>
@@ -82,6 +84,12 @@
 			let cartBundles = computed(() => store.state.cart.items);
 			let cartTotalPrice = computed(() => store.getters['cart/cartTotalPrice']);
 
+			const bundleHasAllProducts0 = computed(() => {
+				return cartBundles.value.some((cart) => {
+					return cart.products.every((product) => product.pivot.quantity === 0);
+				});
+			});
+
 			onMounted(() => {
 				// get cart id
 				const cartId = getCookie('bundle_cart_id');
@@ -102,6 +110,7 @@
 			}
 
 			return {
+				bundleHasAllProducts0,
 				calculatePrice,
 				cartOpen,
 				cartBundles,

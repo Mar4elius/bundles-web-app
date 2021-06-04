@@ -263,12 +263,12 @@
 				isProfileMenuOpen.value = !isProfileMenuOpen.value;
 			}
 
-			// function showShoppingCart() {
-			// 	cartOpen.value ? store.commit('cart/setIsOpen', false) : store.commit('cart/setIsOpen', true);
-			// }
 			function showShoppingCart() {
+				// Depending on the size of the screen we want to show differen carts menues
 				if (type.value === 'lg' || type.value === 'xl' || type.value === '2xl') {
 					showModal.value = !showModal.value;
+				} else {
+					cartOpen.value ? store.commit('cart/setIsOpen', false) : store.commit('cart/setIsOpen', true);
 				}
 			}
 

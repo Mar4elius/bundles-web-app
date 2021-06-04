@@ -83,7 +83,7 @@
 
 		setup(props) {
 			const bundleHasAllProducts0 = computed(() => {
-				return props.cartBundles.every((cart) => {
+				return props.cartBundles.some((cart) => {
 					return cart.products.every((product) => product.pivot.quantity === 0);
 				});
 			});
