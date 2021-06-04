@@ -25,7 +25,7 @@
 
 		<template v-if="cartBundles.length">
 			<div class="mt-6" v-for="bundle in cartBundles" :key="bundle.id">
-				<cart-tile :cart-bundle="bundle" />
+				<mobile-cart-tile :cart-bundle="bundle" />
 			</div>
 		</template>
 		<template v-else>
@@ -35,7 +35,7 @@
 		<hr class="my-3" />
 		<div class="flex justify-end items-center">
 			<p class="text-lg font-bold text-indigo-600">
-				Subtotal: <span>{{ calculatePrice(cartTotalPrice) }}</span>
+				Subtotal: <span class="text-black">{{ calculatePrice(cartTotalPrice) }}</span>
 			</p>
 		</div>
 		<v-button-filled
@@ -65,7 +65,7 @@
 	import { computed, onMounted } from '@vue/runtime-core';
 	import { useStore } from 'vuex';
 	// Components
-	import CartTile from '@/Components/App/Cart/CartTile';
+	import MobileCartTile from '@/Components/App/Cart/MobileCartTile';
 	import VButtonFilled from '@/Components/Forms/VButtonFilled';
 	import SvgHeroIcon from '@/Components/Support/SvgHeroIcon';
 	// Helper
@@ -73,7 +73,7 @@
 
 	export default {
 		components: {
-			CartTile,
+			MobileCartTile,
 			VButtonFilled,
 			SvgHeroIcon
 		},

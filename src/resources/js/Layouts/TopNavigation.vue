@@ -265,9 +265,11 @@
 
 			function showShoppingCart() {
 				// Depending on the size of the screen we want to show differen carts menues
-				if (type.value === 'lg' || type.value === 'xl' || type.value === '2xl') {
+				if ((type.value === 'lg' || type.value === 'xl' || type.value === '2xl') && !cartOpen.value) {
 					showModal.value = !showModal.value;
 				} else {
+					// make sure that modal is not showing up when mobile cart is open
+					showModal.value = false;
 					cartOpen.value ? store.commit('cart/setIsOpen', false) : store.commit('cart/setIsOpen', true);
 				}
 			}

@@ -17,7 +17,10 @@ export default function useBreakpoint() {
 			return 'lg';
 		} else if (windowWidth.value > 1024 && windowWidth.value <= 1280) {
 			return 'xl';
-		} else if (windowWidth.value > 1280 && windowWidth.value <= 1536) {
+			// } else if (windowWidth.value > 1280 && windowWidth.value <= 1536) {
+			// 	return '2xl';
+			// }
+		} else {
 			return '2xl';
 		}
 	});
