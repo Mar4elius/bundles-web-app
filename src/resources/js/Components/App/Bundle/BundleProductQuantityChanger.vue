@@ -15,7 +15,7 @@
 		</v-button-icon>
 		<!-- quantity props not always avaialable, so use default that is always there -->
 		<span class="mx-2">{{ product.quantity || product.pivot.quantity || product.pivot.default_quantity }}</span>
-		<v-button-icon @btnOnClickEvent="decrementQuantity(product)" :is-disabled="disabled">
+		<v-button-icon @btnOnClickEvent="decrementQuantity(product)" :is-disabled="isDecrementDisabled">
 			<svg
 				:class="classes"
 				fill="none"
@@ -34,6 +34,7 @@
 <script>
 	// Components
 	import VButtonIcon from '@/Components/Forms/VButtonIcon';
+	import { computed } from '@vue/runtime-core';
 	export default {
 		emits: ['incrementQuantityBtnClick', 'decrementQuantityBtnClick'],
 		props: {
@@ -58,6 +59,10 @@
 		},
 
 		setup(props, { emit }) {
+			const isDecrementDisabled = computed(() => {
+				return props.disabled || props.product.quantity === 1 || props.product.pivot.quantity === 1;
+			});
+
 			function incrementQuantity({ id }) {
 				emit('incrementQuantityBtnClick', {
 					id: id,
@@ -74,6 +79,7 @@
 
 			return {
 				incrementQuantity,
+				isDecrementDisabled,
 				decrementQuantity
 			};
 		}

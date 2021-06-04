@@ -2,7 +2,7 @@
 	<table class="mb-5 w-full">
 		<thead>
 			<tr>
-				<th v-if="isEditable" />
+				<th />
 				<th class="text-left">Item</th>
 				<th class="text-left">$/Item</th>
 				<th class="text-right">Quantity</th>
@@ -10,10 +10,10 @@
 		</thead>
 		<tbody>
 			<tr v-for="product in products" :key="product.slug">
-				<td class="w-1/12" v-if="isEditable">
+				<td class="w-1/12">
 					<v-checkbox :is-checked="product.is_active" @update:checked="product.is_active = $event" />
 				</td>
-				<td class="w-5/12" :class="[product.is_active ? '' : 'bg-gray-300']">
+				<td class="w-8/12" :class="[product.is_active ? '' : 'bg-gray-300']">
 					{{ product.name }}
 				</td>
 				<td class="w-3/12">
@@ -25,7 +25,7 @@
 						:product="product"
 						@incrementQuantityBtnClick="incrementProductCount"
 						@decrementQuantityBtnClick="decrementProductCount"
-						:disabled="isEditable"
+						:disabled="!product.is_active"
 					/>
 				</td>
 			</tr>
@@ -51,11 +51,6 @@
 			products: {
 				type: Array,
 				required: true
-			},
-
-			isEditable: {
-				type: Boolean,
-				default: false
 			}
 		},
 
