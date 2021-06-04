@@ -7,13 +7,13 @@
 					<h6>{{ cartBundle.name }}</h6>
 					<bundle-product-quantity-changer
 						:product="cartBundle"
-						@incrementQuantityBtnClick="incrementBundleCount"
-						@decrementQuantityBtnClick="decrementBundleCount"
+						@incrementQuantityBtnClick="incrementBundleCount(cartBundle)"
+						@decrementQuantityBtnClick="decrementBundleCount(cartBundle)"
 					/>
 				</div>
 			</div>
 			<div class="w-1/2 flex justify-end align-bottom">
-				<v-button-icon @btnOnClickEvent="removeBundleFromCart">
+				<v-button-icon @btnOnClickEvent="removeBundleFromCart(cartBundle)">
 					<svg
 						class="w-6 md:w-8 text-red-600"
 						fill="none"
@@ -52,15 +52,15 @@
 						<bundle-product-quantity-changer
 							classes="w-5"
 							:product="product"
-							@incrementQuantityBtnClick="incrementProductCount"
-							@decrementQuantityBtnClick="decrementProductCount"
+							@incrementQuantityBtnClick="(...args) => incrementProductCount(cartBundle, ...args)"
+							@decrementQuantityBtnClick="(...args) => decrementProductCount(cartBundle, ...args)"
 						/>
 					</td>
 					<td class="w-2/12 text-right">
 						{{ calculatePrice(product.price) }}
 					</td>
 					<td class="w-2/12 text-right">
-						{{ calculateItemTotalPrice(product) }}
+						{{ calculateProductTotalPrice(product) }}
 					</td>
 				</tr>
 			</tbody>
@@ -79,6 +79,8 @@
 	// Components
 	import BundleProductQuantityChanger from '@/Components/App/Bundle/BundleProductQuantityChanger';
 	import VButtonIcon from '@/Components/Forms/VButtonIcon';
+	// Composables
+	import useCartFunctions from '@/Composables/useCartFunctions';
 	// Modals
 	import InformationModal from '@/Components/Support/InformationModal';
 	// Helpers
@@ -101,65 +103,16 @@
 		},
 
 		setup(props) {
-			const store = useStore();
 			const toast = useToast();
-			let cartBundles = computed(() => store.state.cart.items);
 
-			function calculateItemTotalPrice(item) {
-				const totalPrice = item.pivot.quantity * item.price;
-				return calculatePrice(totalPrice);
-			}
-			// bundle qnt change
-			async function incrementBundleCount() {
-				const data = {
-					cart_bundle_id: props.cartBundle.id,
-					increment_qnt: true
-				};
-				await store.dispatch('cart/updateCartBundle', data);
-			}
-
-			async function decrementBundleCount() {
-				const data = {
-					cart_bundle_id: props.cartBundle.id,
-					increment_qnt: false
-				};
-				if (props.cartBundle.quantity > 1) {
-					await store.dispatch('cart/updateCartBundle', data);
-				}
-			}
-			// \\ bundle qnt change
-
-			// bundle product qnt change
-			async function incrementProductCount({ id }) {
-				const data = {
-					cart_bundle_id: props.cartBundle.id,
-					cart_bundle_product_id: id,
-					increment_qnt: true
-				};
-				await store.dispatch('cart/updateCartBundleProduct', data);
-			}
-
-			async function decrementProductCount({ id }) {
-				const data = {
-					cart_bundle_id: props.cartBundle.id,
-					cart_bundle_product_id: id,
-					increment_qnt: false
-				};
-				await store.dispatch('cart/updateCartBundleProduct', data);
-			}
-			// \\ bundle product qnt change
-
-			async function removeBundleFromCart() {
-				// remove cart bundle from cart
-				if (cartBundles.value.length > 1) {
-					await store.dispatch('cart/destroyCartBundle', props.cartBundle.id);
-				} else {
-					// if there is 1 bundle left remove it
-					await store.dispatch('cart/destroyCartBundle', props.cartBundle.id);
-					// then delete cart
-					await store.dispatch('cart/destroy', props.cartBundle.cart_id);
-				}
-			}
+			const {
+				calculateProductTotalPrice,
+				incrementBundleCount,
+				decrementBundleCount,
+				incrementProductCount,
+				decrementProductCount,
+				removeBundleFromCart
+			} = useCartFunctions();
 
 			watch(
 				() => props.cartBundle,
@@ -175,7 +128,7 @@
 
 			return {
 				calculatePrice,
-				calculateItemTotalPrice,
+				calculateProductTotalPrice,
 				incrementBundleCount,
 				incrementProductCount,
 				decrementBundleCount,
