@@ -102,7 +102,7 @@
 			});
 
 			function goToCheckoutPage() {
-				window.location.href = route('payment.index');
+				window.location.href = route('checkouts.index');
 			}
 
 			function closeCart() {

@@ -88,7 +88,7 @@
 			const { cartTotalPrice, cartTotalBundles, bundleHasAllProducts0 } = useCartFunctions();
 
 			function goToCheckoutPage() {
-				window.location.href = route('payment.index');
+				window.location.href = route('checkouts.index');
 			}
 
 			return {

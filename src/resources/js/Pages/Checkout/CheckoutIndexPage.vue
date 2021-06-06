@@ -73,7 +73,7 @@
 										<v-text-input
 											name="apartment"
 											type="text"
-											label="Aparetents, Suit, etc. (optional)"
+											label="Apartments, Suit, etc. (optional)"
 											:value="activeUser.apartment"
 											@update:value="setValue"
 											class="w-full lg:w-1/2"
