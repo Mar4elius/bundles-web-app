@@ -1,7 +1,7 @@
 <template>
 	<app-layout>
 		<template v-slot:main>
-			<div class="flex flex-col md:flex-row">
+			<div class="flex flex-col-reverse md:flex-row">
 				<!-- left side -->
 				<div class="bg-white rounded-md w-full lg:w-1/2">
 					<div class="flex flex-col md:flex-row justify-center items-center min-h-screen">
@@ -29,7 +29,7 @@
 									<v-text-input
 										name="email"
 										type="email"
-										label="E-mail"
+										label="Email"
 										placeholder="Your email address"
 										:value="activeUser.email"
 										@update:value="setValue"
@@ -38,15 +38,14 @@
 									/>
 
 									<h6>Shipping address</h6>
-									<div class="flex">
+									<div class="lg:flex">
 										<v-text-input
 											name="first_name"
 											type="text"
 											label="First Name"
-											placeholder="Firt Name"
 											:value="activeUser.first_name"
 											@update:value="setValue"
-											class="w-full md:w-1/2 mr-2 md:mr-4 lg:mr-6"
+											class="w-full lg:w-1/2 mr-2 md:mr-4 lg:mr-6"
 											:is-disabled="isSubmitting"
 										/>
 
@@ -54,10 +53,9 @@
 											name="last_name"
 											type="text"
 											label="Last Name"
-											placeholder="Last Name"
 											:value="activeUser.last_name"
 											@update:value="setValue"
-											class="w-full md:w-1/2"
+											class="w-full lg:w-1/2"
 											:is-disabled="isSubmitting"
 										/>
 									</div>
@@ -67,20 +65,18 @@
 											name="address"
 											type="text"
 											label="Address"
-											placeholder="Address"
 											:value="activeUser.address"
 											@update:value="setValue"
-											class="w-full mr-2 md:mr-4 lg:mr-6"
+											class="w-full lg:w-1/2 mr-2 md:mr-4 lg:mr-6"
 										/>
 
 										<v-text-input
 											name="apartment"
 											type="text"
 											label="Aparetents, Suit, etc. (optional)"
-											placeholder="Address"
 											:value="activeUser.apartment"
 											@update:value="setValue"
-											class="w-full mr-2 md:mr-4 lg:mr-6"
+											class="w-full lg:w-1/2"
 										/>
 									</div>
 
@@ -92,16 +88,15 @@
 											placeholder="City"
 											:value="activeUser.city"
 											@update:value="setValue"
-											class="w-full lg:mr-6"
+											class="w-full lg:w-1/2 mr-2 md:mr-4 lg:mr-6"
 										/>
 										<v-text-input
 											name="postal_code"
 											type="text"
 											label="Postal Code"
-											placeholder="Postal Code"
 											:value="activeUser.postal_code"
 											@update:value="setValue"
-											class="w-full lg:mr-6"
+											class="w-full lg:w-1/2"
 											maska="A#A-#A#"
 										/>
 									</div>
@@ -115,6 +110,7 @@
 											:options="countries"
 											:loading="countries.length === 0"
 											:required="true"
+											:classes="`mr-2 md:mr-4 lg:mr-6`"
 										/>
 
 										<v-drop-down-list
@@ -132,10 +128,9 @@
 											name="phone"
 											type="text"
 											label="Phone Number"
-											placeholder="Phone Number"
 											:value="activeUser.phone"
 											@update:value="setValue"
-											class="w-full md:w-1/2 lg:mr-6"
+											class="w-full lg:w-1/2 mr-2 md:mr-4 lg:mr-6"
 											maska="+1(###)-###-####"
 										/>
 									</div>
@@ -151,8 +146,16 @@
 					</div>
 				</div>
 				<!-- right side -->
-				<div class="bg-gray-100 w-full lg:w-1/2">
+				<div class="bg-gray-100 w-full lg:w-1/2 p-4 md:p-6">
 					<h1>Order details</h1>
+					<div v-for="bundle in cartBundles" :key="bundle.slug">
+						<cart-bundle-details :cart-bundle="bundle" />
+						<hr class="border-indigo-600 border-1 rounded-md md:mb-4 lg:mb-6" />
+						<div class="flex justify-end items-center">
+							<h5 class="mr-5 text-indigo-600">Subtotal:</h5>
+							<p class="text-lg font-bold">{{ cartTotalPrice }}</p>
+						</div>
+					</div>
 				</div>
 			</div>
 		</template>
@@ -162,26 +165,31 @@
 <script>
 	// Vue
 	import { reactive } from '@vue/reactivity';
-	import { onMounted } from '@vue/runtime-core';
+	import { computed, onMounted } from '@vue/runtime-core';
 	// Components
 	import AppLayout from '@/Layouts/AppLayout';
+	import CartBundleDetails from '@/Components/App/Cart/CartBundleDetails';
 	import VButtonFilled from '@/Components/Forms/VButtonFilled';
 	import VDropDownList from '@/Components/Forms/VDropDownList';
 	import VTextInput from '@/Components/Forms/VTextInput';
 	// Composables
 	import useCountriesData from '@/Composables/useCountriesData';
+	import useCartFunctions from '@/Composables/useCartFunctions';
 	// Vee-validation and Yup
 	import { useForm } from 'vee-validate';
 	import { string, required, email, object, shape } from 'yup';
+	import { useStore } from 'vuex';
 	export default {
 		components: {
 			AppLayout,
+			CartBundleDetails,
 			VButtonFilled,
 			VDropDownList,
 			VTextInput
 		},
 
 		setup() {
+			const store = useStore();
 			// both logged in or not logged in
 			const activeUser = reactive({
 				first_name: null,
@@ -195,6 +203,8 @@
 				country_id: 1,
 				province_id: null
 			});
+
+			let cartBundles = computed(() => store.state.cart.items);
 
 			const schema = object().shape({
 				address: string().required().nullable(),
@@ -213,6 +223,8 @@
 				countries,
 				provinces
 			} = useCountriesData();
+
+			const { cartTotalPrice } = useCartFunctions();
 
 			const { handleSubmit, setFieldValue, isSubmitting } = useForm({
 				initialValues: {
@@ -248,6 +260,8 @@
 				activeUser,
 				activeCountry,
 				activeProvince,
+				cartBundles,
+				cartTotalPrice,
 				countries,
 				getProvinces,
 				isSubmitting,

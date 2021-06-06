@@ -8,6 +8,25 @@ export default function useCartFunctions() {
 	const store = useStore();
 	let cartBundles = computed(() => store.state.cart.items);
 
+	const cartTotalPrice = computed(() => {
+		const price = cartBundles.value.reduce((curr, acc) => {
+			return curr + acc.price_per_bundle * acc.quantity;
+		}, 0);
+		return calculatePrice(price);
+	});
+
+	const bundleHasAllProducts0 = computed(() => {
+		return cartBundles.value.some((cart) => {
+			return cart.products.every((product) => product.pivot.quantity === 0);
+		});
+	});
+
+	const cartTotalBundles = computed(() => {
+		return cartBundles.value.reduce((curr, acc) => {
+			return curr + acc.quantity;
+		}, 0);
+	});
+
 	// bundle qnt change
 	async function incrementBundleCount(bundle) {
 		const data = {
@@ -68,7 +87,10 @@ export default function useCartFunctions() {
 	}
 
 	return {
+		cartTotalPrice,
 		calculateProductTotalPrice,
+		cartTotalBundles,
+		bundleHasAllProducts0,
 		incrementBundleCount,
 		decrementBundleCount,
 		incrementProductCount,

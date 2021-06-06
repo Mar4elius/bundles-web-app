@@ -54,11 +54,14 @@
 </template>
 
 <script>
+	// Vue
+	import { computed } from '@vue/runtime-core';
 	// Components
 	import CartBundleDetails from '@/Components/App/Cart/CartBundleDetails';
 	import ModalDialog from '@/Components/Support/ModalDialog';
 	import VButtonFilled from '@/Components/Forms/VButtonFilled';
-	import { computed } from '@vue/runtime-core';
+	//Composables
+	import useCartFunctions from '@/Composables/useCartFunctions';
 	// Helpers
 	import { calculatePrice } from '@/helpers.js';
 
@@ -82,24 +85,7 @@
 		},
 
 		setup(props) {
-			const bundleHasAllProducts0 = computed(() => {
-				return props.cartBundles.some((cart) => {
-					return cart.products.every((product) => product.pivot.quantity === 0);
-				});
-			});
-
-			const cartTotalPrice = computed(() => {
-				const price = props.cartBundles.reduce((curr, acc) => {
-					return curr + acc.price_per_bundle * acc.quantity;
-				}, 0);
-				return calculatePrice(price);
-			});
-
-			const cartTotalBundles = computed(() => {
-				return props.cartBundles.reduce((curr, acc) => {
-					return curr + acc.quantity;
-				}, 0);
-			});
+			const { cartTotalPrice, cartTotalBundles, bundleHasAllProducts0 } = useCartFunctions();
 
 			function goToCheckoutPage() {
 				window.location.href = route('payment.index');
