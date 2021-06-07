@@ -20,7 +20,6 @@ export default function useCountriesData() {
 
 	async function getCountries() {
 		if (!countries.value.length) {
-			console.log('go go');
 			const response = await store.dispatch('options/getCountries');
 			if (response.status === 200) {
 				countries.value = createMultiselectDdlObject(response.data.countries);

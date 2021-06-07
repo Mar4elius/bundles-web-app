@@ -1,11 +1,5 @@
 <template>
 	<div class="flex-col flex-shrink-0 flex items-center">
-		<img
-			class="block h-10 w-auto"
-			src="https://tailwindui.com/img/logos/workflow-mark-indigo-500.svg"
-			alt="Workflow"
-		/>
-		<!-- Add crunber menu -->
 		<div class="w-full flex justify-between items-center">
 			<h6>Contact information</h6>
 			<p>

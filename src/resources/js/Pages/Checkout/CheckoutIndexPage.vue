@@ -4,9 +4,16 @@
 			<div class="flex flex-col-reverse md:flex-row">
 				<!-- left side -->
 				<div class="bg-white rounded-md w-full lg:w-1/2">
-					<div class="flex flex-col md:flex-row justify-center items-center min-h-screen">
+					<div class="pt-4 md:pt-6">
+						<img
+							class="block h-10 w-auto m-auto"
+							src="https://tailwindui.com/img/logos/workflow-mark-indigo-500.svg"
+							alt="Workflow"
+						/>
+					</div>
+					<div class="flex flex-col md:flex-row justify-center items-center">
 						<div class="w-full p-4 md:p-6">
-							<breadcrumb-menu :tabs="tabs" @handleOnClickEvent="(...args) => (activeTab = args)" />
+							<breadcrumb-menu :tabs="tabs" @handleOnClickEvent="setActiveTab" />
 							<keep-alive>
 								<component :is="activeTab"></component>
 							</keep-alive>
@@ -32,8 +39,8 @@
 
 <script>
 	// Vue
-	import { ref, reactive } from '@vue/reactivity';
-	import { computed, onMounted } from '@vue/runtime-core';
+	import { ref } from '@vue/reactivity';
+	import { computed } from '@vue/runtime-core';
 	import { useStore } from 'vuex';
 	// Components
 	import AppLayout from '@/Layouts/AppLayout';
@@ -58,33 +65,44 @@
 		setup() {
 			const store = useStore();
 			let cartBundles = computed(() => store.state.cart.items);
-
-			const activeTab = ref('CheckoutInformation');
+			let activeTab = computed(() => tabs.value.find((t) => t.is_active).component);
 			const tabs = ref([
 				{
 					name: 'Information',
 					component: 'CheckoutInformation',
-					is_active: true
+					is_active: true,
+					is_completed: false
 				},
 				{
 					name: 'Shipping',
 					component: 'CheckoutShipping',
-					is_active: false
+					is_active: false,
+					is_completed: false
 				},
 				{
 					name: 'Payment',
 					component: 'CheckoutPayment',
-					is_active: false
+					is_active: false,
+					is_completed: false
 				}
 			]);
 
 			const { cartTotalPrice } = useCartFunctions();
 
+			function setActiveTab(tab) {
+				tabs.value = tabs.value.map((t) => {
+					t.is_active = false;
+					return t;
+				});
+				tabs.value.find((t) => t.name === tab.name).is_active = true;
+			}
+
 			return {
+				activeTab,
 				cartBundles,
 				cartTotalPrice,
 				tabs,
-				activeTab
+				setActiveTab
 			};
 		}
 	};
