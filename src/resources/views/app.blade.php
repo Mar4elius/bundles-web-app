@@ -5,7 +5,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="csrf-token" content="{{ csrf_token() }}">
         @if(Auth::check())
-            <meta name="user" content="{{ Auth::user() }}">
+            <meta name="user" content="{{ Auth::user()->load('addresses.province') }}">
         @endif
 
         <title>{{ config('app.name', 'Laravel') }}</title>

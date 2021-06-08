@@ -106,6 +106,7 @@
 	import VDropDownList from '@/Components/Forms/VDropDownList';
 	import LoadingAnimation from '@/Components/Support/LoadingAnimation';
 	// Composable functions
+	import useCountriesData from '@/Composables/useCountriesData';
 	import useMultiselectDropDown from '@/Composables/useMultiselectDropDown';
 	import useHasDataChanged from '@/Composables/useHasDataChanged';
 	import useLocalLoadingFlag from '@/Composables/useLocalLoadingFlag';
@@ -126,16 +127,6 @@
 
 		setup(props) {
 			const store = useStore();
-			const countries = ref([]);
-			const provinces = ref([]);
-			let activeCountry = reactive({
-				value: '',
-				label: ''
-			});
-			let activeProvince = reactive({
-				value: '',
-				label: ''
-			});
 			let activeUser = reactive({ ...store.state.users.active });
 			let vuexStoreActiveUser = computed(() => store.state.users.active);
 
@@ -149,6 +140,22 @@
 				phone: string().required().min(16).nullable()
 			});
 
+			const { hasDataChanged, updateInitialData, updateMutableData } = useHasDataChanged(
+				vuexStoreActiveUser.value,
+				activeUser
+			);
+
+			const { loading, setLocalLoadingFlag } = useLocalLoadingFlag();
+
+			const {
+				activeCountry,
+				activeProvince,
+				getCountries,
+				getProvinces,
+				countries,
+				provinces
+			} = useCountriesData();
+
 			const { handleSubmit, setFieldValue, isSubmitting } = useForm({
 				initialValues: {
 					country_id: activeCountry.value,
@@ -156,13 +163,6 @@
 				},
 				validationSchema: schema
 			});
-
-			const { hasDataChanged, updateInitialData, updateMutableData } = useHasDataChanged(
-				vuexStoreActiveUser.value,
-				activeUser
-			);
-
-			const { loading, setLocalLoadingFlag } = useLocalLoadingFlag();
 
 			onMounted(() => {
 				getCountries().then((_) => {
@@ -190,7 +190,6 @@
 				};
 
 				return store.dispatch('address/store', updatedActiveUser).then((response) => {
-					console.log(response);
 					if (!response.errors) {
 						toast.success(response.data.message);
 					} else {
@@ -201,25 +200,6 @@
 			});
 
 			const { createMultiselectDdlObject, setDdlValue } = useMultiselectDropDown();
-			async function getCountries() {
-				if (!countries.value.length) {
-					const response = await store.dispatch('options/getCountries');
-					if (response.status === 200) {
-						countries.value = createMultiselectDdlObject(response.data.countries);
-					}
-				}
-			}
-
-			async function getProvinces() {
-				// reset provinces before getting a new list
-				activeProvince.value = '';
-				if (activeCountry.value) {
-					const response = await store.dispatch('options/getProvinces', activeCountry);
-					if (response.status === 200) {
-						provinces.value = createMultiselectDdlObject(response.data.provinces);
-					}
-				}
-			}
 
 			function setValue(data) {
 				if (data.key === 'country_id') {
