@@ -18,10 +18,24 @@ class CreateOrdersTable extends Migration
             $table->foreignId('user_id')
                 ->references('id')
                 ->on('users');
-            $table->string('order_number', 10);
-            $table->string('transaction_id');
-            $table->integer('total')
+            $table->string('order_number', 10)
+                ->unique();
+            $table->string('transaction_id')
+                ->unique();
+            $table->enum('status', [
+                'pending',
+                'processing',
+                'completed',
+                'decline'
+            ])->default('pending');
+            $table->boolean('payment_status')
+                ->default(1);
+            $table->string('payment_method')
+                ->nullable();
+            $table->integer('subtotal')
                 ->default(0);
+            $table->text('notes')
+                ->nullable();
             $table->timestamps();
         });
     }
