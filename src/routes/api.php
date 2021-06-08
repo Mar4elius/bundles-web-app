@@ -3,6 +3,7 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 // Controllers
+use App\Http\Controllers\Api\AddressController;
 use App\Http\Controllers\Api\BundleController;
 use App\Http\Controllers\Api\CartBundleController;
 use App\Http\Controllers\Api\CartController;
@@ -53,6 +54,8 @@ Route::prefix('v1')->group(function () {
 
     // User
     Route::resource('user', UserController::class);
+    // Address
+    Route::resource('addresses', AddressController::class);
 
     // Options
     Route::prefix('options')->group(function () {

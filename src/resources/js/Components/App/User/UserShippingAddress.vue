@@ -26,7 +26,7 @@
 						placeholder="Address"
 						:value="activeUser.apartment"
 						@update:value="setValue"
-						class="w-full mr-2 md:mr-4 lg:mr-6"
+						class="w-full"
 					/>
 				</div>
 
@@ -40,6 +40,7 @@
 						:options="countries"
 						:loading="countries.length === 0"
 						:required="true"
+						styles="w-full mr-2 md:mr-4 lg:mr-6"
 					/>
 
 					<v-drop-down-list
@@ -50,6 +51,7 @@
 						:options="provinces"
 						:loading="provinces.length === 0 && activeUser.province_id"
 						:disabled="activeCountry && !activeCountry.value"
+						styles="w-full"
 					/>
 				</div>
 
@@ -61,7 +63,7 @@
 						placeholder="City"
 						:value="activeUser.city"
 						@update:value="setValue"
-						class="w-full lg:mr-6"
+						class="w-full mr-2 md:mr-4 lg:mr-6"
 					/>
 					<v-text-input
 						name="postal_code"
@@ -70,7 +72,7 @@
 						placeholder="Postal Code"
 						:value="activeUser.postal_code"
 						@update:value="setValue"
-						class="w-full lg:mr-6"
+						class="w-full"
 						maska="A#A-#A#"
 					/>
 				</div>
@@ -81,7 +83,7 @@
 					placeholder="Phone Number"
 					:value="activeUser.phone"
 					@update:value="setValue"
-					class="w-full md:w-1/2 lg:mr-6"
+					class="w-full mr-2 md:mr-4 lg:mr-6"
 					maska="+1(###)-###-####"
 				/>
 				<div class="flex justify-end items-center">
@@ -187,20 +189,8 @@
 					...values
 				};
 
-				const formData = new FormData();
-
-				Object.keys(updatedActiveUser).forEach((key) => {
-					formData.append(key, updatedActiveUser[key]);
-				});
-
-				const data = {
-					activeUser: updatedActiveUser,
-					formData: formData
-				};
-
-				formData.append('_method', 'PUT');
-				// need to return a Promise so vee validate form works
-				return store.dispatch('users/update', data).then((response) => {
+				return store.dispatch('address/store', updatedActiveUser).then((response) => {
+					console.log(response);
 					if (!response.errors) {
 						toast.success(response.data.message);
 					} else {

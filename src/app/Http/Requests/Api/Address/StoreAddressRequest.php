@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Requests\Api\User;
+namespace App\Http\Requests\Api\Address;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class UpdateUserProfileRequest extends FormRequest
+class StoreAddressRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,11 +24,11 @@ class UpdateUserProfileRequest extends FormRequest
     public function rules()
     {
         return [
-            'first_name' => 'required_if:is_user_profile_update,true|string',
-            'last_name' => 'required_if:is_user_profile_update,true|string',
-            'email' => 'required_if:is_user_profile_update,true|email|unique:users,email,' . $this->request->get(
-                'id'
-            )
+            'address' => 'required|string',
+            'province_id' => 'required|numeric',
+            'city' => 'required|string',
+            'postal_code' => 'required|string|min:7',
+            'phone' => 'required|string|min:16'
         ];
     }
 }

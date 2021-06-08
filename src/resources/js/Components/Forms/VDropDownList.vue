@@ -1,6 +1,6 @@
 <template>
 	<!-- https://github.com/vueform/multiselect -->
-	<div class="relative w-full lg:w-1/2 mb-6" :class="classes">
+	<div class="relative w-full lg:w-1/2 mb-6" :class="styles">
 		<label class="block mb-2 md:mb-3 w-full text-md font-medium text-gray-700" :for="name">{{ label }}</label>
 		<!-- using long version of v-model. This way we can change @input event handler -->
 		<!-- handleChange will emit event to parent where the prop value will be update -->
@@ -71,7 +71,7 @@
 				default: false
 			},
 
-			classes: {
+			styles: {
 				type: String,
 				default: ''
 			}

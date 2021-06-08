@@ -8,7 +8,6 @@ use App\Http\Controllers\Controller;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 // Models
 use App\Models\User;
-use App\Models\Province;
 // Storage
 use Illuminate\Support\Facades\Storage;
 // Requests
@@ -64,28 +63,6 @@ class UserController extends Controller
             $user->first_name = $data['first_name'];
             $user->last_name = $data['last_name'];
 
-            // because request is coming as form-data object it sees null as string
-            $user->address = $data['address'] === 'null' ? null : $data['address'];
-            $user->apartment = $data['apartment'] === 'null' ? null : $data['apartment'];
-            $user->city = $data['city'] === 'null' ? null : $data['city'];
-            if (isset($data['province_id'])) {
-                $province = Province::find($data['province_id']);
-                $user->province()->associate($province);
-            }
-            $user->postal_code = $data['postal_code'] === 'null' ? null : $data['postal_code'];
-            $user->phone = $data['phone'] === 'null' ? null : $data['phone'];
-
-            if ($request->hasFile('image')) {
-                if (Storage::disk('public')->exists($user->profile_photo_path)) {
-                    Storage::disk('public')->delete($user->profile_photo_path);
-                }
-
-                $path = $request->file('image')->store('avatars', [
-                    'disk' => 'public'
-                ]);
-                $user->profile_photo_path = $path;
-            }
-
             // If user update current email we have to send verification email
             $is_email_changed = $data['email'] !== $user->email && $user instanceof MustVerifyEmail;
             if ($is_email_changed) {
@@ -100,8 +77,20 @@ class UserController extends Controller
             } else {
                 $user->email = $data['email'];
             }
+            // Avatar
+            if ($request->hasFile('image')) {
+                if (Storage::disk('public')->exists($user->profile_photo_path)) {
+                    Storage::disk('public')->delete($user->profile_photo_path);
+                }
+
+                $path = $request->file('image')->store('avatars', [
+                    'disk' => 'public'
+                ]);
+                $user->profile_photo_path = $path;
+            }
 
             $user->save();
+
             // can not redirect user to verification page because I don't reload a page. Just updating data on the page
             // https://laracasts.com/discuss/channels/vue/redirect-after-ajax-post-request
             return response()->json([

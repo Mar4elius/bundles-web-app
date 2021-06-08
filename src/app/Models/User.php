@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 // Models
-use App\Models\Province;
+use App\Models\Address;
 
 class User extends Authenticatable implements MustVerifyEmail
 {
@@ -44,12 +44,14 @@ class User extends Authenticatable implements MustVerifyEmail
         'email_verified_at' => 'datetime',
     ];
 
+
+
     /**
-     * Get user province
+     * Get user addresses
      */
-    public function province()
+    public function addresses()
     {
-        return $this->belongsTo(Province::class);
+        return $this->hasMany(Address::class);
     }
 
     /**

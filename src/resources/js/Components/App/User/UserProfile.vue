@@ -113,8 +113,7 @@
 				// update use profile fiels that have been changed
 				let updatedActiveUser = {
 					...activeUser,
-					...values,
-					is_user_profile_update: true
+					...values
 				};
 
 				// https://dev.to/diogoko/file-upload-using-laravel-and-vue-js-the-right-way-1775
