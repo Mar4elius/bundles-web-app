@@ -34,9 +34,6 @@ class CreateAddressesTable extends Migration
                 ->nullable()
                 ->references('id')
                 ->on('provinces');
-            $table->boolean('is_billing')
-                ->default(false);
-            $table->boolean('is_active');
             $table->timestamps();
         });
     }

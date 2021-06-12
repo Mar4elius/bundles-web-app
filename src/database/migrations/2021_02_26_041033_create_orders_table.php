@@ -22,6 +22,12 @@ class CreateOrdersTable extends Migration
                 ->unique();
             $table->string('transaction_id')
                 ->unique();
+            $table->foreignId('shipping_address_id')
+                ->references('id')
+                ->on('address_user');
+            $table->foreignId('billing_address_id')
+                ->references('id')
+                ->on('address_user');
             $table->enum('status', [
                 'pending',
                 'processing',

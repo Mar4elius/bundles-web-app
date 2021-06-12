@@ -5,6 +5,7 @@
 		</label>
 		<input
 			type="checkbox"
+			:name="name"
 			:value="value"
 			v-model="checked"
 			class="rounded border-gray-300 text-indigo-600 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
@@ -15,6 +16,8 @@
 <script>
 	import { computed } from '@vue/runtime-core';
 	export default {
+		emits: ['update:checked'],
+
 		props: {
 			isChecked: {
 				type: Boolean,
@@ -29,6 +32,11 @@
 			label: {
 				type: String,
 				required: false
+			},
+
+			name: {
+				type: String,
+				required: true
 			}
 		},
 
@@ -39,7 +47,11 @@
 				},
 
 				set(val) {
-					emit('update:checked', val);
+					console.log('emit');
+					emit('update:checked', {
+						key: props.name,
+						value: val
+					});
 				}
 			});
 

@@ -17,7 +17,7 @@ const AddressApi = {
 	 *
 	 * @return JSON response
 	 */
-	update: (payload, { id }) => axios.patch(`api/v1/addresses/${id}`, payload),
+	update: ({ id, ...payload }) => axios.patch(`api/v1/addresses/${id}`, payload),
 
 	/**
 	 * Delete address
@@ -26,7 +26,7 @@ const AddressApi = {
 	 *
 	 * @return JSON response
 	 */
-	destroy: (payload, { id }) => axios.delete(`api/v1/addresses/${id}`)
+	destroy: ({ id, ...payload }) => axios.delete(`api/v1/addresses/${id}`)
 };
 
 export default AddressApi;
