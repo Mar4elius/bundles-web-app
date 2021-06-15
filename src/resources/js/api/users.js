@@ -25,6 +25,15 @@ const usersApi = {
 	update: (payload) => axios.post(`/api/v1/user/${payload.activeUser.id}`, payload.formData),
 
 	/**
+	 * Update user personal data
+	 *
+	 * @param {Object} payload
+	 *
+	 * @returns
+	 */
+	show: ({ id }) => axios.get(`/api/v1/user/${id}`),
+
+	/**
 	 * Update user password
 	 *
 	 * @param {Object} payload

@@ -40,12 +40,16 @@ class UserController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param  \App\Models\User  $user
+     *
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(User $user)
     {
-        //
+        return response()->json([
+            'user' => User::whereId($user->id)->with('addresses.province')
+                ->first()
+        ]);
     }
 
     /**
@@ -53,6 +57,7 @@ class UserController extends Controller
      *
      * @param  \App\Http\Requests\Api\User\UpdateUserProfileRequest  $request
      * @param  \App\Models\User $user
+     *
      * @return \Illuminate\Http\Response
      */
     public function update(UpdateUserProfileRequest $request, User $user)

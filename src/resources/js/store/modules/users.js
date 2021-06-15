@@ -65,6 +65,26 @@ const actions = {
 			}
 			return error.response.data;
 		}
+	},
+
+	/**
+	 * Get users data
+	 *
+	 * @param {Object} user
+	 *
+	 * @return JSON Response
+	 */
+	async show({ commit }, user) {
+		try {
+			const response = await usersApi.show(user);
+			commit('updateActiveUser', response.data.user);
+			return response;
+		} catch (error) {
+			if (process.env.NODE_ENV !== 'production') {
+				console.error(error);
+			}
+			return error.response.data;
+		}
 	}
 };
 
