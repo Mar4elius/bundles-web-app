@@ -160,7 +160,7 @@
 
 		setup(props) {
 			const store = useStore();
-			let activeUser = reactive({ ...store.state.users.active });
+			let activeUser = computed(() => store.state.users.active);
 
 			let activeAddress = reactive({
 				...props.activeAddress
@@ -227,7 +227,7 @@
 			const onSubmit = handleSubmit(async (values) => {
 				setLocalLoadingFlag(true);
 				const data = {
-					user_id: activeUser.id,
+					user_id: activeUser.value.id,
 					is_billing: props.type === 'shipping' ? false : true,
 					is_billing_and_shipping_same: isBillingSameAsShipping.value,
 					...values,
@@ -243,6 +243,8 @@
 				}
 
 				if (!response.errors) {
+					// get updated user info
+					await store.dispatch('users/show', activeUser.value);
 					toast.success(response.data.message);
 				} else {
 					toast.danger(response.data);

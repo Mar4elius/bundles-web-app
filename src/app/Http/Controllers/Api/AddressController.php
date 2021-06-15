@@ -59,7 +59,6 @@ class AddressController extends Controller
 
             return response()->json([
                 'message' => 'Address has been saved.'
-                //FIXME: return updated addresses
             ]);
         } catch (Exception $e) {
             if (config('app.env') !== 'production') {
@@ -94,60 +93,66 @@ class AddressController extends Controller
      */
     public function update(Request $request, Address $address)
     {
-        $data = $request->all();
-        $user = User::find(11);
+        try {
+            $data = $request->all();
+            $user = User::find(11);
 
-        // if billing and shipping are the same - update the main address
-        if ($data['is_billing_and_shipping_same'] && !$data['is_billing']) {
-            $address->storeAddress($data);
-
-            // find billing address and delete it because now they are the same
-            $billing_address = $user->addresses()
-                ->wherePivot('is_billing', true)
-                ->wherePivot('is_active', true)
-                ->first();
-
-            if ($billing_address) {
-                //Find old billing address, because now they are the same and delete it.
-                $user->addresses()->detach($billing_address->id);
-                // Delete address from the address table
-                Address::whereId($billing_address->id)->delete();
-            }
-
-            $user->addresses()->attach([$address->id => [
-                'is_active' => true,
-                'is_billing' => true,
-                'is_shipping' => false
-            ]]);
-        } else {
-            // addresses are different
-            // update shipping address
-            if (!$data['is_billing']) {
+            // if billing and shipping are the same - update the main address
+            if ($data['is_billing_and_shipping_same'] && !$data['is_billing']) {
                 $address->storeAddress($data);
-            } else if ($data['is_billing']) {
-                // update billing address
-                // find all active addresses for this user
-                $addresses = $user->addresses()
-                    ->wherePivot('is_active', true)
-                    ->get();
-                // check if they used to use the same address
-                $used_to_be_same = $addresses->every(function ($value) use ($address) {
-                    return $value->pivot->address_id === $address->id;
-                });
 
-                if ($used_to_be_same) {
-                    // create new address in Addresses table
-                    $new_address = new Address();
-                    $new_address->storeAddress($data);
-                    // update pivot billing address and connect it to new address
-                    $user->addresses()->wherePivot('is_billing', true)->updateExistingPivot($address->id, [
-                        'address_id' => $new_address->id,
-                        'is_active' => true,
-                        'is_billing' => true,
-                        'is_shipping' => false
-                    ]);
+                // find billing address and delete it because now they are the same
+                $billing_address = $user->addresses()
+                    ->wherePivot('is_billing', true)
+                    ->wherePivot('is_active', true)
+                    ->first();
+
+                if ($billing_address) {
+                    //Find old billing address, because now they are the same and delete it.
+                    $user->addresses()->detach($billing_address->id);
+                    // Delete address from the address table
+                    Address::whereId($billing_address->id)->delete();
+                }
+
+                $user->addresses()->attach([$address->id => [
+                    'is_active' => true,
+                    'is_billing' => true,
+                    'is_shipping' => false
+                ]]);
+            } else {
+                // addresses are different
+                // update shipping address
+                if (!$data['is_billing']) {
+                    $address->storeAddress($data);
+                } else if ($data['is_billing']) {
+                    // update billing address
+                    // find all active addresses for this user
+                    $addresses = $user->addresses()
+                        ->wherePivot('is_active', true)
+                        ->get();
+                    // check if they used to use the same address
+                    $used_to_be_same = $addresses->every(function ($value) use ($address) {
+                        return $value->pivot->address_id === $address->id;
+                    });
+
+                    if ($used_to_be_same) {
+                        // create new address in Addresses table
+                        $new_address = new Address();
+                        $new_address->storeAddress($data);
+                        // update pivot billing address and connect it to new address
+                        $user->addresses()->wherePivot('is_billing', true)->updateExistingPivot($address->id, [
+                            'address_id' => $new_address->id,
+                            'is_active' => true,
+                            'is_billing' => true,
+                            'is_shipping' => false
+                        ]);
+                    }
                 }
             }
+            return response()->json([
+                'message' => 'Address has been updated.'
+            ]);
+        } catch (Exception $e) {
         }
     }
 
