@@ -101,10 +101,9 @@
 				</div>
 				<div class="flex justify-end items-center">
 					<loading-animation classes="w-6 h-6 mr-2 md:mr-4" v-if="loading" />
-					<!-- <v-button-filled id="update-shipping-address" :is-disabled="isSubmitting || !hasDataChanged"
+					<v-button-filled id="update-shipping-address" :is-disabled="isSubmitting || !hasDataChanged"
 						>Save</v-button-filled
-					> -->
-					<v-button-filled id="update-shipping-address">Save</v-button-filled>
+					>
 				</div>
 			</form>
 		</div>
@@ -286,11 +285,9 @@
 			watch(
 				() => ({ ...props.address }),
 				(newValue, oldValue) => {
-					console.log('watch', newValue);
-					// updateInitialData(newValue);
+					updateInitialData(newValue);
 					activeAddress.data = { ...newValue };
-					console.log('activeAddress', activeAddress.data);
-					// updateMutableData(activeAddress);
+					updateMutableData(activeAddress.data);
 				},
 
 				{ deep: true }
