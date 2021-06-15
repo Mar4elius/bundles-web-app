@@ -47,7 +47,6 @@
 				},
 
 				set(val) {
-					console.log('emit');
 					emit('update:checked', {
 						key: props.name,
 						value: val

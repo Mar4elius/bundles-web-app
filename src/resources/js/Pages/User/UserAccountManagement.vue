@@ -3,15 +3,14 @@
 		<template v-slot:main>
 			<user-profile />
 			<user-update-password />
-			<template v-for="address in addresses">
+			<div v-for="address in addresses" :key="address.id">
 				<user-address
-					v-show="address.is_show"
-					:key="address.id"
+					v-if="address.is_show"
 					:title="address.title"
-					:active-address="address.address"
+					:address="address.address"
 					:type="address.type"
 				/>
-			</template>
+			</div>
 		</template>
 	</app-layout>
 </template>
@@ -38,45 +37,52 @@
 		setup() {
 			onMounted(() => {
 				const isAddressesSame =
-					activeShippingAddress.pivot?.address_id === activeBillingAddress.pivot?.address_id;
+					activeShippingAddress.value.pivot?.address_id === activeBillingAddress.value.pivot?.address_id;
 				store.commit('address/setBillingAddressSameAsShipping', isAddressesSame);
 			});
 			const store = useStore();
-			let activeUser = reactive({ ...store.state.users.active });
-			const activeShippingAddress = reactive({
-				...activeUser.addresses.find((a) => a.pivot.is_active && a.pivot.is_shipping)
-			});
-			const activeBillingAddress = reactive({
-				...activeUser.addresses.find((a) => a.pivot.is_active && a.pivot.is_billing)
+			let activeUser = computed(() => store.state.users.active);
+
+			let activeShippingAddress = computed(() => {
+				return activeUser.value.addresses.find((a) => a.pivot.is_active && a.pivot.is_shipping) || null;
 			});
 
-			const isBillingSameAsShipping = computed(() => store.state.address.isBillingSameAsShipping);
+			let activeBillingAddress = computed(() => {
+				return activeUser.value.addresses.find((a) => a.pivot.is_active && a.pivot.is_billing) || null;
+			});
 
-			const addresses = computed(() => [
-				{
-					id: 1,
-					type: 'shipping',
-					title: {
-						name: 'Shipping Address',
-						description: 'Update your shipping information.'
+			let isBillingSameAsShipping = computed(() => store.state.address.isBillingSameAsShipping);
+
+			let addresses = computed(() => {
+				return [
+					{
+						id: 1,
+						type: 'shipping',
+						title: {
+							name: 'Shipping Address',
+							description: 'Update your shipping information.'
+						},
+						address: activeShippingAddress.value,
+						is_show: true
 					},
-					address: activeShippingAddress,
-					is_show: true
-				},
-				{
-					id: 2,
-					type: 'billing',
-					title: {
-						name: 'Billing Address',
-						description: 'Update your billing information.'
-					},
-					address: activeBillingAddress,
-					is_show: !isBillingSameAsShipping.value // don't show billing address form is addresses are the same
-				}
-			]);
+					{
+						id: 2,
+						type: 'billing',
+						title: {
+							name: 'Billing Address',
+							description: 'Update your billing information.'
+						},
+						address: activeBillingAddress.value,
+						is_show: !isBillingSameAsShipping.value // don't show billing address form is addresses are the same
+					}
+				];
+			});
 
 			return {
 				addresses,
+				activeUser,
+				activeShippingAddress,
+				activeBillingAddress,
 				isBillingSameAsShipping
 			};
 		}

@@ -14,7 +14,7 @@
 						type="text"
 						label="Address"
 						placeholder="Address"
-						:value="activeAddress.address"
+						:value="activeAddress.data.address"
 						@update:value="setValue"
 						class="w-full mr-2 md:mr-4 lg:mr-6"
 					/>
@@ -24,7 +24,7 @@
 						type="text"
 						label="Aparetents, Suit, etc. (optional)"
 						placeholder="Address"
-						:value="activeAddress.apartment"
+						:value="activeAddress.data.apartment"
 						@update:value="setValue"
 						class="w-full"
 					/>
@@ -49,7 +49,7 @@
 						:value="activeProvince.value"
 						@update:value="setValue"
 						:options="provinces"
-						:loading="provinces.length === 0 && activeAddress.province_id"
+						:loading="provinces.length === 0 && activeAddress.data.province_id"
 						:disabled="activeCountry && !activeCountry.value"
 						styles="w-full"
 					/>
@@ -61,7 +61,7 @@
 						type="text"
 						label="City"
 						placeholder="City"
-						:value="activeAddress.city"
+						:value="activeAddress.data.city"
 						@update:value="setValue"
 						class="w-full mr-2 md:mr-4 lg:mr-6"
 					/>
@@ -70,7 +70,7 @@
 						type="text"
 						label="Postal Code"
 						placeholder="Postal Code"
-						:value="activeAddress.postal_code"
+						:value="activeAddress.data.postal_code"
 						@update:value="setValue"
 						class="w-full"
 						maska="A#A-#A#"
@@ -82,7 +82,7 @@
 						type="text"
 						label="Phone Number"
 						placeholder="Phone Number"
-						:value="activeAddress.phone"
+						:value="activeAddress.data.phone"
 						@update:value="setValue"
 						class="w-full mr-2 md:mr-4 lg:mr-6"
 						maska="+1(###)-###-####"
@@ -142,7 +142,7 @@
 		},
 
 		props: {
-			activeAddress: {
+			address: {
 				type: Object,
 				required: true
 			},
@@ -163,7 +163,7 @@
 			let activeUser = computed(() => store.state.users.active);
 
 			let activeAddress = reactive({
-				...props.activeAddress
+				data: { ...props.address }
 			});
 
 			const toast = useToast();
@@ -178,13 +178,9 @@
 			});
 			const isBillingSameAsShipping = computed(() => store.state.address.isBillingSameAsShipping);
 
-			// const { hasDataChanged, updateInitialData, updateMutableData } = useHasDataChanged(
-			// 	vuexStoreActiveUser.value,
-			// 	activeUser
-			// );
 			const { hasDataChanged, updateInitialData, updateMutableData } = useHasDataChanged(
-				props.activeAddress,
-				activeAddress
+				props.address,
+				activeAddress.data
 			);
 
 			const { loading, setLocalLoadingFlag } = useLocalLoadingFlag();
@@ -208,15 +204,15 @@
 
 			onMounted(() => {
 				getCountries().then((_) => {
-					const country = countries?.value.find((c) => c.value === activeAddress?.province?.country_id);
+					const country = countries?.value.find((c) => c.value === activeAddress.data?.province?.country_id);
 					if (country?.value) {
 						activeCountry.value = country.value;
 						setFieldValue('country_id', activeCountry.value);
 					}
 					getProvinces().then((_) => {
-						if (activeAddress.province_id) {
+						if (activeAddress.data.province_id) {
 							activeProvince.value = provinces.value.find(
-								(c) => c.value === activeAddress.province_id
+								(c) => c.value === activeAddress.data.province_id
 							).value;
 							setFieldValue('province_id', activeProvince.value);
 						}
@@ -231,11 +227,11 @@
 					is_billing: props.type === 'shipping' ? false : true,
 					is_billing_and_shipping_same: isBillingSameAsShipping.value,
 					...values,
-					...activeAddress
+					...activeAddress.data
 				};
 				// update address
 				let response = null;
-				if (activeAddress?.id) {
+				if (activeAddress.data?.id) {
 					response = await store.dispatch('address/update', data);
 				} else {
 					// create new address
@@ -255,7 +251,6 @@
 			const { createMultiselectDdlObject, setDdlValue } = useMultiselectDropDown();
 
 			function setValue(data) {
-				console.log(data);
 				if (data.key === 'country_id') {
 					// if country ddl is empty we have to reset value of province ddl
 					if (data.value === '') {
@@ -265,13 +260,13 @@
 					activeCountry.value = data.value;
 				} else if (data.key === 'province_id') {
 					activeProvince.value = data.value;
-					activeAddress[data.key] = data.value;
+					activeAddress.data[data.key] = data.value;
 					// update mutable data
-					updateMutableData(activeAddress);
+					updateMutableData(activeAddress.data);
 				} else {
-					activeAddress[data.key] = data.value;
+					activeAddress.data[data.key] = data.value;
 					// update mutable data
-					updateMutableData(activeAddress);
+					updateMutableData(activeAddress.data);
 				}
 				// sets vee-validate field so the validation works
 				setFieldValue(data.key, data.value);
@@ -288,11 +283,18 @@
 			// When data is changes in one of the components, it will update the vuex
 			// state. With watcher we making sure that activeUser will have the same
 			// data in both components
-			watch(props.activeAddress, (newValue, oldValue) => {
-				updateInitialData(newValue);
-				activeAddress = { ...newValue };
-				updateMutableData(activeAddress);
-			});
+			watch(
+				() => ({ ...props.address }),
+				(newValue, oldValue) => {
+					console.log('watch', newValue);
+					// updateInitialData(newValue);
+					activeAddress.data = { ...newValue };
+					console.log('activeAddress', activeAddress.data);
+					// updateMutableData(activeAddress);
+				},
+
+				{ deep: true }
+			);
 
 			return {
 				activeAddress,

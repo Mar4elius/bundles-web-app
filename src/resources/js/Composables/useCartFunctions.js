@@ -49,8 +49,6 @@ export default function useCartFunctions() {
 
 	// bundle product qnt change
 	async function incrementProductCount(bundle, { id }) {
-		console.log(id);
-		console.log(bundle);
 		const data = {
 			cart_bundle_id: bundle.id,
 			cart_bundle_product_id: id,
