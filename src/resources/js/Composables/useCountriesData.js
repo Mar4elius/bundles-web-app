@@ -38,12 +38,22 @@ export default function useCountriesData() {
 		}
 	}
 
+	function setCountry(value) {
+		activeCountry.value = value;
+	}
+
+	function setProvince(value) {
+		activeProvince.value = value;
+	}
+
 	return {
 		activeCountry,
 		activeProvince,
 		countries,
 		getCountries,
 		getProvinces,
-		provinces
+		provinces,
+		setCountry,
+		setProvince
 	};
 }

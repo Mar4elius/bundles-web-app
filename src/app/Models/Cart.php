@@ -38,7 +38,7 @@ class Cart extends Model
      *
      * @var array
      */
-    protected $touches = ['cart'];
+    // protected $touches = ['cart'];
 
     /**
      * Get cart bundles

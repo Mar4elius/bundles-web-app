@@ -77,6 +77,7 @@ const actions = {
 		commit('setActiveCart', cartResponse.data.cart);
 		if (cartResponse.status === 200) {
 			// update cart_id value
+			console.log(cartResponse);
 			bundle.cart_id = cartResponse.data.cart.id;
 			const cartBundleResponse = await cartsApi.storeCartBundle(bundle);
 			// update store with newly created data

@@ -2,7 +2,7 @@
 	<div class="flex-col flex-shrink-0 flex items-center">
 		<div class="w-full flex justify-between items-center">
 			<h6>Contact information</h6>
-			<p>
+			<p v-if="!activeUser.user.id">
 				Already have an account?
 				<inertia-link href="/login" class="font-bold text-indigo-600 hover:text-indigo-500">
 					Log in
@@ -15,19 +15,18 @@
 				type="email"
 				label="Email"
 				placeholder="Your email address"
-				:value="activeUser.email"
+				:value="activeUser.user.email"
 				@update:value="setValue"
 				class="w-full"
 				:is-disabled="isSubmitting"
 			/>
-
 			<h6>Shipping address</h6>
 			<div class="lg:flex">
 				<v-text-input
 					name="first_name"
 					type="text"
 					label="First Name"
-					:value="activeUser.first_name"
+					:value="activeUser.user.first_name"
 					@update:value="setValue"
 					class="w-full lg:w-1/2 mr-2 md:mr-4 lg:mr-6"
 					:is-disabled="isSubmitting"
@@ -37,7 +36,7 @@
 					name="last_name"
 					type="text"
 					label="Last Name"
-					:value="activeUser.last_name"
+					:value="activeUser.user.last_name"
 					@update:value="setValue"
 					class="w-full lg:w-1/2"
 					:is-disabled="isSubmitting"
@@ -49,7 +48,7 @@
 					name="address"
 					type="text"
 					label="Address"
-					:value="activeUser.address"
+					:value="activeUser.address.address"
 					@update:value="setValue"
 					class="w-full lg:w-1/2 mr-2 md:mr-4 lg:mr-6"
 				/>
@@ -58,7 +57,7 @@
 					name="apartment"
 					type="text"
 					label="Apartments, Suit, etc. (optional)"
-					:value="activeUser.apartment"
+					:value="activeUser.address.apartment"
 					@update:value="setValue"
 					class="w-full lg:w-1/2"
 				/>
@@ -70,7 +69,7 @@
 					type="text"
 					label="City"
 					placeholder="City"
-					:value="activeUser.city"
+					:value="activeUser.address.city"
 					@update:value="setValue"
 					class="w-full lg:w-1/2 mr-2 md:mr-4 lg:mr-6"
 				/>
@@ -78,7 +77,7 @@
 					name="postal_code"
 					type="text"
 					label="Postal Code"
-					:value="activeUser.postal_code"
+					:value="activeUser.address.postal_code"
 					@update:value="setValue"
 					class="w-full lg:w-1/2"
 					maska="A#A-#A#"
@@ -94,7 +93,7 @@
 					:options="countries"
 					:loading="countries.length === 0"
 					:required="true"
-					:classes="`mr-2 md:mr-4 lg:mr-6`"
+					styles="w-full mr-2 md:mr-4 lg:mr-6"
 				/>
 
 				<v-drop-down-list
@@ -103,8 +102,9 @@
 					:value="activeProvince.value"
 					@update:value="setValue"
 					:options="provinces"
-					:loading="provinces.length === 0 && activeUser.province_id"
+					:loading="provinces.length === 0 && activeUser.address.province_id"
 					:disabled="activeCountry && !activeCountry.value"
+					styles="w-full"
 				/>
 			</div>
 			<div class="w-full">
@@ -112,7 +112,7 @@
 					name="phone"
 					type="text"
 					label="Phone Number"
-					:value="activeUser.phone"
+					:value="activeUser.address.phone"
 					@update:value="setValue"
 					class="w-full lg:w-1/2 mr-2 md:mr-4 lg:mr-6"
 					maska="+1(###)-###-####"
@@ -130,8 +130,8 @@
 <script>
 	// Vue
 	import { useStore } from 'vuex';
-	import { reactive } from '@vue/reactivity';
-	import { onMounted } from '@vue/runtime-core';
+	import { reactive, toRefs } from '@vue/reactivity';
+	import { computed, onMounted } from '@vue/runtime-core';
 	// Components
 	import VButtonFilled from '@/Components/Forms/VButtonFilled';
 	import VDropDownList from '@/Components/Forms/VDropDownList';
@@ -152,20 +152,24 @@
 		setup() {
 			const store = useStore();
 			// both logged in or not logged in
-			const activeUser = reactive({
-				first_name: null,
-				last_name: null,
-				address: null,
-				appartment: null,
-				city: null,
-				postal_code: null,
-				email: null,
-				phone: null,
-				country_id: 1,
-				province_id: null
+			let activeUser = reactive({
+				user: { ...store.state.users.active },
+				address: {
+					...(store.state.users.active?.addresses.find((a) => a.pivot.is_active && a.pivot.is_shipping) || {
+						address: null,
+						country_id: null,
+						province_id: null,
+						city: null,
+						postal_code: null,
+						phone: null
+					})
+				}
 			});
 
 			const schema = object().shape({
+				email: string().required().email().nullable(),
+				first_name: string().required().nullable(),
+				last_name: string().required().nullable(),
 				address: string().required().nullable(),
 				country_id: string().required().nullable(),
 				province_id: string().required().nullable(),
@@ -180,8 +184,29 @@
 				getCountries,
 				getProvinces,
 				countries,
-				provinces
+				provinces,
+				setCountry,
+				setProvince
 			} = useCountriesData();
+
+			onMounted(() => {
+				getCountries().then((_) => {
+					const country = countries?.value.find((c) => c.value === activeUser.address?.province?.country_id);
+					console.log('country', activeCountry);
+					console.log('province', activeProvince);
+					if (country?.value) {
+						setCountry(country.value);
+						setFieldValue('country_id', activeCountry.value);
+					}
+					getProvinces().then((_) => {
+						if (activeUser.address.province_id) {
+							const province = provinces.value.find((c) => c.value === activeUser.address.province_id);
+							setProvince(province.value);
+							setFieldValue('province_id', activeProvince.value);
+						}
+					});
+				});
+			});
 
 			const { handleSubmit, setFieldValue, isSubmitting } = useForm({
 				initialValues: {
@@ -191,26 +216,26 @@
 				validationSchema: schema
 			});
 
-			onMounted(() => {
-				getCountries().then((_) => {
-					const country = countries?.value.find((c) => c.value === activeUser?.province?.country?.id);
-					if (country?.value) {
-						activeCountry.value = country.value;
-						setFieldValue('country_id', activeCountry.value);
-					}
-					getProvinces().then((_) => {
-						if (activeUser.province_id) {
-							activeProvince.value = provinces.value.find(
-								(c) => c.value === activeUser.province_id
-							).value;
-							setFieldValue('province_id', activeProvince.value);
-						}
-					});
-				});
-			});
-
 			function setValue(data) {
-				console.log(data);
+				// if (data.key === 'country_id') {
+				// 	// if country ddl is empty we have to reset value of province ddl
+				// 	if (data.value === '') {
+				// 		activeProvince.value = '';
+				// 		setFieldValue('province_id', data.value);
+				// 	}
+				// 	activeCountry.value = data.value;
+				// } else if (data.key === 'province_id') {
+				// 	activeProvince.value = data.value;
+				// 	activeUser.data[data.key] = data.value;
+				// 	// update mutable data
+				// 	// updateMutableData(activeUser.data);
+				// } else {
+				// 	activeUser.data[data.key] = data.value;
+				// 	// update mutable data
+				// 	// updateMutableData(activeUser.data);
+				// }
+				// // sets vee-validate field so the validation works
+				// setFieldValue(data.key, data.value);
 			}
 
 			return {
