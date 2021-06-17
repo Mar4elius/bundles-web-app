@@ -4,9 +4,9 @@
 			<span
 				class="flex hover:text-indigo-600 cursor-pointer"
 				:class="{
-					'text-emerald-600': tab.is_completed,
-					'text-indigo-600 font-bold': tab.is_active,
-					'text-gray-600 pointer-events-none': !tab.is_active
+					'text-green-600 font-bold': tab.is_completed,
+					'text-indigo-600 font-bold text-ra': tab.is_active,
+					'text-gray-600 pointer-events-none': !tab.is_active && !tab.is_completed
 				}"
 				@click="handleOnClickEvent(tab)"
 			>
