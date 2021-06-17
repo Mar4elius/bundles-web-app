@@ -15,7 +15,11 @@
 						<div class="w-full p-4 md:p-6">
 							<breadcrumb-menu :tabs="tabs" @handleOnClickEvent="setActiveTab" />
 							<keep-alive>
-								<component :is="activeTab"></component>
+								<component
+									:is="activeTab.component"
+									@completeTab="completeTab"
+									:active-tab="activeTab"
+								></component>
 							</keep-alive>
 						</div>
 					</div>
@@ -65,21 +69,24 @@
 		setup() {
 			const store = useStore();
 			let cartBundles = computed(() => store.state.cart.items);
-			let activeTab = computed(() => tabs.value.find((t) => t.is_active).component);
+			let activeTab = computed(() => tabs.value.find((t) => t.is_active));
 			const tabs = ref([
 				{
+					id: 1,
 					name: 'Information',
 					component: 'CheckoutInformation',
 					is_active: true,
 					is_completed: false
 				},
 				{
+					id: 2,
 					name: 'Shipping',
 					component: 'CheckoutShipping',
 					is_active: false,
 					is_completed: false
 				},
 				{
+					id: 3,
 					name: 'Payment',
 					component: 'CheckoutPayment',
 					is_active: false,
@@ -97,10 +104,22 @@
 				tabs.value.find((t) => t.name === tab.name).is_active = true;
 			}
 
+			function completeTab(tab) {
+				const activeTabIndex = tabs.value.findIndex((t) => t.name === tab.name);
+				tabs.value[activeTabIndex].is_active = false;
+				tabs.value[activeTabIndex].is_completed = true;
+
+				// find next tab
+				if (tab.id <= tabs.value.length) {
+					tabs.value.find((t) => t.id === tab.id + 1).is_active = true;
+				}
+			}
+
 			return {
 				activeTab,
 				cartBundles,
 				cartTotalPrice,
+				completeTab,
 				tabs,
 				setActiveTab
 			};

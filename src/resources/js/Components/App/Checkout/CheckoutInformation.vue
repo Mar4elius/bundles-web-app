@@ -9,7 +9,7 @@
 				</inertia-link>
 			</p>
 		</div>
-		<form class="w-full">
+		<form class="w-full" @submit="onSubmit" :validation-schema="schema">
 			<v-text-input
 				name="email"
 				type="email"
@@ -149,7 +149,14 @@
 			VTextInput
 		},
 
-		setup() {
+		props: {
+			activeTab: {
+				type: Object,
+				required: true
+			}
+		},
+
+		setup(props, { emit }) {
 			const store = useStore();
 			// both logged in or not logged in
 			let activeUser = reactive({
@@ -217,26 +224,30 @@
 			});
 
 			function setValue(data) {
-				// if (data.key === 'country_id') {
-				// 	// if country ddl is empty we have to reset value of province ddl
-				// 	if (data.value === '') {
-				// 		activeProvince.value = '';
-				// 		setFieldValue('province_id', data.value);
-				// 	}
-				// 	activeCountry.value = data.value;
-				// } else if (data.key === 'province_id') {
-				// 	activeProvince.value = data.value;
-				// 	activeUser.data[data.key] = data.value;
-				// 	// update mutable data
-				// 	// updateMutableData(activeUser.data);
-				// } else {
-				// 	activeUser.data[data.key] = data.value;
-				// 	// update mutable data
-				// 	// updateMutableData(activeUser.data);
-				// }
-				// // sets vee-validate field so the validation works
-				// setFieldValue(data.key, data.value);
+				if (data.key === 'country_id') {
+					// if country ddl is empty we have to reset value of province ddl
+					if (data.value === '') {
+						activeProvince.value = '';
+						setFieldValue('province_id', data.value);
+					}
+					activeCountry.value = data.value;
+				} else if (data.key === 'province_id') {
+					activeProvince.value = data.value;
+					activeUser.address[data.key] = data.value;
+					// update mutable data
+					// updateMutableData(activeUser.data);
+				} else {
+					activeUser.user[data.key] = data.value;
+					// update mutable data
+					// updateMutableData(activeUser.data);
+				}
+				// sets vee-validate field so the validation works
+				setFieldValue(data.key, data.value);
 			}
+
+			const onSubmit = handleSubmit((values) => {
+				emit('completeTab', props.activeTab);
+			});
 
 			return {
 				activeCountry,
@@ -247,7 +258,8 @@
 				getCountries,
 				getProvinces,
 				provinces,
-				setValue
+				setValue,
+				onSubmit
 			};
 		}
 	};
