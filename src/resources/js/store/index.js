@@ -8,6 +8,7 @@ import cart from './modules/cart';
 import loader from './modules/loader';
 import options from './modules/options';
 import products from './modules/products';
+import stripe from './modules/stripe';
 import users from './modules/users';
 
 const debug = process.env.NODE_ENV !== 'production';
@@ -21,6 +22,7 @@ export default createStore({
 		loader,
 		options,
 		products,
+		stripe,
 		users
 	},
 	strict: debug,

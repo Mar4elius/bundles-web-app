@@ -9,6 +9,7 @@ use App\Http\Controllers\Api\CartBundleController;
 use App\Http\Controllers\Api\CartController;
 use App\Http\Controllers\Api\OptionController;
 use App\Http\Controllers\Api\ProductController;
+use App\Http\Controllers\Api\StripeController;
 use App\Http\Controllers\Api\UserController;
 
 /*
@@ -62,4 +63,11 @@ Route::prefix('v1')->group(function () {
         Route::get('/countries', [OptionController::class, 'getCountries']);
         Route::get('/countries/{country}/provinces', [OptionController::class, 'getProvinces']);
     });
+
+    // Stripe
+    Route::prefix('stripe')->group(function () {
+        Route::post('/create', [StripeController::class, 'create']);
+    });
+
+    Route::resource('stripe', StripeController::class);
 });
