@@ -41,7 +41,7 @@ class StripeController extends Controller
         ]);
 
         return response()->json([
-            'clientSecret' => $payment_intent->client_secret
+            'client_secret' => $payment_intent->client_secret
         ]);
     }
 
