@@ -5,7 +5,7 @@
 				<label for="card_element" class="leading-7 text-sm text-gray-600">Credit Card Infromation</label>
 				<form id="payment-form">
 					<div id="card-element"><!--Stripe.js injects the Card Element--></div>
-					<button id="submit" @submit="processPayment">
+					<button id="submit" @submit.prevent="processPayment">
 						<div class="spinner hidden" id="spinner"></div>
 						<span id="button-text">Pay now</span>
 					</button>
@@ -42,16 +42,24 @@
 
 			let cartBundles = computed(() => store.state.cart.items);
 			let clientSecret = ref(null);
+			let card = ref(null);
 
-			const processPayment = () => {
+			const processPayment = async () => {
 				// Calls stripe.confirmCardPayment
 				// If the card requires authentication Stripe shows a pop-up modal to
 				// prompt the user to enter authentication details without leaving your page.
-				stripe.confirmCardPayment(clientSecret.value, {
+				const response = await stripe.confirmCardPayment(clientSecret.value, {
 					payment_method: {
-						card: card
+						card: card.value
 					}
 				});
+				if (response.error) {
+					// Show error to your customer
+					showError(result.error.message);
+				} else {
+					// The payment succeeded!
+					orderComplete(result.paymentIntent.id);
+				}
 			};
 
 			watch(cartBundles, async (curr, prev) => {
@@ -79,22 +87,22 @@
 					}
 				};
 
-				const card = elements.create('card', { style: style });
+				card.value = elements.create('card', { style: style });
 				// Stripe injects an iframe into the DOM
-				card.mount('#card-element');
+				card.value.mount('#card-element');
 
-				card.on('change', function (event) {
+				card.value.on('change', function (event) {
 					// Disable the Pay button if there are no card details in the Element
 					document.querySelector('button').disabled = event.empty;
 					document.querySelector('#card-error').textContent = event.error ? event.error.message : '';
 				});
 
-				var form = document.getElementById('payment-form');
-				form.addEventListener('submit', function (event) {
-					event.preventDefault();
-					// Complete payment when the submit button is clicked
-					payWithCard(stripe, card, data.clientSecret);
-				});
+				// var form = document.getElementById('payment-form');
+				// form.addEventListener('submit', function (event) {
+				// 	event.preventDefault();
+				// 	// Complete payment when the submit button is clicked
+				// 	payWithCard(stripe, card, data.clientSecret);
+				// });
 			});
 
 			return {

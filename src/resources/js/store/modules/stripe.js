@@ -18,7 +18,7 @@ const actions = {
 	 * return JSON
 	 */
 	async create({ commit }, purchase) {
-		await stripeApi.create(purchase);
+		return await stripeApi.create(purchase);
 	}
 };
 
