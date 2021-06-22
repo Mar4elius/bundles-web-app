@@ -54,7 +54,11 @@ Route::prefix('v1')->group(function () {
     Route::resource('cart-bundles', CartBundleController::class);
 
     // User
-    Route::resource('user', UserController::class);
+    Route::prefix('users')->group(function () {
+        Route::post('/{user}/avatar', [UserController::class, 'updateAvatar']);
+    });
+    Route::resource('users', UserController::class);
+
     // Address
     Route::resource('addresses', AddressController::class);
 

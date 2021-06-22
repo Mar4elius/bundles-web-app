@@ -246,6 +246,12 @@
 			}
 
 			const onSubmit = handleSubmit((values) => {
+				const data = {
+					user_id: activeUser.user?.id || null,
+					user: activeUser,
+					is_billing: false // shipping address
+				};
+				// store.dispatch()
 				emit('completeTab', props.activeTab);
 			});
 

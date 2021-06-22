@@ -68,6 +68,27 @@ const actions = {
 	},
 
 	/**
+	 * Update user personal data
+	 *
+	 * @param {FormData} data
+	 *
+	 * @return JSON Response
+	 */
+	async updateAvatar({ commit }, data) {
+		try {
+			console.log(data);
+			const response = await usersApi.updateAvatar(data);
+			// commit('updateActiveUser', response.data.user);
+			return response;
+		} catch (error) {
+			if (process.env.NODE_ENV !== 'production') {
+				console.error(error);
+			}
+			return error.response.data;
+		}
+	},
+
+	/**
 	 * Get users data
 	 *
 	 * @param {Object} user

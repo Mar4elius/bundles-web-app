@@ -116,38 +116,51 @@
 					...values
 				};
 
-				// https://dev.to/diogoko/file-upload-using-laravel-and-vue-js-the-right-way-1775
-				// When using FormData, for complex data structure we have to convert data to JSON format
-				Object.keys(updatedActiveUser).forEach((key) => {
-					formData.append(key, updatedActiveUser[key]);
-				});
+				// check if formData has values. If yes update it.
+				if (formData.has('image')) {
+					let data = {
+						activeUser: updatedActiveUser,
+						formData: formData
+					};
+					// https://dev.to/diogoko/file-upload-using-laravel-and-vue-js-the-right-way-1775
+					// When using FormData, for complex data structure we have to convert data to JSON format
+					// Object.keys(updatedActiveUser).forEach((key) => {
+					// 	formData.append(key, updatedActiveUser[key]);
+					// });
+					// https://stackoverflow.com/questions/47676134/laravel-request-all-is-empty-using-multipart-form-data
+					// append form method to PUT or PATCH so to overcome PHP mulitp form bug (which works only with POST request)
+					// this way we will make use of correct route (PUT) and overcome php bug (POST)
+					// formData.append('_method', 'PUT');
+					const response = await store.dispatch('users/updateAvatar', data);
 
-				let data = {
-					activeUser: updatedActiveUser,
-					formData: formData
-				};
-				// https://stackoverflow.com/questions/47676134/laravel-request-all-is-empty-using-multipart-form-data
-				// append form method to PUT or PATCH so to overcome PHP mulitp form bug (which works only with POST request)
-				// this way we will make use of correct route (PUT) and overcome php bug (POST)
-				formData.append('_method', 'PUT');
-
-				const response = await store.dispatch('users/update', data);
-
-				if (!response.errors) {
-					toast.success(response.data.message);
-
-					if (response.data?.is_email_changed) {
-						setTimeout(() => {
-							window.location.href = route('verification.notice');
-						}, 5000);
+					if (!response.errors) {
+						toast.success(response.data.message);
+					} else {
+						toast.danger(response.data);
 					}
-				} else {
-					toast.danger(response.data);
+
+					// delete locally saved image
+					URL.revokeObjectURL(tempImage.value);
+					tempImage.value = null;
 				}
 
-				// delete locally saved image
-				URL.revokeObjectURL(tempImage.value);
-				tempImage.value = null;
+				if (hasDataChanged.value) {
+					// update user profile data
+					const response = await store.dispatch('users/update', updatedActiveUser);
+
+					if (!response.errors) {
+						toast.success(response.data.message);
+
+						if (response.data?.is_email_changed) {
+							setTimeout(() => {
+								window.location.href = route('verification.notice');
+							}, 5000);
+						}
+					} else {
+						toast.danger(response.data);
+					}
+				}
+
 				setLocalLoadingFlag(false);
 			}
 

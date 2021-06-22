@@ -13,6 +13,7 @@ use Illuminate\Support\Facades\Storage;
 // Requests
 use Illuminate\Http\Request;
 use App\Http\Requests\Api\User\UpdateUserProfileRequest;
+use App\Http\Requests\Api\User\UpdateUserAvatarRequest;
 
 class UserController extends Controller
 {
@@ -53,6 +54,45 @@ class UserController extends Controller
     }
 
     /**
+     * Update user's avatar
+     *
+     * @param  \App\Http\Requests\Api\User\UpdateUserAvatarRequest  $request
+     * @param  \App\Models\User $user
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function updateAvatar(UpdateUserAvatarRequest $request, User $user)
+    {
+        try {
+            if ($request->hasFile('image')) {
+                if (Storage::disk('public')->exists($user->profile_photo_path)) {
+                    Storage::disk('public')->delete($user->profile_photo_path);
+                }
+
+                $path = $request->file('image')->store('avatars', [
+                    'disk' => 'public'
+                ]);
+                $user->profile_photo_path = $path;
+                $user->save();
+
+                return response()->json([
+                    'message'   => 'Profile picture has been updated.',
+                    'user'      => $user
+                ]);
+            }
+        } catch (Exception $e) {
+            if (config('app.env') !== 'production') {
+                return $e->getMessage();
+            } else {
+                Log::error($e->getMessage);
+                return response()->json([
+                    'message' => 'The request failed successfully in user profile update.'
+                ]);
+            }
+        }
+    }
+
+    /**
      * Update the specified resource in storage.
      *
      * @param  \App\Http\Requests\Api\User\UpdateUserProfileRequest  $request
@@ -82,18 +122,6 @@ class UserController extends Controller
             } else {
                 $user->email = $data['email'];
             }
-            // Avatar
-            if ($request->hasFile('image')) {
-                if (Storage::disk('public')->exists($user->profile_photo_path)) {
-                    Storage::disk('public')->delete($user->profile_photo_path);
-                }
-
-                $path = $request->file('image')->store('avatars', [
-                    'disk' => 'public'
-                ]);
-                $user->profile_photo_path = $path;
-            }
-
             $user->save();
 
             // can not redirect user to verification page because I don't reload a page. Just updating data on the page

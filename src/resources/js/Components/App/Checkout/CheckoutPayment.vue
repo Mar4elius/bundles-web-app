@@ -15,11 +15,6 @@
 						<a href="" target="_blank">Stripe dashboard.</a> Refresh the page to pay again.
 					</p>
 				</form>
-				<div class="w-full text-right">
-					<v-button-filled id="continut-to-shipping" @btnOnClickEvent="processPayment"
-						>Process payment</v-button-filled
-					>
-				</div>
 			</div>
 		</div>
 	</div>

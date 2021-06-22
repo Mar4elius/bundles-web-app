@@ -37,7 +37,7 @@
 		setup() {
 			onMounted(() => {
 				const isAddressesSame =
-					activeShippingAddress.value.pivot?.address_id === activeBillingAddress.value.pivot?.address_id;
+					activeShippingAddress.value?.pivot?.address_id === activeBillingAddress.value?.pivot?.address_id;
 				store.commit('address/setBillingAddressSameAsShipping', isAddressesSame);
 			});
 			const store = useStore();
