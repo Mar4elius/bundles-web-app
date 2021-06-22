@@ -69,11 +69,10 @@
 	// Composables
 	import useHasDataChanged from '@/Composables/useHasDataChanged';
 	import useLocalLoadingFlag from '@/Composables/useLocalLoadingFlag';
+	import useStoreUpdateUser from '@/Composables/useStoreUpdateUser';
 	// Vee-validation and Yup
 	import { Form as ValidateForm } from 'vee-validate';
 	import { string, required, email, object, shape } from 'yup';
-	// Toast
-	import { useToast } from 'vue-toastification';
 
 	export default {
 		components: {
@@ -93,7 +92,6 @@
 			let vuexStoreActiveUser = computed(() => store.state.users.active);
 			const formData = new FormData();
 			const tempImage = ref(null);
-			const toast = useToast();
 
 			const schema = object().shape({
 				first_name: string().required(),
@@ -107,6 +105,8 @@
 			);
 
 			const { loading, setLocalLoadingFlag } = useLocalLoadingFlag();
+
+			const { updateUser, updateUserAvatar } = useStoreUpdateUser();
 
 			async function onSubmit(values, actions) {
 				setLocalLoadingFlag(true);
@@ -122,22 +122,8 @@
 						activeUser: updatedActiveUser,
 						formData: formData
 					};
-					// https://dev.to/diogoko/file-upload-using-laravel-and-vue-js-the-right-way-1775
-					// When using FormData, for complex data structure we have to convert data to JSON format
-					// Object.keys(updatedActiveUser).forEach((key) => {
-					// 	formData.append(key, updatedActiveUser[key]);
-					// });
-					// https://stackoverflow.com/questions/47676134/laravel-request-all-is-empty-using-multipart-form-data
-					// append form method to PUT or PATCH so to overcome PHP mulitp form bug (which works only with POST request)
-					// this way we will make use of correct route (PUT) and overcome php bug (POST)
-					// formData.append('_method', 'PUT');
-					const response = await store.dispatch('users/updateAvatar', data);
 
-					if (!response.errors) {
-						toast.success(response.data.message);
-					} else {
-						toast.danger(response.data);
-					}
+					updateUserAvatar(data);
 
 					// delete locally saved image
 					URL.revokeObjectURL(tempImage.value);
@@ -145,20 +131,9 @@
 				}
 
 				if (hasDataChanged.value) {
+					console.log(updatedActiveUser);
 					// update user profile data
-					const response = await store.dispatch('users/update', updatedActiveUser);
-
-					if (!response.errors) {
-						toast.success(response.data.message);
-
-						if (response.data?.is_email_changed) {
-							setTimeout(() => {
-								window.location.href = route('verification.notice');
-							}, 5000);
-						}
-					} else {
-						toast.danger(response.data);
-					}
+					updateUser(updatedActiveUser);
 				}
 
 				setLocalLoadingFlag(false);
